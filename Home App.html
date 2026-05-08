@@ -1055,6 +1055,19 @@ const firebaseConfig = {
     }
   };
 
+  // ➕ 點「+1」按鈕：把庫存數量加 1
+  window.increaseQty = async function(id, curQty) {
+    if (isFirebaseOk) {
+      // 更新 Firestore 裡的數量
+      await updateDoc(doc(db, 'inventory', id), { quantity: curQty + 1 });
+    } else {
+      // 更新假資料裡的數量
+      const item = inventoryItems.find(i => i.id === id);
+      if (item) item.quantity = curQty + 1;
+      renderInventory(); renderShoppingList();
+    }
+  };
+
   // 🔄 更新不可數物品的狀態（充足 / 夠用 / 快用完了）
   window.updateStatus = async function(id, newStatus) {
     if (isFirebaseOk) {
@@ -1183,15 +1196,23 @@ window.cycleStatus = function(id, currentStatus) {
       // 數量控制 or 狀態選單
       let control = '';
       if (item.isCountable) {
+        // 【可數物品】顯示數量加減按鈕
         const qty = item.quantity ?? 0;
-        const red = qty <= 1 ? 'style="color:var(--red);font-weight:900;"' : '';
+        control = `
+          <div class="qty-box">
+            <button class="qty-btn minus" onclick="decreaseQty('${item.id}', ${qty})">-</button>
+            <div class="qty-val">${qty}</div>
+            <button class="qty-btn" style="background:var(--green-light); color:var(--green);" onclick="increaseQty('${item.id}', ${qty})">+</button>
+          </div>`;
+      } else {
+        // 【不可數物品】顯示狀態切換按鈕
         let btnClass = item.status === '充足' ? 'ok' : item.status === '夠用' ? 'warn' : 'bad';
-let btnText = item.status === '充足' ? '✅ 充足' : item.status === '夠用' ? '🟡 夠用' : '🔴 快用完了';
+        let btnText = item.status === '充足' ? '✅ 充足' : item.status === '夠用' ? '🟡 夠用' : '🔴 快用完了';
 
-control = `
-  <button class="status-btn ${btnClass}" onclick="cycleStatus('${item.id}', '${item.status}')">
-    ${btnText}
-  </button>`;
+        control = `
+          <button class="status-btn ${btnClass}" onclick="cycleStatus('${item.id}', '${item.status}')">
+            ${btnText}
+          </button>`;
       }
 
       return `
