@@ -3,509 +3,410 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>🏠 Home Sweet home</title>
-
-  <!-- ① Tailwind CSS (CDN) - 讓我們可以用 class 快速設定樣式 -->
+  <title>🏠 Sohin's Home</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- ② Font Awesome (CDN) - 漂亮的圖示庫 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-  <!-- ③ Google Fonts - 溫馨手寫感字體 -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
 
   <style>
-    /* ══════════════════════════════════════
-       CSS 變數：所有顏色統一在這裡管理
-       想換顏色主題，只要改這裡就好！
-    ══════════════════════════════════════ */
     :root {
-      --bg:             #FBF7F0;      /* 整體背景：溫暖米白 */
-      --card:           #FFFFFF;      /* 卡片背景：純白 */
-      --primary:        #D4784A;      /* 主色：溫暖橙 */
-      --primary-light:  #F5E6DA;
-      --green:          #4E9468;      /* 安全/充足 */
-      --green-light:    #E2F0E7;
-      --red:            #C94444;      /* 警告/過期 */
-      --red-light:      #FDEAEA;
-      --yellow:         #C4873A;      /* 快用完/即將到期 */
-      --yellow-light:   #FDF3E2;
-      --text:           #2C1A0E;
-      --text-muted:     #8B6E5A;
-      --border:         #EDE3D9;
-      --nav-h:          68px;
+      --bg:            #0D0D0D;
+      --bg2:           #141414;
+      --card:          #1A1A1A;
+      --card2:         #202020;
+      --primary:       #E8E8E8;
+      --primary-light: #2A2A2A;
+      --primary-dim:   #3C3C3C;
+      --green:         #74C69D;
+      --green-light:   rgba(116,198,157,0.13);
+      --red:           #E07070;
+      --red-light:     rgba(224,112,112,0.13);
+      --yellow:        #F0A849;
+      --yellow-light:  rgba(240,168,73,0.13);
+      --blue:          #64B5F6;
+      --blue-light:    rgba(100,181,246,0.13);
+      --text:          #ECECEC;
+      --text-muted:    #888;
+      --text-dim:      #555;
+      --border:        #2C2C2C;
+      --border2:       #383838;
+      --nav-h:         68px;
+      --radius-lg:     18px;
+      --radius-md:     12px;
+      --radius-sm:     8px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Nunito', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding-bottom: calc(var(--nav-h) + 16px);
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; padding-bottom: calc(var(--nav-h) + 20px);
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── 頂部 Header ── */
+    /* ══ Header ══ */
     .app-header {
-      background: linear-gradient(135deg, var(--primary) 0%, #C06028 100%);
-      color: white;
-      padding: 16px 20px 14px;
+      background: var(--card); padding: 14px 18px 12px;
       position: sticky; top: 0; z-index: 40;
-      box-shadow: 0 6px 24px rgba(212,120,74,0.4);
+      border-bottom: 1px solid var(--border);
     }
-    .app-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.35rem;
-      letter-spacing: -0.01em;
-    }
+    .app-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--text); }
+    .header-sub { font-size: 0.66rem; color: var(--text-dim); margin-top: 1px; letter-spacing: 0.05em; text-transform: uppercase; }
     .member-chip {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,0.22);
-      border: 1.5px solid rgba(255,255,255,0.4);
-      border-radius: 50px;
-      padding: 6px 13px 6px 8px;
-      font-size: 0.83rem; font-weight: 700;
-      cursor: pointer; transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--bg2); border: 1px solid var(--border2);
+      border-radius: 50px; padding: 6px 12px 6px 7px;
+      font-size: 0.8rem; font-weight: 800; cursor: pointer; color: var(--text); transition: all 0.2s;
     }
-    .member-chip:hover { background: rgba(255,255,255,0.32); }
+    .member-chip:hover { background: var(--primary-light); border-color: var(--primary-dim); }
     .m-avatar {
-      width: 24px; height: 24px;
-      background: white; color: var(--primary);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; background: var(--primary); color: var(--bg);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
       font-size: 0.72rem; font-weight: 900;
     }
 
-    /* ── 底部導覽列 ── */
+    /* ══ Bottom Nav ══ */
     .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      height: var(--nav-h);
-      background: white;
-      border-top: 1px solid var(--border);
+      position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h);
+      background: var(--card); border-top: 1px solid var(--border);
       display: flex; z-index: 40;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.07);
     }
     .nav-btn {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 3px; cursor: pointer;
-      color: var(--text-muted); font-size: 0.68rem; font-weight: 800;
-      letter-spacing: 0.03em; border: none; background: none;
-      transition: color 0.2s;
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; cursor: pointer; color: var(--text-dim); font-size: 0.65rem; font-weight: 800;
+      letter-spacing: 0.04em; border: none; background: none; transition: color 0.2s;
     }
-    .nav-btn i { font-size: 1.35rem; transition: transform 0.2s; }
+    .nav-btn i { font-size: 1.3rem; transition: transform 0.2s; }
     .nav-btn.active { color: var(--primary); }
-    .nav-btn.active i { transform: scale(1.12); }
+    .nav-btn.active i { transform: scale(1.1); }
 
-    /* ── Tab 頁面 ── */
-    .tab-pane { display: none; padding: 16px 16px 8px; animation: fadeUp 0.3s ease; }
+    /* ══ Tabs ══ */
+    .tab-pane { display: none; padding: 14px 14px 6px; animation: fadeUp 0.28s ease; }
     .tab-pane.active { display: block; }
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(12px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(10px);} to { opacity:1; transform:translateY(0);} }
 
-    /* ── 區塊標題 ── */
     .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem; color: var(--text);
-      margin-bottom: 10px;
-      display: flex; align-items: center; gap: 8px;
+      font-family: 'Playfair Display', serif; font-size: 0.98rem;
+      color: var(--text); margin-bottom: 10px;
+      display: flex; align-items: center; gap: 9px;
     }
-    .section-title::after {
-      content: ''; flex: 1; height: 1px; background: var(--border);
-    }
+    .section-title::after { content:''; flex:1; height:1px; background: var(--border); }
+    .container { max-width: 500px; margin: 0 auto; }
 
-    /* ── 通用卡片 ── */
+    /* ══ Cards ══ */
     .card {
-      background: var(--card);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      padding: 13px 15px;
-      margin-bottom: 9px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: box-shadow 0.2s, transform 0.1s;
+      background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border);
+      padding: 12px 14px; margin-bottom: 8px; position: relative; transition: border-color 0.2s;
     }
-    .card:active { transform: scale(0.99); }
+    .card:hover { border-color: var(--border2); }
 
-    /* ── 庫存物品列 ── */
-    .inv-row { display: flex; align-items: center; gap: 9px; }
-    .inv-name { font-weight: 800; font-size: 0.95rem; flex: 1; }
-    .inv-meta { font-size: 0.73rem; color: var(--text-muted); margin-top: 3px;
-                display: flex; align-items: center; gap: 5px; }
+    /* ══ Color Filter Bar ══ */
+    .color-filter-bar { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 10px; scrollbar-width: none; }
+    .color-filter-bar::-webkit-scrollbar { display: none; }
+    .cf-btn {
+      display: flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 50px;
+      border: 1px solid var(--border2); background: var(--card2); color: var(--text-muted);
+      font-size: 0.76rem; font-weight: 800; cursor: pointer; white-space: nowrap;
+      transition: all 0.18s; flex-shrink: 0;
+    }
+    .cf-btn:hover { border-color: var(--primary-dim); color: var(--text); }
+    .cf-btn.active { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+    .cf-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 
-    /* 數量控制 */
+    /* ══ Inventory Row ══ */
+    .inv-row { display: flex; align-items: center; gap: 8px; }
+    .inv-info { flex: 1; min-width: 0; }
+    .inv-name { font-weight: 800; font-size: 0.93rem; display: flex; align-items: center; gap: 7px; line-height: 1.3; flex-wrap: wrap; }
+    .color-dot {
+      width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0;
+      box-shadow: 0 0 0 2px var(--card); position: relative; z-index: 1;
+    }
+    .inv-meta { font-size: 0.71rem; color: var(--text-muted); margin-top: 4px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .inv-memo {
+      display: flex; align-items: center; gap: 5px; margin-top: 6px; padding: 5px 10px;
+      background: rgba(240,168,73,0.08); border: 1px solid rgba(240,168,73,0.2);
+      border-radius: 8px; font-size: 0.72rem; color: var(--yellow); font-weight: 700;
+    }
+
+    /* ══ Sort Buttons ══ */
+    .sort-controls { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
+    .sort-btn {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 6px;
+      width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+      color: var(--text-dim); cursor: pointer; font-size: 0.72rem; transition: all 0.15s; padding: 0;
+    }
+    .sort-btn:hover:not(:disabled) { background: var(--primary-light); color: var(--primary); border-color: var(--border2); }
+    .sort-btn:disabled { opacity: 0.18; cursor: not-allowed; pointer-events: none; }
+
+    /* ══ Qty ══ */
     .qty-box {
-      display: flex; align-items: center; gap: 7px;
-      background: var(--bg); border-radius: 50px;
-      padding: 4px 10px;
+      display: flex; align-items: center; gap: 5px; background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 50px; padding: 3px 8px; flex-shrink: 0;
     }
     .qty-btn {
-      width: 27px; height: 27px; border-radius: 50%;
-      border: none; cursor: pointer; font-size: 0.85rem; font-weight: 900;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.15s;
+      width: 28px; height: 28px; border-radius: 50%; border: none; cursor: pointer;
+      font-size: 1rem; font-weight: 900; display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s; flex-shrink: 0; line-height: 1;
     }
-    .qty-btn.minus { background: var(--primary-light); color: var(--primary); }
-    .qty-btn.minus:hover { background: var(--primary); color: white; }
-    .qty-val { font-weight: 900; font-size: 1rem; min-width: 22px; text-align: center; }
+    .qty-btn.minus { background: var(--primary-light); color: var(--text); }
+    .qty-btn.minus:hover { background: var(--red-light); color: var(--red); }
+    .qty-val { font-weight: 900; font-size: 0.98rem; min-width: 22px; text-align: center; color: var(--text); }
+    .qty-btn.plus { background: var(--green-light); color: var(--green); }
+    .qty-btn.plus:hover { background: var(--green); color: var(--bg); }
 
-    /* 狀態下拉選單 */
-    .status-select {
-      border: 2px solid var(--border); border-radius: 50px;
-      padding: 5px 10px; font-size: 0.78rem; font-weight: 700;
-      font-family: 'Nunito', sans-serif;
-      background: white; cursor: pointer; outline: none;
-      color: var(--text); transition: border-color 0.2s;
+    /* ══ Status ══ */
+    .status-btn {
+      padding: 5px 11px; border-radius: 50px; font-size: 0.76rem; font-weight: 800;
+      cursor: pointer; border: 1px solid transparent; user-select: none; white-space: nowrap;
+      flex-shrink: 0; transition: all 0.18s;
     }
-    .status-select:focus { border-color: var(--primary); }
+    .status-btn.ok   { background: var(--green-light);  color: var(--green);  border-color: rgba(116,198,157,0.25); }
+    .status-btn.warn { background: var(--yellow-light); color: var(--yellow); border-color: rgba(240,168,73,0.25); }
+    .status-btn.bad  { background: var(--red-light);    color: var(--red);    border-color: rgba(224,112,112,0.25); }
 
-    /* 效期小燈 */
-    .exp-dot {
-      width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+    /* ══ Icon Buttons ══ */
+    .action-btn-group { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+    .icon-btn {
+      width: 30px; height: 30px; border-radius: var(--radius-sm); border: none; cursor: pointer;
+      font-size: 0.8rem; display: flex; align-items: center; justify-content: center; transition: all 0.15s;
     }
-    .exp-ok   { background: var(--green); }
-    .exp-warn { background: var(--yellow); }
-    .exp-bad  { background: var(--red); box-shadow: 0 0 0 3px var(--red-light); }
+    .del-btn  { background: var(--red-light);  color: var(--red);  } .del-btn:hover  { background: var(--red);  color: #fff; }
+    .edit-btn { background: var(--blue-light); color: var(--blue); } .edit-btn:hover { background: var(--blue); color: var(--bg); }
 
-    /* ── 購物清單 ── */
-    .shop-row {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 0; border-bottom: 1px dashed var(--border);
-    }
+    /* ══ Shopping List ══ */
+    .shop-row { display: flex; align-items: center; gap: 9px; padding: 8px 0; border-bottom: 1px solid var(--border); }
     .shop-row:last-child { border-bottom: none; }
-    .shop-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--primary); }
+    .shop-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
-    /* ── 家務卡片 ── */
+    /* ══ Chores ══ */
     .chore-row { display: flex; align-items: flex-start; gap: 12px; }
     .chore-check {
-      width: 25px; height: 25px; border-radius: 8px;
-      border: 2.5px solid var(--border);
-      cursor: pointer; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s; margin-top: 1px;
-      font-size: 0.8rem; font-weight: 900; color: white;
+      width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--border2);
+      cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; margin-top: 1px; font-size: 0.78rem; font-weight: 900; color: var(--bg); background: var(--bg2);
     }
     .chore-check.done { background: var(--green); border-color: var(--green); }
-    .chore-title { font-weight: 800; font-size: 0.94rem; flex: 1; transition: all 0.2s; }
-    .chore-title.done { text-decoration: line-through; color: var(--text-muted); }
-    .chore-sub { font-size: 0.73rem; color: var(--text-muted); margin-top: 3px; }
+    .chore-title { font-weight: 800; font-size: 0.92rem; flex: 1; transition: all 0.2s; }
+    .chore-title.done { text-decoration: line-through; color: var(--text-dim); }
+    .chore-sub { font-size: 0.71rem; color: var(--text-muted); margin-top: 2px; }
+    .chore-chip {
+      display: inline-flex; align-items: center; gap: 5px; padding: 7px 12px;
+      border-radius: 50px; border: 1px solid var(--border); background: var(--bg2);
+      color: var(--text); font-size: 0.79rem; font-weight: 800; cursor: pointer; transition: all 0.15s; margin-bottom: 6px;
+    }
+    .chore-chip.selected { border-color: var(--green); background: var(--green-light); color: var(--green); }
 
-    /* ── FAB 浮動按鈕 ── */
+    /* ══ FAB ══ */
     .fab {
       position: fixed; bottom: calc(var(--nav-h) + 14px); right: 18px;
-      width: 52px; height: 52px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), #c06028);
-      color: white; border: none; font-size: 1.35rem;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 6px 22px rgba(212,120,74,0.55);
-      z-index: 35; transition: all 0.2s;
+      width: 52px; height: 52px; border-radius: 50%; background: var(--primary); color: var(--bg);
+      border: none; font-size: 1.3rem; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.6); z-index: 35; transition: all 0.2s;
     }
-    .fab:hover { transform: scale(1.08) rotate(90deg); }
-    .fab:active { transform: scale(0.95); }
+    .fab:hover { transform: scale(1.08); background: #fff; }
+    .fab:active { transform: scale(0.94) !important; }
 
-    /* ── Modal 底部彈出 ── */
+    /* ══ Modal ══ */
     .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(44,26,14,0.45);
-      backdrop-filter: blur(5px);
-      z-index: 50; display: none;
-      align-items: flex-end; justify-content: center;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(5px); z-index: 50; display: none; align-items: flex-end; justify-content: center;
     }
     .modal-overlay.open { display: flex; }
     .modal-sheet {
-      background: white; border-radius: 24px 24px 0 0;
-      padding: 20px 20px 38px; width: 100%; max-width: 500px;
-      animation: slideUp 0.32s cubic-bezier(0.34, 1.3, 0.64, 1);
-      max-height: 92vh; overflow-y: auto;
+      background: var(--card); border-radius: 24px 24px 0 0; padding: 18px 18px 44px;
+      width: 100%; max-width: 500px; animation: slideUp 0.3s cubic-bezier(0.34,1.2,0.64,1);
+      max-height: 93vh; overflow-y: auto; border-top: 1px solid var(--border2);
     }
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to   { transform: translateY(0); }
-    }
-    .modal-handle {
-      width: 38px; height: 4px; background: var(--border);
-      border-radius: 99px; margin: 0 auto 18px;
-    }
-    .modal-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.15rem; margin-bottom: 18px;
-    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 99px; margin: 0 auto 16px; }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 16px; color: var(--text); }
 
-    /* ── 表單元件 ── */
+    /* ══ Forms ══ */
     .field-label {
-      font-size: 0.75rem; font-weight: 900; color: var(--text-muted);
-      margin-bottom: 6px; letter-spacing: 0.06em; text-transform: uppercase;
+      font-size: 0.7rem; font-weight: 900; color: var(--text-muted); margin-bottom: 6px;
+      letter-spacing: 0.07em; text-transform: uppercase; margin-top: 14px;
     }
     .field-input {
-      width: 100%; padding: 12px 14px;
-      border: 2px solid var(--border); border-radius: 12px;
-      font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 700;
-      color: var(--text); background: var(--bg); outline: none;
-      transition: border-color 0.2s, background 0.2s;
+      width: 100%; padding: 11px 13px; border: 1px solid var(--border); border-radius: var(--radius-md);
+      font-family: 'Nunito', sans-serif; font-size: 0.93rem; font-weight: 700; color: var(--text);
+      background: var(--bg2); outline: none; transition: border-color 0.2s, background 0.2s;
     }
-    .field-input:focus { border-color: var(--primary); background: white; }
+    .field-input:focus { border-color: var(--border2); background: var(--bg); }
+
+    .color-picker { display: flex; gap: 10px; padding: 8px 4px 12px; overflow-x: auto; scrollbar-width: none; }
+    .color-picker::-webkit-scrollbar { display: none; }
+    .color-option {
+      width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; flex-shrink: 0; transition: transform 0.18s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    }
+    .color-option.selected { transform: scale(1.22); box-shadow: 0 0 0 3px var(--card), 0 0 0 5px white; }
 
     .toggle-group { display: flex; gap: 7px; flex-wrap: wrap; }
     .toggle-btn {
-      flex: 1; min-width: 90px; padding: 10px 6px;
-      border-radius: 12px; border: 2px solid var(--border);
-      background: white; font-family: 'Nunito', sans-serif;
-      font-size: 0.8rem; font-weight: 800; cursor: pointer;
-      transition: all 0.18s; text-align: center;
+      flex: 1; min-width: 88px; padding: 10px 6px; border-radius: var(--radius-md);
+      border: 1px solid var(--border); background: var(--bg2); color: var(--text);
+      font-family: 'Nunito', sans-serif; font-size: 0.79rem; font-weight: 800; cursor: pointer; transition: all 0.18s; text-align: center;
     }
-    .toggle-btn.selected {
-      border-color: var(--primary);
-      background: var(--primary-light); color: var(--primary);
-    }
+    .toggle-btn.selected { border-color: var(--border2); background: var(--primary-light); color: var(--primary); }
 
     .btn-primary {
-      width: 100%; padding: 14px; background: var(--primary);
-      color: white; border: none; border-radius: 14px;
-      font-family: 'Nunito', sans-serif; font-size: 0.98rem; font-weight: 900;
-      cursor: pointer; margin-top: 18px; transition: all 0.2s;
-      box-shadow: 0 4px 14px rgba(212,120,74,0.4);
+      width: 100%; padding: 13px; background: var(--primary); color: var(--bg); border: none;
+      border-radius: var(--radius-md); font-family: 'Nunito', sans-serif; font-size: 0.95rem;
+      font-weight: 900; cursor: pointer; margin-top: 16px; transition: all 0.2s;
     }
-    .btn-primary:hover { background: #c06028; }
-    .btn-cancel {
-      width: 100%; margin-top: 10px; padding: 12px;
-      background: none; border: none; color: var(--text-muted);
-      font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer;
+    .btn-primary:hover { background: #fff; }
+    .btn-cancel { width: 100%; margin-top: 8px; padding: 11px; background: none; border: none; color: var(--text-muted); font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; }
+
+    /* ══ Alert badge ══ */
+    .alert-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 0.64rem; font-weight: 900; padding: 2px 7px;
+      background: var(--red-light); color: var(--red); border-radius: 50px; border: 1px solid rgba(224,112,112,0.2);
     }
 
-    /* ── 刪除按鈕 ── */
-    .del-btn {
-      width: 29px; height: 29px; border-radius: 9px;
-      border: none; background: var(--red-light); color: var(--red);
-      cursor: pointer; font-size: 0.82rem;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.15s; flex-shrink: 0;
-    }
-    .del-btn:hover { background: var(--red); color: white; }
-
-    /* ── 連線提示條 ── */
+    /* ══ Connection Banner ══ */
     #conn-banner {
-      background: var(--yellow-light);
-      border-bottom: 2px solid #e8a04a;
-      color: #a06020;
-      padding: 9px 16px; font-size: 0.8rem; font-weight: 700;
       display: none; align-items: center; gap: 8px;
-      line-height: 1.4;
+      background: rgba(240,168,73,0.1); border-bottom: 1px solid var(--border);
+      color: var(--yellow); padding: 9px 16px; font-size: 0.79rem; font-weight: 700; line-height: 1.4;
     }
 
-    /* ── 空狀態提示 ── */
-    .empty {
-      text-align: center; padding: 28px 16px;
-      color: var(--text-muted); font-size: 0.88rem;
-    }
-    .empty i { font-size: 2.2rem; margin-bottom: 10px; display: block; }
-
-    /* ── 家務選項 Chip ── */
-    .chore-chip {
+    /* ══ Firebase Status Dot ══ */
+    .db-status {
       display: inline-flex; align-items: center; gap: 5px;
-      padding: 8px 13px; border-radius: 50px;
-      border: 2px solid var(--border); background: white;
-      font-size: 0.8rem; font-weight: 800; cursor: pointer;
-      transition: all 0.15s; margin-bottom: 6px;
+      font-size: 0.66rem; font-weight: 800; color: var(--text-dim);
     }
-    .chore-chip.selected {
-      border-color: var(--green); background: var(--green-light); color: var(--green);
-    }
+    .db-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
+    .db-dot.online  { background: var(--green); box-shadow: 0 0 5px var(--green); }
+    .db-dot.offline { background: var(--yellow); }
+    .db-dot.error   { background: var(--red); }
 
-    /* ── 歡迎頁 ── */
+    /* ══ Toast ══ */
+    #toast {
+      visibility: hidden; min-width: 200px; text-align: center; border-radius: var(--radius-md);
+      padding: 11px 22px; position: fixed; z-index: 9999; left: 50%;
+      bottom: calc(var(--nav-h) + 24px); transform: translateX(-50%);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.6); font-weight: 700; font-size: 0.88rem;
+      border: 1px solid; transition: none;
+    }
+    #toast.show { visibility: visible; animation: toastIn 0.28s ease, toastOut 0.35s 2.4s ease forwards; }
+    @keyframes toastIn  { from { opacity:0; bottom: calc(var(--nav-h) + 8px); } to { opacity:1; bottom: calc(var(--nav-h) + 24px); } }
+    @keyframes toastOut { from { opacity:1; } to { opacity:0; } }
+
+    /* ══ Welcome ══ */
     #welcome-screen {
-      position: fixed; inset: 0; background: var(--bg);
-      z-index: 60; display: none;
-      flex-direction: column; align-items: center; justify-content: center;
-      padding: 36px 28px; gap: 20px;
+      position: fixed; inset: 0; background: var(--bg); z-index: 60;
+      display: none; flex-direction: column; align-items: center; justify-content: center; padding: 36px 28px; gap: 22px;
     }
-    .welcome-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.9rem; text-align: center; color: var(--text);
-      line-height: 1.25;
-    }
+    .welcome-title { font-family: 'Playfair Display', serif; font-size: 1.85rem; text-align: center; color: var(--text); line-height: 1.25; }
 
-    /* ── 日期標籤 ── */
+    /* ══ Loading overlay ══ */
+    #loading-overlay {
+      position: fixed; inset: 0; background: var(--bg); z-index: 55;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    }
+    .loading-spinner { width: 36px; height: 36px; border: 3px solid var(--border2); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     .date-badge {
-      font-size: 0.76rem; font-weight: 800; color: var(--text-muted);
-      background: var(--border); padding: 4px 12px;
-      border-radius: 50px; display: inline-block; margin-bottom: 14px;
+      font-size: 0.74rem; font-weight: 800; color: var(--text-dim);
+      border: 1px solid var(--border); padding: 4px 12px; border-radius: 50px;
+      display: inline-block; margin-bottom: 12px;
     }
+    .empty { text-align: center; padding: 28px 16px; color: var(--text-muted); font-size: 0.86rem; }
+    .empty i { font-size: 2rem; margin-bottom: 10px; display: block; opacity: 0.4; }
 
-    /* ── 成員列表 ── */
-    .member-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 0; border-bottom: 1px solid var(--border);
-    }
-    .member-row:last-child { border-bottom: none; }
-    .m-big-avatar {
-      width: 38px; height: 38px;
-      background: var(--primary-light); color: var(--primary);
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 1rem; flex-shrink: 0;
-    }
-
-    /* ── 最大寬度容器 ── */
-    .container { max-width: 500px; margin: 0 auto; }
-
-    /* ── 分隔線動畫 ── */
-    .card { animation: fadeIn 0.25s ease; }
-    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-
-    /* ── 按鈕點擊通用回饋 ── */
-button {
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease, opacity 0.2s ease !important;
-}
-
-/* 點擊時微縮小，產生按壓感 */
-button:active {
-  transform: scale(0.92) !important;
-}
-
-/* 狀態切換按鈕專用樣式 */
-.status-btn {
-  padding: 5px 12px;
-  border-radius: 50px;
-  font-size: 0.78rem;
-  font-weight: 800;
-  cursor: pointer;
-  border: 2px solid transparent;
-  user-select: none;
-}
-.status-btn.ok { background: var(--green-light); color: var(--green); border-color: var(--green); }
-.status-btn.warn { background: var(--yellow-light); color: var(--yellow); border-color: var(--yellow); }
-.status-btn.bad { background: var(--red-light); color: var(--red); border-color: var(--red); }
-
-/* 🍞 提示訊息 (Toast) 樣式 */
-#toast {
-  visibility: hidden;
-  min-width: 200px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 12px;
-  padding: 12px 24px;
-  position: fixed;
-  z-index: 9999;
-  left: 50%;
-  bottom: 50px;
-  transform: translateX(-50%);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  font-weight: 600;
-}
-
-#toast.show {
-  visibility: visible;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-@keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 50px; opacity: 1;} }
-@keyframes fadeout { from {bottom: 50px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-
-/* 按鈕禁用樣式 */
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  filter: grayscale(1);
-}
-
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+    button { transition: transform 0.12s ease, background-color 0.18s ease, opacity 0.18s ease !important; }
+    button:active { transform: scale(0.93) !important; }
   </style>
-  
 </head>
-<div id="toast">提示訊息</div>
 <body>
 
-<!-- ① Firebase 連線失敗提示條 -->
-<div id="conn-banner">
-  <i class="fa fa-triangle-exclamation"></i>
-  <span>Firebase 尚未設定，目前顯示<strong>示範假資料</strong>。請在 &lt;script&gt; 內填入你的 firebaseConfig，重整頁面後即可連線！</span>
+<!-- Loading -->
+<div id="loading-overlay">
+  <div class="loading-spinner"></div>
+  <div style="color:var(--text-muted); font-size:0.83rem; font-weight:700;">連線中…</div>
 </div>
 
-<!-- ② 歡迎畫面（第一次使用） -->
+<div id="toast"></div>
+
+<div id="conn-banner">
+  <i class="fa fa-triangle-exclamation"></i>
+  <span>Firebase 連線失敗，目前顯示<strong>示範模式</strong>。資料不會永久保存。</span>
+</div>
+
+<!-- Welcome -->
 <div id="welcome-screen">
-  <div style="font-size:4rem; line-height:1;">🏠</div>
+  <div style="font-size:3.8rem; line-height:1;">🏠</div>
   <div>
     <div class="welcome-title">歡迎來到<br/>Sohin's Home</div>
-    <p style="text-align:center; color:var(--text-muted); font-size:0.9rem; margin-top:8px;">
+    <p style="text-align:center; color:var(--text-muted); font-size:0.88rem; margin-top:8px; line-height:1.7;">
       全方位家庭管理中心<br/>請輸入你的名字，開始使用！
     </p>
   </div>
   <div style="width:100%; max-width:320px;">
-    <div class="field-label">你叫什麼名字？</div>
-    <input id="welcome-name-input" class="field-input" type="text"
-           placeholder="例如：小明、爸爸、媽媽" maxlength="10" />
+    <div class="field-label" style="margin-top:0;">你叫什麼名字？</div>
+    <input id="welcome-name-input" class="field-input" type="text" placeholder="例如：小明、爸爸、媽媽" maxlength="10"
+      onkeydown="if(event.key==='Enter') submitWelcomeName()" />
     <button class="btn-primary" onclick="submitWelcomeName()">進入 🏡</button>
   </div>
 </div>
 
-<!-- ③ 主應用 -->
+<!-- App -->
 <div id="app" style="display:none;">
-
-  <!-- Header -->
   <header class="app-header">
     <div class="container" style="display:flex; align-items:center; justify-content:space-between;">
       <div>
         <div class="app-title">🏠 Sohin's home</div>
-        <div style="font-size:0.7rem; opacity:0.8; margin-top:2px;">今日買咩好</div>
+        <div style="display:flex; align-items:center; gap:8px; margin-top:2px;">
+          <div class="header-sub">HOME MANAGEMENT</div>
+          <div class="db-status" id="db-status-indicator">
+            <div class="db-dot" id="db-dot"></div>
+            <span id="db-status-text">…</span>
+          </div>
+        </div>
       </div>
       <div class="member-chip" onclick="openMemberModal()">
         <div class="m-avatar" id="member-avatar">?</div>
         <span id="current-member-name">我</span>
-        <i class="fa fa-chevron-down" style="font-size:0.58rem; opacity:0.8;"></i>
+        <i class="fa fa-chevron-down" style="font-size:0.55rem; color:var(--text-dim);"></i>
       </div>
     </div>
   </header>
 
-  <!-- ────────────────────────────────────────
-       Tab 1：庫存 & 購物
-  ──────────────────────────────────────── -->
   <div id="tab-dashboard" class="tab-pane active">
     <div class="container">
-
-      <!-- 待購區 -->
-      <div style="margin-bottom:20px;">
-        <div class="section-title">
-          <i class="fa fa-cart-shopping" style="color:var(--primary);"></i> 待購清單
-        </div>
+      <div style="margin-bottom:18px;">
+        <div class="section-title"><i class="fa fa-cart-shopping" style="color:var(--primary); font-size:0.85rem;"></i> 待購清單</div>
         <div id="shopping-list"></div>
       </div>
-
-      <!-- 庫存清單 -->
       <div>
-        <div class="section-title">
-          <i class="fa fa-box-open" style="color:var(--primary);"></i> 家庭庫存
+        <div class="section-title"><i class="fa fa-box-open" style="color:var(--primary); font-size:0.85rem;"></i> 家庭庫存</div>
+        <div class="color-filter-bar" id="color-filter-bar">
+          <button class="cf-btn active" data-color="all" onclick="setColorFilter('all', this)">
+            <span style="font-size:0.8rem;">⬜</span> 全部
+          </button>
         </div>
-        <div id="inventory-list">
-          <div class="empty"><i class="fa fa-spinner fa-spin"></i>載入中...</div>
-        </div>
+        <div id="inventory-list"><div class="empty"><i class="fa fa-spinner fa-spin"></i>載入中...</div></div>
       </div>
-
     </div>
   </div>
 
-  <!-- ────────────────────────────────────────
-       Tab 2：家務打卡
-  ──────────────────────────────────────── -->
   <div id="tab-chores" class="tab-pane">
     <div class="container">
       <div class="date-badge" id="today-badge">📅</div>
-      <div class="section-title">
-        <i class="fa fa-broom" style="color:var(--primary);"></i> 今日家務
-      </div>
-      <div id="chores-list">
-        <div class="empty"><i class="fa fa-spinner fa-spin"></i>載入中...</div>
-      </div>
-
+      <div class="section-title"><i class="fa fa-broom" style="color:var(--primary); font-size:0.85rem;"></i> 今日家務</div>
+      <div id="chores-list"></div>
       <div style="margin-top:22px;">
-        <div class="section-title">
-          <i class="fa fa-medal" style="color:var(--primary);"></i> 今日完成紀錄
-        </div>
+        <div class="section-title"><i class="fa fa-medal" style="color:var(--primary); font-size:0.85rem;"></i> 今日完成紀錄</div>
         <div id="recent-log"></div>
       </div>
     </div>
   </div>
 
-  <!-- 底部導覽列 -->
   <nav class="bottom-nav">
     <button class="nav-btn active" id="nav-dashboard" onclick="switchTab('dashboard')">
       <i class="fa fa-house"></i><span>庫存</span>
@@ -516,915 +417,751 @@ button:disabled {
   </nav>
 </div>
 
-<!-- FAB 浮動新增按鈕 -->
-<button class="fab" id="fab-btn" onclick="openFAB()" style="display:none;">
-  <i class="fa fa-plus"></i>
-</button>
+<button class="fab" id="fab-btn" style="display:none;" onclick="handleFab()"><i class="fa fa-plus"></i></button>
 
-<!-- ════════════════════════════════════
-     Modal：新增庫存物品
-════════════════════════════════════ -->
+<!-- Modal: Add/Edit Item -->
 <div class="modal-overlay" id="modal-add-item">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-title">➕ 新增庫存物品</div>
+    <div class="modal-title" id="item-modal-title">➕ 新增庫存物品</div>
+    <input type="hidden" id="edit-item-id" />
 
-    <div style="margin-bottom:13px;">
-      <div class="field-label">物品名稱</div>
-      <input id="item-name" class="field-input" type="text" placeholder="例如：洗衣粉、鮮奶" maxlength="20" />
+    <div>
+      <div class="field-label" style="margin-top:0;">物品名稱 *</div>
+      <input id="item-name" class="field-input" type="text" placeholder="例如：洗衣粉、鮮奶" maxlength="20"
+        onkeydown="if(event.key==='Enter') saveItem()" />
     </div>
 
-    <div style="margin-bottom:13px;">
+    <div>
+      <div class="field-label">自訂分類顏色</div>
+      <div class="color-picker" id="color-picker">
+        <div class="color-option selected" data-color="#E0E0E0" style="background:#E0E0E0;" onclick="selectColor(this)"></div>
+        <div class="color-option" data-color="#74C69D" style="background:#74C69D;" onclick="selectColor(this)"></div>
+        <div class="color-option" data-color="#E07070" style="background:#E07070;" onclick="selectColor(this)"></div>
+        <div class="color-option" data-color="#64B5F6" style="background:#64B5F6;" onclick="selectColor(this)"></div>
+        <div class="color-option" data-color="#BA68C8" style="background:#BA68C8;" onclick="selectColor(this)"></div>
+        <div class="color-option" data-color="#F0A849" style="background:#F0A849;" onclick="selectColor(this)"></div>
+        <div class="color-option" data-color="#FF8A80" style="background:#FF8A80;" onclick="selectColor(this)"></div>
+        <div class="color-option" data-color="#80DEEA" style="background:#80DEEA;" onclick="selectColor(this)"></div>
+        <div class="color-option" data-color="#A5D6A7" style="background:#A5D6A7;" onclick="selectColor(this)"></div>
+        <div class="color-option" data-color="#FFCC80" style="background:#FFCC80;" onclick="selectColor(this)"></div>
+        <div class="color-option" data-color="#CE93D8" style="background:#CE93D8;" onclick="selectColor(this)"></div>
+        <div class="color-option" data-color="#90A4AE" style="background:#90A4AE;" onclick="selectColor(this)"></div>
+      </div>
+    </div>
+
+    <div>
       <div class="field-label">類型</div>
       <div class="toggle-group">
         <button class="toggle-btn selected" id="type-countable" onclick="selectType('countable')">
-          🔢 可計數<br/><small style="font-weight:600;opacity:0.7;">（有幾個）</small>
+          🔢 可計數<br/><small style="font-weight:600;opacity:0.6;">（有幾個）</small>
         </button>
         <button class="toggle-btn" id="type-uncountable" onclick="selectType('uncountable')">
-          📊 不可數<br/><small style="font-weight:600;opacity:0.7;">（用狀態）</small>
+          📊 不可數<br/><small style="font-weight:600;opacity:0.6;">（用狀態）</small>
         </button>
       </div>
     </div>
 
-    <!-- 可計數：數量欄 -->
-    <div id="qty-field" style="margin-bottom:13px;">
+    <div id="qty-field">
       <div class="field-label">目前數量</div>
       <input id="item-qty" class="field-input" type="number" placeholder="例如：3" min="0" value="1" />
+      <div class="field-label">最低提醒數量
+        <span style="text-transform:none; font-size:0.68rem; font-weight:600; opacity:0.6;">（少於或等於此數時加入待購）</span>
+      </div>
+      <input id="item-alert-qty" class="field-input" type="number" placeholder="預設為 1" min="0" value="1" />
     </div>
 
-    <!-- 不可數：狀態選擇 -->
-    <div id="status-field" style="margin-bottom:13px; display:none;">
+    <div id="status-field" style="display:none;">
       <div class="field-label">目前狀態</div>
       <div class="toggle-group">
         <button class="toggle-btn selected" data-status="充足"    onclick="selectStatus(this)">✅ 充足</button>
-        <button class="toggle-btn"           data-status="夠用"    onclick="selectStatus(this)">🟡 夠用</button>
-        <button class="toggle-btn"           data-status="快用完了" onclick="selectStatus(this)">🔴 快用完了</button>
+        <button class="toggle-btn"          data-status="夠用"    onclick="selectStatus(this)">🟡 夠用</button>
+        <button class="toggle-btn"          data-status="快用完了" onclick="selectStatus(this)">🔴 快用完了</button>
       </div>
     </div>
 
-    <div style="margin-bottom:4px;">
-      <div class="field-label">效期日期（選填）</div>
-      <input id="item-expiry" class="field-input" type="date" />
+    <div style="display:flex; gap:10px;">
+      <div style="flex:1;">
+        <div class="field-label">效期日期 <span style="opacity:0.45; text-transform:none; font-size:0.68rem; font-weight:600;">選填</span></div>
+        <input id="item-expiry" class="field-input" type="date" />
+      </div>
+      <div style="flex:1;">
+        <div class="field-label">購買日期 <span style="opacity:0.45; text-transform:none; font-size:0.68rem; font-weight:600;">選填</span></div>
+        <input id="item-purchase" class="field-input" type="date" />
+      </div>
     </div>
 
-    <button class="btn-primary" onclick="saveItem()">💾 儲存物品</button>
+    <div>
+      <div class="field-label">備忘錄 <span style="opacity:0.45; text-transform:none; font-size:0.68rem; font-weight:600;">選填，例如：價格、購買地點</span></div>
+      <input id="item-memo" class="field-input" type="text" placeholder="例如：$150 在全聯購買" maxlength="50" />
+    </div>
+
+    <button class="btn-primary" id="save-item-btn" onclick="saveItem()">💾 儲存物品</button>
     <button class="btn-cancel" onclick="closeModal('modal-add-item')">取消</button>
   </div>
 </div>
 
-<!-- ════════════════════════════════════
-     Modal：新增家務打卡
-════════════════════════════════════ -->
+<!-- Modal: Chore -->
 <div class="modal-overlay" id="modal-add-chore">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title">🧹 新增今日家務</div>
-
-    <div class="field-label">快速選擇家務</div>
+    <div class="field-label" style="margin-top:0;">快速選擇家務</div>
     <div id="chore-chips" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;"></div>
-
     <div class="field-label">或輸入自訂家務</div>
-    <input id="custom-chore" class="field-input" type="text" placeholder="例如：整理玩具、擦窗戶" maxlength="20" />
-
+    <input id="custom-chore" class="field-input" type="text" placeholder="例如：整理玩具、擦窗戶" maxlength="20"
+      onkeydown="if(event.key==='Enter') saveChore()" />
     <button class="btn-primary" onclick="saveChore()">📋 加入今日家務</button>
     <button class="btn-cancel" onclick="closeModal('modal-add-chore')">取消</button>
   </div>
 </div>
 
-<!-- ════════════════════════════════════
-     Modal：家庭成員管理
-════════════════════════════════════ -->
+<!-- Modal: Members -->
 <div class="modal-overlay" id="modal-member">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title">👨‍👩‍👧 家庭成員管理</div>
-
     <div id="members-list-ui" style="margin-bottom:16px;"></div>
-
     <div class="field-label">新增成員</div>
     <div style="display:flex; gap:8px;">
-      <input id="new-member-input" class="field-input" type="text"
-             placeholder="輸入名字" maxlength="10" style="flex:1;" />
-      <button onclick="addMember()"
-              style="padding:12px 16px; background:var(--primary); color:white; border:none;
-                     border-radius:12px; font-family:'Nunito',sans-serif; font-weight:900;
-                     cursor:pointer; white-space:nowrap;">
-        新增
-      </button>
+      <input id="new-member-input" class="field-input" type="text" placeholder="輸入名字" maxlength="10" style="flex:1;"
+        onkeydown="if(event.key==='Enter') addMember()" />
+      <button onclick="addMember()" style="padding:11px 15px; background:var(--primary); color:var(--bg); border:none; border-radius:var(--radius-md); font-family:'Nunito',sans-serif; font-weight:900; cursor:pointer; white-space:nowrap; font-size:0.88rem;">新增</button>
     </div>
-
-    <button onclick="closeModal('modal-member')"
-            style="width:100%; margin-top:16px; padding:12px;
-                   background:none; border:2px solid var(--border); border-radius:12px;
-                   color:var(--text-muted); font-family:'Nunito',sans-serif;
-                   font-size:0.9rem; font-weight:700; cursor:pointer;">
-      關閉
-    </button>
+    <button onclick="closeModal('modal-member')" style="width:100%; margin-top:14px; padding:11px; background:none; border:1px solid var(--border); border-radius:var(--radius-md); color:var(--text); font-family:'Nunito',sans-serif; font-size:0.88rem; font-weight:700; cursor:pointer;">關閉</button>
   </div>
 </div>
 
-<!-- ════════════════════════════════════
-     Modal：改名
-════════════════════════════════════ -->
-<div class="modal-overlay" id="modal-rename">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">✏️ 修改成員名稱</div>
-    <input type="hidden" id="rename-id" />
-    <div class="field-label">新名字</div>
-    <input id="rename-input" class="field-input" type="text" placeholder="輸入新名字" maxlength="10" />
-    <button class="btn-primary" onclick="confirmRename()">確認修改 ✓</button>
-    <button class="btn-cancel" onclick="openMemberModal()">← 返回成員列表</button>
-  </div>
-</div>
-
-
-<!-- ═══════════════════════════════════════════════════════
-     🔥 Firebase Web SDK v9 Modular (CDN 引入)
-═══════════════════════════════════════════════════════ -->
+<!-- ════════════════ SCRIPT ════════════════ -->
 <script type="module">
+  import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, enableIndexedDbPersistence,
+           collection, doc, onSnapshot,
+           addDoc, updateDoc, deleteDoc, query, orderBy }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-  import { initializeApp }    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import {
-    getFirestore,
-    collection, doc,
-    onSnapshot,    // 即時監聽（像哨兵，資料變就更新畫面）
-    addDoc,        // 新增一筆資料
-    updateDoc,     // 更新某欄位
-    deleteDoc,     // 刪除一筆
-    setDoc,        // 強制寫入（覆蓋整份文件）
-    getDoc,        // 讀取一次
-    query,
-    where,
-    orderBy
-  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  // ══ Config ══
+  const firebaseConfig = {
+    apiKey:            "AIzaSyDQ6lycJWKBnINu1Qbu8kTT_PGYP2rPzrs",
+    authDomain:        "home-app-data.firebaseapp.com",
+    projectId:         "home-app-data",
+    storageBucket:     "home-app-data.firebasestorage.app",
+    messagingSenderId: "116703485136",
+    appId:             "1:116703485136:web:2a21ea6ac010ae685152d5",
+  };
 
-// 顯示自定義通知
-window.showToast = function(message, type = 'success') {
-  const toast = document.getElementById('toast');
-  toast.textContent = message;
-  toast.style.backgroundColor = type === 'success' ? '#4CAF50' : '#F44336'; // 成功綠 或 失敗紅
-  toast.className = "show";
-  setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-};
-  // ╔══════════════════════════════════════════════════════════════════╗
-  // ║                                                                  ║
-  // ║   🔥 第一步：把你的 Firebase 設定貼在這裡！ 🔥                      ║
-  // ║                                                                  ║
-  // ║   📌 如何取得設定？共 3 步驟：                                      ║
-  // ║   1. 前往 https://console.firebase.google.com                   ║
-  // ║   2. 建立專案 → 新增「網頁 (</>)」應用程式                           ║
-  // ║   3. 複製 firebaseConfig 物件，貼到下方 6 個欄位                    ║
-  // ║                                                                  ║
-  // ║   📌 開啟 Firestore 資料庫：                                       ║
-  // ║   專案 → Firestore Database → 建立資料庫 → 測試模式                ║
-  // ║                                                                  ║
-  // ╚══════════════════════════════════════════════════════════════════╝
+  // ══ State ══
+  let db = null, isFirebaseOk = false;
+  let currentMemberId = '', currentMemberName = '我';
+  let members = [], inventoryItems = [], choresItems = [];
+  let activeColorFilter = 'all';
+  let currentTab = 'dashboard';
+  let inventoryUnsubscribe = null, choresUnsubscribe = null;
 
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDQ6lycJWKBnINu1Qbu8kTT_PGYP2rPzrs",
-  authDomain: "home-app-data.firebaseapp.com",
-  projectId: "home-app-data",
-  storageBucket: "home-app-data.firebasestorage.app",
-  messagingSenderId: "116703485136",
-  appId: "1:116703485136:web:2a21ea6ac010ae685152d5",
-  measurementId: "G-TBNC1MX9NP"
-};
-
-  // ══════════════════════════════════════
-  //  🌐 全域狀態（App 的記憶）
-  // ══════════════════════════════════════
-  let db = null;               // Firestore 資料庫連線
-  let isFirebaseOk = false;    // 是否連上 Firebase
-  let currentMemberId   = '';
-  let currentMemberName = '我';
-  let members        = [];     // 所有家庭成員
-  let inventoryItems = [];     // 庫存物品
-  let choresItems    = [];     // 今日家務
-
-  // ── 家務預設選項 ──
+  // ══ Presets ══
   const CHORE_PRESETS = [
-    { e:'🧹', n:'掃地拖地' }, { e:'🍽️', n:'洗碗' },
-    { e:'🧺', n:'洗衣服' },   { e:'🗑️', n:'倒垃圾' },
-    { e:'🧽', n:'清潔浴室' }, { e:'🛒', n:'買菜購物' },
-    { e:'🌿', n:'澆花' },     { e:'🪣', n:'清廚房' },
-    { e:'🛏️', n:'整理床鋪' }, { e:'🪟', n:'擦玻璃' },
+    { e:'🧹', n:'掃地拖地' }, { e:'🍽️', n:'洗碗' }, { e:'🧺', n:'洗衣服' },
+    { e:'🗑️', n:'倒垃圾' }, { e:'🚿', n:'清潔浴室' }, { e:'🪟', n:'擦窗戶' },
+    { e:'🛏️', n:'整理床鋪' }, { e:'🧽', n:'清潔廚房' }
   ];
+  function daysFromNow(n) { const d = new Date(); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; }
+  const MOCK_INVENTORY = [
+    { id:'m1', order:0, name:'洗碗精', isCountable:false, status:'充足',    expiryDate:'',              colorTag:'#64B5F6', memo:'好市多買的', purchaseDate:'2024-03-01' },
+    { id:'m2', order:1, name:'衛生紙', isCountable:true,  quantity:3, alertQty:2, expiryDate:'',          colorTag:'#E0E0E0', memo:'', purchaseDate:'' },
+    { id:'m3', order:2, name:'洗衣粉', isCountable:false, status:'快用完了', expiryDate:'',              colorTag:'#BA68C8', memo:'', purchaseDate:'' },
+    { id:'m4', order:3, name:'牛奶',   isCountable:true,  quantity:1, alertQty:2, expiryDate:daysFromNow(3), colorTag:'#74C69D', memo:'全聯 $65', purchaseDate:'' },
+  ];
+  const MOCK_CHORES = [{ id:'c1', title:'🧹 掃地拖地', completed:false, completedBy:'', completedAt:'', date:daysFromNow(0) }];
 
-  // ── 計算幾天後的日期字串（假資料用）──
-  function daysFromNow(n) {
-    const d = new Date(); d.setDate(d.getDate() + n);
-    return d.toISOString().split('T')[0];
+  // ══ Toast ══
+  window.showToast = function(msg, type='success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    if (type === 'success') { t.style.background='#162413'; t.style.color='#74C69D'; t.style.borderColor='rgba(116,198,157,0.3)'; }
+    else if (type === 'error') { t.style.background='#2a1212'; t.style.color='#E07070'; t.style.borderColor='rgba(224,112,112,0.3)'; }
+    else { t.style.background='#1e1a10'; t.style.color='#F0A849'; t.style.borderColor='rgba(240,168,73,0.3)'; }
+    t.className = 'show';
+    clearTimeout(t._tid);
+    t._tid = setTimeout(() => { t.className = ''; }, 2900);
+  };
+
+  // ══ DB status indicator ══
+  function setDbStatus(state) {
+    const dot  = document.getElementById('db-dot');
+    const text = document.getElementById('db-status-text');
+    if (!dot) return;
+    dot.className = 'db-dot ' + state;
+    text.textContent = state === 'online' ? '已連線' : state === 'offline' ? '離線快取' : '未連線';
   }
 
-  // ── 假資料（Firebase 沒設定時顯示，讓你先看版面）──
-  const MOCK_INVENTORY = [
-    { id:'m1', name:'洗碗精',   isCountable:false, status:'充足',    expiryDate:'' },
-    { id:'m2', name:'衛生紙',   isCountable:true,  quantity:3,       expiryDate:'' },
-    { id:'m3', name:'洗衣粉',   isCountable:false, status:'快用完了', expiryDate:'' },
-    { id:'m4', name:'鮮奶',     isCountable:true,  quantity:1,       expiryDate:daysFromNow(3) },
-    { id:'m5', name:'牙膏',     isCountable:true,  quantity:2,       expiryDate:daysFromNow(45) },
-    { id:'m6', name:'沙拉油',   isCountable:false, status:'夠用',    expiryDate:daysFromNow(-5) },
-    { id:'m7', name:'洗髮精',   isCountable:true,  quantity:0,       expiryDate:'' },
-  ];
-  const MOCK_CHORES = [
-    { id:'c1', title:'🧹 掃地拖地', completed:false, completedBy:'',   completedAt:'', date:daysFromNow(0) },
-    { id:'c2', title:'🍽️ 洗碗',    completed:true,  completedBy:'小明', completedAt:'08:30', date:daysFromNow(0) },
-    { id:'c3', title:'🗑️ 倒垃圾',  completed:false, completedBy:'',   completedAt:'', date:daysFromNow(0) },
-  ];
-
-
-  // ══════════════════════════════════════
-  //  🚀 App 初始化（程式進入點）
-  // ══════════════════════════════════════
+  // ══ Init ══
   async function initApp() {
+    // Hide loading after max 6s regardless
+    const loadingTimeout = setTimeout(hideLoading, 6000);
+
     try {
-      // 如果 apiKey 還是預設值，就直接跳到假資料模式
-      if (firebaseConfig.apiKey === 'YOUR_API_KEY') {
-        throw new Error('firebaseConfig 尚未設定');
-      }
-      // 嘗試連線 Firebase
+      if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'YOUR_API_KEY') throw new Error('no key');
+
       const app = initializeApp(firebaseConfig);
       db = getFirestore(app);
+
+      // Enable offline persistence (IndexedDB cache)
+      try {
+        await enableIndexedDbPersistence(db);
+      } catch (e) {
+        // persistence may already be enabled or not supported – ignore
+      }
+
       isFirebaseOk = true;
-      console.log('✅ Firebase 連線成功！');
+      setDbStatus('online');
+      clearTimeout(loadingTimeout);
+
+      // Start real-time listeners immediately
+      startListeners();
+
     } catch (err) {
-      // ⚠️ 連線失敗：顯示提示條 + 載入假資料，讓你先預覽版面
-      console.warn('⚠️ Firebase 未設定：', err.message);
-      showBanner();
-      loadMockData();
-      return;
-    }
-
-    // 連線成功：從 Firestore 讀取家庭成員設定
-    await loadFamilyConfig();
-  }
-
-  // 顯示 Firebase 未連線提示條
-  function showBanner() {
-    document.getElementById('conn-banner').style.display = 'flex';
-  }
-
-  // ══════════════════════════════════════
-  //  👨‍👩‍👧 家庭成員管理
-  // ══════════════════════════════════════
-
-  // 從 Firestore 讀取家庭設定（成員列表）
-  async function loadFamilyConfig() {
-    try {
-      const famSnap = await getDoc(doc(db, 'config', 'family'));
-
-      if (!famSnap.exists() || !famSnap.data().members?.length) {
-        // 還沒有任何成員 → 顯示歡迎頁讓使用者輸入名字
-        document.getElementById('welcome-screen').style.display = 'flex';
-        return;
-      }
-
-      members = famSnap.data().members;
-
-      // 從瀏覽器記憶（localStorage）找回上次用的成員
-      const savedId = localStorage.getItem('smh_member_id');
-      const found = members.find(m => m.id === savedId);
-      if (found) {
-        currentMemberId   = found.id;
-        currentMemberName = found.name;
-      } else {
-        currentMemberId   = members[0].id;
-        currentMemberName = members[0].name;
-      }
-
-      showApp();
-      startListeners(); // 開始即時監聽 Firestore 資料
-
-    } catch(e) {
-      console.error('讀取成員失敗', e);
+      console.warn('Firebase init failed:', err);
+      clearTimeout(loadingTimeout);
+      document.getElementById('conn-banner').style.display = 'flex';
+      setDbStatus('error');
       loadMockData();
     }
   }
 
-  // 歡迎頁：提交名字（第一次使用）
-  window.submitWelcomeName = async function() {
-    const nameInput = document.getElementById('welcome-name-input');
-    const name = nameInput.value.trim();
-    const btn = document.querySelector('#welcome-screen .btn-primary'); // 抓取按鈕
-
-    if (!name) { showToast('請輸入你的名字！', 'error'); return; }
-
-    // 1. 按鈕變為載入中
-    const originalText = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 進入中...';
-
-    const newMember = { id: Date.now().toString(), name };
-    members = [newMember];
-
-    try {
-      if (isFirebaseOk) {
-        await setDoc(doc(db, 'config', 'family'), { members });
-      }
-      
-      currentMemberId   = newMember.id;
-      currentMemberName = newMember.name;
-      localStorage.setItem('smh_member_id', currentMemberId);
-
-      document.getElementById('welcome-screen').style.display = 'none';
-      showApp();
-      if (isFirebaseOk) startListeners();
-      
-      // 2. 顯示成功歡迎訊息
-      showToast(`歡迎加入，${name}！ 🎉`);
-      
-    } catch(err) {
-      console.error(err);
-      showToast('連線失敗，請檢查網路', 'error');
-    } finally {
-      // 3. 恢復按鈕
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-    }
-  };
-
-  // 新增一個家庭成員
-  window.addMember = async function() {
-    const nameInput = document.getElementById('new-member-input');
-    const name = nameInput.value.trim();
-    const btn = document.querySelector('#modal-member button[onclick="addMember()"]');
-
-    if (!name) { showToast('請輸入名字！', 'error'); return; }
-
-    // 1. 按鈕變為載入中
-    const originalText = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-    const newMember = { id: Date.now().toString(), name };
-    members.push(newMember);
-
-    try {
-      if (isFirebaseOk) {
-        // 更新 Firestore 的成員陣列
-        await setDoc(doc(db, 'config', 'family'), { members });
-      }
-
-      nameInput.value = '';
-      renderMembersUI();
-      // 2. 顯示成功提示
-      showToast(`已成功新增成員：${name} ✨`);
-
-    } catch(err) {
-      console.error(err);
-      showToast('新增失敗，請稍後再試', 'error');
-      members.pop(); // 如果失敗，把剛剛加進去的成員抽出來
-    } finally {
-      // 3. 恢復按鈕
-      btn.disabled = false;
-      btn.innerHTML = originalText;
-    }
-  };
-
-  // 切換目前操作的家庭成員
-  window.selectMember = function(id, name) {
-    currentMemberId   = id;
-    currentMemberName = name;
-    localStorage.setItem('smh_member_id', id); // 記住選擇
-    updateMemberChip();
-    closeModal('modal-member');
-  };
-
-  // 打開改名視窗
-  window.openRename = function(id, oldName) {
-    document.getElementById('rename-id').value    = id;
-    document.getElementById('rename-input').value = oldName;
-    closeModal('modal-member');
-    openModal('modal-rename');
-  };
-
-  // 確認改名（這是最重要的步驟：同步改動 Firestore 裡的成員名稱）
-  window.confirmRename = async function() {
-    const id      = document.getElementById('rename-id').value;
-    const newName = document.getElementById('rename-input').value.trim();
-    if (!newName) return alert('請輸入新名字！');
-
-    // 更新本地的 members 陣列
-    members = members.map(m => m.id === id ? { ...m, name: newName } : m);
-
-    if (isFirebaseOk) {
-      // 🔸 把更新後的成員列表存回 Firestore（覆蓋整個 config/family 文件）
-      await setDoc(doc(db, 'config', 'family'), { members });
-    }
-
-    // 如果改的是目前登入者，也更新頁面顯示
-    if (currentMemberId === id) {
-      currentMemberName = newName;
-      updateMemberChip();
-    }
-
-    closeModal('modal-rename');
-    alert(`✅ 已改名為「${newName}」！`);
-  };
-
-  // 更新 Header 上的成員顯示
-  function updateMemberChip() {
-    document.getElementById('current-member-name').textContent = currentMemberName;
-    document.getElementById('member-avatar').textContent       = (currentMemberName[0] || '?');
-  }
-
-  // 渲染成員管理列表
-  function renderMembersUI() {
-    const el = document.getElementById('members-list-ui');
-    if (!members.length) { el.innerHTML = ''; return; }
-    el.innerHTML = members.map(m => `
-      <div class="member-row">
-        <div class="m-big-avatar">${m.name[0]}</div>
-        <span style="flex:1; font-weight:800;">${m.name}
-          ${currentMemberId === m.id ? ' <span style="font-size:0.75rem;color:var(--green);">（目前使用中）</span>' : ''}
-        </span>
-        ${currentMemberId !== m.id ? `
-          <button onclick="selectMember('${m.id}','${m.name}')"
-            style="padding:5px 10px; background:var(--green-light); color:var(--green);
-                   border:none; border-radius:8px; font-family:'Nunito',sans-serif;
-                   font-weight:800; font-size:0.75rem; cursor:pointer; margin-right:5px;">
-            切換
-          </button>` : ''}
-        <button onclick="openRename('${m.id}','${m.name}')"
-          style="padding:5px 10px; background:var(--primary-light); color:var(--primary);
-                 border:none; border-radius:8px; font-family:'Nunito',sans-serif;
-                 font-weight:800; font-size:0.75rem; cursor:pointer;">
-          ✏️ 改名
-        </button>
-      </div>
-    `).join('');
-  }
-
-
-  // ══════════════════════════════════════
-  //  📦 庫存模組：Firebase 即時監聽 + CRUD
-  // ══════════════════════════════════════
-
+  // ══ REAL-TIME LISTENERS (the missing piece!) ══
   function startListeners() {
-    // ── 🔊 即時監聽 inventory 集合 ──
-    // onSnapshot 像一個「哨兵」站在資料庫旁邊
-    // 只要任何一筆庫存資料有變動，這個函數就會自動被呼叫，畫面即時更新！
-    onSnapshot(collection(db, 'inventory'), (snap) => {
-      inventoryItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderInventory();
-      renderShoppingList();
-    }, err => console.error('庫存監聽失敗', err));
+    // Unsubscribe any existing listeners first
+    if (inventoryUnsubscribe) inventoryUnsubscribe();
+    if (choresUnsubscribe)    choresUnsubscribe();
 
-    // ── 🔊 即時監聽今日家務 ──
-    const todayStr = daysFromNow(0);
-    const q = query(collection(db, 'chores'), where('date', '==', todayStr));
-    onSnapshot(q, (snap) => {
-      choresItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderChores();
-    }, err => console.error('家務監聽失敗', err));
+    // ── Inventory listener ──
+    inventoryUnsubscribe = onSnapshot(
+      collection(db, 'inventory'),
+      (snap) => {
+        inventoryItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderInventory();
+        renderShoppingList();
+        updateColorFilterBar();
+        setDbStatus('online');
+        hideLoading(); // hide on first data
+      },
+      (err) => {
+        console.error('inventory snapshot error:', err);
+        setDbStatus('offline');
+        showToast('⚠️ 資料庫連線中斷，使用快取', 'warn');
+      }
+    );
+
+    // ── Chores listener ──
+    const today = new Date().toISOString().split('T')[0];
+    choresUnsubscribe = onSnapshot(
+      collection(db, 'chores'),
+      (snap) => {
+        choresItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderChores();
+      },
+      (err) => { console.error('chores snapshot error:', err); }
+    );
+
+    // Show app & welcome after listeners attach (data will populate via callbacks)
+    showAppFrame();
   }
 
-  // 📝 新增庫存物品到 Firestore
-  // 📝 新增庫存物品到 Firestore
+  function hideLoading() {
+    const lo = document.getElementById('loading-overlay');
+    if (lo) { lo.style.opacity='0'; lo.style.transition='opacity 0.4s'; setTimeout(()=>lo.remove(), 400); }
+  }
+
+  function showAppFrame() {
+    // Check if user name is stored
+    const savedName = localStorage.getItem('hsa_member_name');
+    const savedId   = localStorage.getItem('hsa_member_id');
+    if (savedName && savedId) {
+      currentMemberName = savedName;
+      currentMemberId   = savedId;
+      document.getElementById('app').style.display = 'block';
+      document.getElementById('fab-btn').style.display = 'flex';
+      updateMemberChip();
+      renderChoreChips();
+      updateTodayBadge();
+    } else {
+      hideLoading();
+      document.getElementById('welcome-screen').style.display = 'flex';
+    }
+  }
+
+  // ══ Welcome ══
+  window.submitWelcomeName = function() {
+    const name = document.getElementById('welcome-name-input').value.trim();
+    if (!name) { showToast('⚠️ 請輸入名字', 'error'); return; }
+    currentMemberName = name;
+    currentMemberId   = 'u_' + Date.now();
+    localStorage.setItem('hsa_member_name', name);
+    localStorage.setItem('hsa_member_id',   currentMemberId);
+    members = [{ id: currentMemberId, name }];
+    document.getElementById('welcome-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('fab-btn').style.display = 'flex';
+    updateMemberChip(); renderChoreChips(); updateTodayBadge();
+    showToast(`👋 歡迎，${name}！`);
+  };
+
+  // ══ Mock (offline fallback) ══
+  function loadMockData() {
+    inventoryItems = MOCK_INVENTORY.map(i => ({ ...i }));
+    choresItems    = MOCK_CHORES.map(c => ({ ...c }));
+    members = [{ id:'demo', name:'示範用戶' }];
+    currentMemberId = 'demo'; currentMemberName = '示範用戶';
+    showAppFrame();
+    renderInventory(); renderShoppingList(); renderChores(); updateColorFilterBar();
+  }
+
+  // ══ Tab switching ══
+  window.switchTab = function(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-'+tab).classList.add('active');
+    document.getElementById('nav-'+tab).classList.add('active');
+    if (tab === 'chores') renderChores();
+  };
+
+  window.handleFab = function() {
+    if (currentTab === 'chores') { renderChoreChips(); openModal('modal-add-chore'); }
+    else openItemModal();
+  };
+
+  // ══ Save Item (Add / Edit) ══
   window.saveItem = async function() {
-    const name = document.getElementById('item-name').value.trim();
-    const qty  = document.getElementById('item-qty').value;
-    const exp  = document.getElementById('item-expiry').value;
-    
-    // 修正 1：對應正確的 Modal ID (#modal-add-item)
-    const btn  = document.querySelector('#modal-add-item button[onclick="saveItem()"]'); 
+    const btn    = document.getElementById('save-item-btn');
+    const editId = document.getElementById('edit-item-id').value;
+    const name   = document.getElementById('item-name').value.trim();
+    if (!name) { showToast('⚠️ 請輸入物品名稱', 'error'); document.getElementById('item-name').focus(); return; }
 
-    if(!name) { showToast('請輸入物品名稱', 'error'); return; }
-
-    // 修正 2：直接從畫面的 class 狀態來判斷目前的類型與狀態
+    const qty      = parseInt(document.getElementById('item-qty').value) || 0;
+    const alertQty = parseInt(document.getElementById('item-alert-qty').value) || 1;
+    const exp      = document.getElementById('item-expiry').value;
+    const pur      = document.getElementById('item-purchase').value;
+    const memo     = document.getElementById('item-memo').value.trim();
+    const colorTag = document.querySelector('.color-option.selected')?.dataset.color || '#E0E0E0';
     const isCountable = document.getElementById('type-countable').classList.contains('selected');
-    
-    let currentStatus = '';
+
+    let status = '充足';
     if (!isCountable) {
-      const selectedBtn = document.querySelector('#status-field .toggle-btn.selected');
-      currentStatus = selectedBtn ? selectedBtn.dataset.status : '充足';
+      const sel = document.querySelector('#status-field .toggle-btn.selected');
+      status = sel ? sel.dataset.status : '充足';
     }
 
-    // 按鈕進入「處理中」狀態
-    const originalText = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 儲存中...';
-
-    // 修正 3：對齊 renderInventory 畫面的欄位名稱 (isCountable, expiryDate)
     const data = {
-      name,
-      isCountable, 
-      status: isCountable ? '' : currentStatus,
-      quantity: isCountable ? parseInt(qty) : 0,
-      expiryDate: exp || '', 
+      name, isCountable,
+      status:       isCountable ? '' : status,
+      quantity:     isCountable ? qty : 0,
+      alertQty:     isCountable ? alertQty : 1,
+      expiryDate:   exp || '',
+      purchaseDate: pur || '',
+      memo, colorTag,
       updatedAt: new Date().toISOString()
     };
 
+    // Disable button to prevent double-tap
+    btn.disabled = true; btn.textContent = '儲存中…';
+
     try {
-      if (isFirebaseOk) {
-        // 修正 4：改用 Firebase v9 模組化寫法 addDoc
-        await addDoc(collection(db, 'inventory'), data);
+      if (editId) {
+        // ── EDIT ──
+        if (isFirebaseOk) {
+          await updateDoc(doc(db, 'inventory', editId), data);
+          // onSnapshot will update UI automatically
+        } else {
+          const idx = inventoryItems.findIndex(i => i.id === editId);
+          if (idx > -1) Object.assign(inventoryItems[idx], data);
+          renderInventory(); renderShoppingList();
+        }
+        showToast('✅ 物品已更新！');
       } else {
-        // 假資料模式下也能新增
-        inventoryItems.push({ id: 'local_' + Date.now(), ...data });
-        renderInventory();
-        renderShoppingList();
+        // ── ADD ──
+        const maxOrder = inventoryItems.length > 0 ? Math.max(...inventoryItems.map(i => i.order ?? 0)) : -1;
+        data.order = maxOrder + 1;
+        if (isFirebaseOk) {
+          await addDoc(collection(db, 'inventory'), data);
+          // onSnapshot will update UI
+        } else {
+          inventoryItems.push({ id:'local_'+Date.now(), ...data });
+          renderInventory(); renderShoppingList(); updateColorFilterBar();
+        }
+        showToast('✅ 已新增物品！');
       }
-      
-      showToast('🎉 已成功新增物品！');
-      closeModal('modal-add-item'); // 修正關閉視窗的 ID
-      resetItemForm();              // 新增後清空表單
-      
-    } catch(err) {
-      console.error(err);
-      showToast('儲存失敗，請檢查網路連接', 'error');
+      closeModal('modal-add-item');
+    } catch (err) {
+      console.error('saveItem error:', err);
+      showToast('❌ 儲存失敗：' + err.message, 'error');
     } finally {
-      // 恢復按鈕狀態
-      btn.disabled = false;
-      btn.innerHTML = originalText;
+      btn.disabled = false; btn.textContent = '💾 儲存物品';
     }
   };
 
-  // ➖ 點「-1」按鈕：把庫存數量扣掉 1
+  // ══ Order (move up/down one step) ══
+  window.moveItemOrder = async function(id, direction) {
+    // Normalise orders to consecutive integers
+    const sorted = [...inventoryItems].sort((a,b) => (a.order??0) - (b.order??0));
+    sorted.forEach((item, i) => { item.order = i; });
+
+    const idx = sorted.findIndex(i => i.id === id);
+    if (idx === -1) return;
+    const targetIdx = idx + direction;
+    if (targetIdx < 0 || targetIdx >= sorted.length) return;
+
+    // Swap
+    const tmp = sorted[idx].order;
+    sorted[idx].order    = sorted[targetIdx].order;
+    sorted[targetIdx].order = tmp;
+
+    // Update local state & re-render immediately
+    inventoryItems = [...sorted].sort((a,b) => a.order - b.order);
+    renderInventory();
+
+    // Persist to Firebase in background
+    if (isFirebaseOk) {
+      try {
+        await Promise.all([
+          updateDoc(doc(db, 'inventory', sorted[idx].id),    { order: sorted[idx].order }),
+          updateDoc(doc(db, 'inventory', sorted[targetIdx].id), { order: sorted[targetIdx].order })
+        ]);
+      } catch (e) { console.warn('order update failed', e); }
+    }
+  };
+
+  // ══ Qty ══
   window.decreaseQty = async function(id, curQty) {
-    if (curQty <= 0) return alert('數量已經是 0 了！');
-    if (isFirebaseOk) {
-      // 🔸 updateDoc：只更新 inventory 裡這筆文件的 quantity 欄位
-      await updateDoc(doc(db, 'inventory', id), { quantity: curQty - 1 });
-    } else {
-      const item = inventoryItems.find(i => i.id === id);
-      if (item) item.quantity = curQty - 1;
-      renderInventory(); renderShoppingList();
-    }
+    if (curQty <= 0) return;
+    const newQty = curQty - 1;
+    if (isFirebaseOk) await updateDoc(doc(db,'inventory',id), { quantity: newQty });
+    else { const item = inventoryItems.find(i=>i.id===id); if(item) item.quantity=newQty; renderInventory(); renderShoppingList(); }
   };
-
-  // ➕ 點「+1」按鈕：把庫存數量加 1
   window.increaseQty = async function(id, curQty) {
-    if (isFirebaseOk) {
-      // 更新 Firestore 裡的數量
-      await updateDoc(doc(db, 'inventory', id), { quantity: curQty + 1 });
-    } else {
-      // 更新假資料裡的數量
-      const item = inventoryItems.find(i => i.id === id);
-      if (item) item.quantity = curQty + 1;
-      renderInventory(); renderShoppingList();
-    }
+    const newQty = curQty + 1;
+    if (isFirebaseOk) await updateDoc(doc(db,'inventory',id), { quantity: newQty });
+    else { const item = inventoryItems.find(i=>i.id===id); if(item) item.quantity=newQty; renderInventory(); renderShoppingList(); }
   };
-
-  // 🔄 更新不可數物品的狀態（充足 / 夠用 / 快用完了）
-  window.updateStatus = async function(id, newStatus) {
-    if (isFirebaseOk) {
-      await updateDoc(doc(db, 'inventory', id), { status: newStatus });
-    } else {
-      const item = inventoryItems.find(i => i.id === id);
-      if (item) item.status = newStatus;
-      renderInventory(); renderShoppingList();
-    }
+  window.cycleStatus = async function(id, currentStatus) {
+    const sf = { '充足':'夠用','夠用':'快用完了','快用完了':'充足' };
+    const newStatus = sf[currentStatus] || '充足';
+    if (isFirebaseOk) await updateDoc(doc(db,'inventory',id), { status: newStatus });
+    else { const item = inventoryItems.find(i=>i.id===id); if(item) item.status=newStatus; renderInventory(); renderShoppingList(); }
   };
-
-  // 🔄 循環切換物品狀態 (充足 -> 夠用 -> 快用完了 -> 充足)
-window.cycleStatus = function(id, currentStatus) {
-  const statusFlow = {
-    '充足': '夠用',
-    '夠用': '快用完了',
-    '快用完了': '充足'
-  };
-  const newStatus = statusFlow[currentStatus] || '充足';
-  // 呼叫你原本寫好的更新函式
-  window.updateStatus(id, newStatus);
-};
-
-  // 🗑️ 刪除庫存物品
   window.deleteItem = async function(id) {
     if (!confirm('確定要刪除這個物品嗎？')) return;
-    if (isFirebaseOk) {
-      // 🔸 deleteDoc：從 Firestore 永久刪除這筆文件
-      await deleteDoc(doc(db, 'inventory', id));
-    } else {
-      inventoryItems = inventoryItems.filter(i => i.id !== id);
-      renderInventory(); renderShoppingList();
-    }
+    if (isFirebaseOk) await deleteDoc(doc(db,'inventory',id));
+    else { inventoryItems = inventoryItems.filter(i=>i.id!==id); renderInventory(); renderShoppingList(); updateColorFilterBar(); }
+    showToast('🗑️ 已刪除物品');
   };
 
-
-  // ══════════════════════════════════════
-  //  🧹 家務模組：Firebase CRUD
-  // ══════════════════════════════════════
-
-  // 📝 新增今日家務項目
-  window.saveChore = async function() {
-    const selected = [...document.querySelectorAll('#chore-chips .chore-chip.selected')]
-                       .map(c => c.dataset.name);
-    const custom = document.getElementById('custom-chore').value.trim();
-    const allChores = [...selected, ...(custom ? [custom] : [])];
-    if (!allChores.length) return alert('請選擇或輸入至少一個家務！');
-
-    const todayStr = daysFromNow(0);
-    try {
-      for (const title of allChores) {
-        const newChore = { title, completed:false, completedBy:'', completedAt:'', date:todayStr };
-        if (isFirebaseOk) {
-          await addDoc(collection(db, 'chores'), newChore);
-        } else {
-          choresItems.push({ id:'lc_'+Date.now()+Math.random(), ...newChore });
-        }
-      }
-      if (!isFirebaseOk) renderChores();
-      closeModal('modal-add-chore');
-      resetChoreForm();
-    } catch(e) { alert('儲存失敗：' + e.message); }
+  // ══ Color filter ══
+  window.setColorFilter = function(color, btn) {
+    activeColorFilter = color;
+    document.querySelectorAll('.cf-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderInventory();
   };
+  function updateColorFilterBar() {
+    const bar = document.getElementById('color-filter-bar');
+    const usedColors = [...new Set(inventoryItems.map(i=>i.colorTag).filter(Boolean))];
+    let html = `<button class="cf-btn ${activeColorFilter==='all'?'active':''}" data-color="all" onclick="setColorFilter('all',this)">
+      <span style="font-size:0.8rem;">⬜</span> 全部 (${inventoryItems.length})
+    </button>`;
+    usedColors.forEach(c => {
+      const items = inventoryItems.filter(i=>i.colorTag===c);
+      const label = items.length<=2 ? items.map(i=>i.name).join('、') : items[0].name+'等';
+      html += `<button class="cf-btn ${activeColorFilter===c?'active':''}" data-color="${c}" onclick="setColorFilter('${c}',this)">
+        <span class="cf-dot" style="background:${c};"></span>${label} (${items.length})
+      </button>`;
+    });
+    bar.innerHTML = html;
+  }
 
-  // ✅ 勾選家務完成打卡（或取消完成）
-  window.toggleChore = async function(id, isDone) {
-    const newDone = !isDone;
-    const data = {
-      completed:   newDone,
-      completedBy: newDone ? currentMemberName : '',
-      completedAt: newDone ? new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'}) : '',
-    };
-    if (isFirebaseOk) {
-      // 🔸 updateDoc：更新這筆家務的完成狀態、完成者、完成時間
-      await updateDoc(doc(db, 'chores', id), data);
-    } else {
-      const item = choresItems.find(c => c.id === id);
-      if (item) Object.assign(item, data);
-      renderChores();
-    }
-  };
-
-  // 🗑️ 刪除家務項目
-  window.deleteChore = async function(id) {
-    if (isFirebaseOk) {
-      await deleteDoc(doc(db, 'chores', id));
-    } else {
-      choresItems = choresItems.filter(c => c.id !== id);
-      renderChores();
-    }
-  };
-
-
-  // ══════════════════════════════════════
-  //  🎨 畫面渲染函數（把資料變成 HTML）
-  // ══════════════════════════════════════
-
-  // 渲染庫存列表
+  // ══ Render Inventory ══
   function renderInventory() {
     const el = document.getElementById('inventory-list');
-
     if (!inventoryItems.length) {
-      el.innerHTML = `<div class="empty">
-        <i class="fa fa-box-open"></i>庫存是空的！<br/>點右下角 + 新增第一項物品
-      </div>`;
+      el.innerHTML = `<div class="empty"><i class="fa fa-box-open"></i>庫存空空如也<br/><small style="display:block;margin-top:4px;">點右下角 ＋ 新增第一件物品</small></div>`;
       return;
     }
 
-    el.innerHTML = inventoryItems.map(item => {
-      // 計算效期狀態（紅/黃/綠）
-      let expDot = '', expText = '';
+    const sorted   = [...inventoryItems].sort((a,b) => (a.order??0) - (b.order??0));
+    const filtered = activeColorFilter === 'all' ? sorted : sorted.filter(i => i.colorTag === activeColorFilter);
+
+    if (!filtered.length) {
+      el.innerHTML = `<div class="empty"><i class="fa fa-filter"></i>此顏色分類下沒有物品</div>`;
+      return;
+    }
+
+    el.innerHTML = filtered.map((item, index) => {
+      // Expiry
+      let expText = '';
       if (item.expiryDate) {
-        const today = new Date(); today.setHours(0,0,0,0);
-        const exp   = new Date(item.expiryDate);
-        const diff  = Math.floor((exp - today) / 86400000);
-        const cls   = diff < 0 ? 'bad' : diff <= 7 ? 'warn' : 'ok';
-        const label = diff < 0
-          ? `<span style="color:var(--red);font-weight:800;">⚠️ 已過期 ${Math.abs(diff)} 天！</span>`
+        const diff = Math.floor((new Date(item.expiryDate) - new Date().setHours(0,0,0,0)) / 86400000);
+        expText = diff < 0
+          ? `<span style="color:var(--red);font-weight:800;">⚠️ 已過期 ${Math.abs(diff)} 天</span>`
           : diff <= 7
-            ? `<span style="color:var(--yellow);font-weight:800;">🟡 ${diff} 天後到期</span>`
-            : `<span>效期 ${item.expiryDate}</span>`;
-        expDot  = `<div class="exp-dot exp-${cls}" title="${item.expiryDate}"></div>`;
-        expText = label;
+          ? `<span style="color:var(--yellow);font-weight:800;">🟡 ${diff} 天後到期</span>`
+          : `<span>📅 效期 ${item.expiryDate}</span>`;
       }
+      const purText  = item.purchaseDate ? `<span>🛒 ${item.purchaseDate}</span>` : '';
+      const memoHtml = item.memo ? `<div class="inv-memo"><i class="fa fa-thumbtack" style="font-size:0.68rem;"></i>${item.memo}</div>` : '';
+      const colorDot = item.colorTag ? `<span class="color-dot" style="background:${item.colorTag};"></span>` : '';
 
-      // 數量控制 or 狀態選單
-      let control = '';
-      if (item.isCountable) {
-        // 【可數物品】顯示數量加減按鈕
-        const qty = item.quantity ?? 0;
-        control = `
-          <div class="qty-box">
-            <button class="qty-btn minus" onclick="decreaseQty('${item.id}', ${qty})">-</button>
-            <div class="qty-val">${qty}</div>
-            <button class="qty-btn" style="background:var(--green-light); color:var(--green);" onclick="increaseQty('${item.id}', ${qty})">+</button>
-          </div>`;
-      } else {
-        // 【不可數物品】顯示狀態切換按鈕
-        let btnClass = item.status === '充足' ? 'ok' : item.status === '夠用' ? 'warn' : 'bad';
-        let btnText = item.status === '充足' ? '✅ 充足' : item.status === '夠用' ? '🟡 夠用' : '🔴 快用完了';
+      const needsAlert = item.isCountable && (item.quantity??0) <= (item.alertQty??1);
+      const alertBadge = needsAlert ? `<span class="alert-badge"><i class="fa fa-bell" style="font-size:0.6rem;"></i>待購</span>` : '';
 
-        control = `
-          <button class="status-btn ${btnClass}" onclick="cycleStatus('${item.id}', '${item.status}')">
-            ${btnText}
-          </button>`;
-      }
+      const control = item.isCountable
+        ? `<div class="qty-box">
+            <button class="qty-btn minus" onclick="decreaseQty('${item.id}',${item.quantity??0})">−</button>
+            <div class="qty-val">${item.quantity??0}</div>
+            <button class="qty-btn plus"  onclick="increaseQty('${item.id}',${item.quantity??0})">＋</button>
+           </div>`
+        : `<button class="status-btn ${item.status==='充足'?'ok':item.status==='夠用'?'warn':'bad'}" onclick="cycleStatus('${item.id}','${item.status}')">
+            ${item.status==='充足'?'✅ 充足':item.status==='夠用'?'🟡 夠用':'🔴 快用完了'}
+           </button>`;
 
       return `
-        <div class="card">
+        <div class="card" id="card-${item.id}">
           <div class="inv-row">
-            <div style="flex:1; min-width:0;">
-              <div class="inv-name">${item.name}</div>
-              <div class="inv-meta">${expDot}${expText}</div>
+            <div class="sort-controls">
+              <button class="sort-btn" ${index===0?'disabled':''} onclick="moveItemOrder('${item.id}',-1)" title="上移一格">
+                <i class="fa fa-chevron-up"></i>
+              </button>
+              <button class="sort-btn" ${index===filtered.length-1?'disabled':''} onclick="moveItemOrder('${item.id}',1)" title="下移一格">
+                <i class="fa fa-chevron-down"></i>
+              </button>
+            </div>
+            <div class="inv-info">
+              <div class="inv-name">${colorDot}${item.name}${alertBadge}</div>
+              <div class="inv-meta">${expText}${purText}</div>
+              ${memoHtml}
             </div>
             ${control}
-            <button class="del-btn" onclick="deleteItem('${item.id}')">
-              <i class="fa fa-trash"></i>
-            </button>
+            <div class="action-btn-group">
+              <button class="icon-btn edit-btn" onclick="openItemModal('${item.id}')" title="編輯"><i class="fa fa-pen"></i></button>
+              <button class="icon-btn del-btn"  onclick="deleteItem('${item.id}')"   title="刪除"><i class="fa fa-trash"></i></button>
+            </div>
           </div>
         </div>`;
     }).join('');
   }
 
-  // 渲染待購清單（數量 ≤ 1，或狀態是「快用完了」）
+  // ══ Render Shopping ══
   function renderShoppingList() {
-    const el     = document.getElementById('shopping-list');
-    const needed = inventoryItems.filter(item =>
-      item.isCountable ? (item.quantity ?? 0) <= 1 : item.status === '快用完了'
+    const el = document.getElementById('shopping-list');
+    const needed = inventoryItems.filter(i =>
+      i.isCountable ? (i.quantity??0) <= (i.alertQty??1) : i.status === '快用完了'
     );
-
     if (!needed.length) {
-      el.innerHTML = `<div class="card" style="text-align:center; padding:14px; color:var(--green);">
-        <i class="fa fa-check-circle"></i>&nbsp; 太棒了！目前沒有需要補購的物品 🎉
-      </div>`;
-      return;
+      el.innerHTML = `<div class="card" style="text-align:center;padding:11px;color:var(--green);font-size:0.86rem;font-weight:800;">
+        <i class="fa fa-check-circle"></i> 太棒了！目前不需補貨
+      </div>`; return;
     }
-
-    el.innerHTML = `
-      <div class="card" style="padding:10px 15px;">
-        ${needed.map(item => `
-          <div class="shop-row">
-            <div class="shop-dot"></div>
-            <span style="font-weight:800; flex:1;">${item.name}</span>
-            <span style="font-size:0.76rem; color:var(--red); font-weight:800;">
-              ${item.isCountable ? `剩 ${item.quantity??0} 個` : item.status}
-            </span>
-          </div>`).join('')}
-      </div>`;
+    el.innerHTML = `<div class="card" style="padding:8px 14px;">
+      ${needed.map(i=>`
+        <div class="shop-row">
+          <div class="shop-dot" style="background:${i.colorTag||'var(--primary)'}"></div>
+          <span style="font-weight:800;flex:1;font-size:0.9rem;">${i.name}</span>
+          <span style="font-size:0.74rem;color:var(--red);font-weight:800;">
+            ${i.isCountable ? `剩 ${i.quantity??0}（需 >${i.alertQty??1}）` : i.status}
+          </span>
+        </div>`).join('')}
+    </div>`;
   }
 
-  // 渲染今日家務列表
+  // ══ Render Chores ══
   function renderChores() {
-    const el     = document.getElementById('chores-list');
-    const reLog  = document.getElementById('recent-log');
+    const el    = document.getElementById('chores-list');
+    const logEl = document.getElementById('recent-log');
+    if (!el) return;
+    const today = new Date().toISOString().split('T')[0];
+    const todayC = choresItems.filter(c => c.date === today);
 
-    // 未完成排前面，完成的排後面
-    const sorted = [...choresItems].sort((a,b) => Number(a.completed) - Number(b.completed));
-
-    if (!sorted.length) {
-      el.innerHTML = `<div class="empty">
-        <i class="fa fa-sun" style="color:var(--yellow);"></i>
-        今天還沒有家務項目<br/>點右下角 + 新增！
-      </div>`;
+    if (!todayC.length) {
+      el.innerHTML = `<div class="empty"><i class="fa fa-broom"></i>今日還沒有家務<br/><small style="display:block;margin-top:4px;">點右下角 ＋ 新增</small></div>`;
     } else {
-      el.innerHTML = sorted.map(c => `
+      el.innerHTML = todayC.map(c=>`
         <div class="card">
           <div class="chore-row">
-            <div class="chore-check ${c.completed?'done':''}"
-                 onclick="toggleChore('${c.id}',${c.completed})">
-              ${c.completed ? '✓' : ''}
+            <div class="chore-check ${c.completed?'done':''}" onclick="toggleChore('${c.id}')">
+              ${c.completed?'<i class="fa fa-check"></i>':''}
             </div>
-            <div style="flex:1; min-width:0;">
+            <div style="flex:1;">
               <div class="chore-title ${c.completed?'done':''}">${c.title}</div>
-              ${c.completed && c.completedBy
-                ? `<div class="chore-sub">✅ 由 <strong>${c.completedBy}</strong> 完成${c.completedAt?' · '+c.completedAt:''}</div>`
-                : ''}
+              ${c.completedBy?`<div class="chore-sub">✅ ${c.completedBy}${c.completedAt?' · '+c.completedAt:''}</div>`:''}
             </div>
-            <button class="del-btn" onclick="deleteChore('${c.id}')">
-              <i class="fa fa-trash"></i>
-            </button>
+            <button class="icon-btn del-btn" onclick="deleteChore('${c.id}')"><i class="fa fa-trash"></i></button>
           </div>
         </div>`).join('');
     }
 
-    // 今日完成紀錄（只顯示已完成且有記錄人的）
-    const done = choresItems.filter(c => c.completed && c.completedBy);
-    if (!done.length) {
-      reLog.innerHTML = `<div class="card" style="text-align:center; padding:14px; color:var(--text-muted); font-size:0.86rem;">
-        <i class="fa fa-star" style="color:var(--yellow);"></i>&nbsp; 大家一起維持家裡整潔！
-      </div>`;
-    } else {
-      reLog.innerHTML = `<div class="card" style="padding:10px 15px;">
-        ${done.map(c => `
-          <div style="display:flex; align-items:center; gap:8px; padding:7px 0;
-               border-bottom:1px dashed var(--border);">
-            <span style="font-size:1.1rem;">${c.title.split(' ')[0]}</span>
-            <span style="flex:1; font-size:0.84rem; font-weight:700;">
-              ${c.title.replace(/^\S+\s*/,'').trim() || c.title}
-            </span>
-            <span style="font-size:0.75rem; color:var(--green); font-weight:900;">
-              ${c.completedBy}
-            </span>
-            ${c.completedAt ? `<span style="font-size:0.72rem; color:var(--text-muted);">${c.completedAt}</span>` : ''}
-          </div>`).join('')}
-      </div>`;
-    }
+    const done = todayC.filter(c=>c.completed);
+    logEl.innerHTML = done.length
+      ? `<div class="card" style="padding:8px 14px;">${done.map(c=>`
+          <div class="shop-row">
+            <div class="shop-dot" style="background:var(--green)"></div>
+            <span style="flex:1;font-weight:800;font-size:0.88rem;">${c.title}</span>
+            <span style="font-size:0.74rem;color:var(--green);font-weight:800;">${c.completedBy||''}</span>
+          </div>`).join('')}</div>`
+      : `<div style="color:var(--text-dim);font-size:0.83rem;padding:8px 0;">尚無完成紀錄</div>`;
   }
 
-  // 渲染家務選項 Chip
+  window.toggleChore = async function(id) {
+    const chore = choresItems.find(c=>c.id===id);
+    if (!chore) return;
+    chore.completed   = !chore.completed;
+    chore.completedBy = chore.completed ? currentMemberName : '';
+    chore.completedAt = chore.completed ? new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'}) : '';
+    if (isFirebaseOk) await updateDoc(doc(db,'chores',id), { completed:chore.completed, completedBy:chore.completedBy, completedAt:chore.completedAt });
+    renderChores();
+    showToast(chore.completed ? '✅ 家務完成！' : '↩️ 已取消完成');
+  };
+  window.deleteChore = async function(id) {
+    if (!confirm('確定刪除此家務？')) return;
+    if (isFirebaseOk) await deleteDoc(doc(db,'chores',id));
+    else choresItems = choresItems.filter(c=>c.id!==id);
+    renderChores();
+  };
+
   function renderChoreChips() {
-    document.getElementById('chore-chips').innerHTML = CHORE_PRESETS.map(c => `
-      <div class="chore-chip" data-name="${c.e} ${c.n}" onclick="toggleChip(this)">
-        ${c.e} ${c.n}
-      </div>`).join('');
+    document.getElementById('chore-chips').innerHTML = CHORE_PRESETS.map(c=>
+      `<div class="chore-chip" data-name="${c.e} ${c.n}" onclick="toggleChip(this)">${c.e} ${c.n}</div>`
+    ).join('');
   }
-
-
-  // ══════════════════════════════════════
-  //  🖱️ UI 互動
-  // ══════════════════════════════════════
-
-  // Tab 切換
-  window.switchTab = function(tab) {
-    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-btn') .forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-'  + tab).classList.add('active');
-    document.getElementById('nav-'  + tab).classList.add('active');
+  window.saveChore = async function() {
+    const selected = [...document.querySelectorAll('.chore-chip.selected')].map(c=>c.dataset.name);
+    const custom   = document.getElementById('custom-chore').value.trim();
+    const toAdd    = [...selected, ...(custom?[custom]:[])];
+    if (!toAdd.length) { showToast('⚠️ 請選擇或輸入家務','error'); return; }
+    const today = new Date().toISOString().split('T')[0];
+    for (const title of toAdd) {
+      const nc = { title, completed:false, completedBy:'', completedAt:'', date:today };
+      if (isFirebaseOk) await addDoc(collection(db,'chores'), nc);
+      else choresItems.push({ id:'c_'+Date.now()+'_'+Math.random(), ...nc });
+    }
+    if (!isFirebaseOk) renderChores();
+    closeModal('modal-add-chore');
+    document.getElementById('custom-chore').value = '';
+    document.querySelectorAll('.chore-chip').forEach(c=>c.classList.remove('selected'));
+    showToast(`✅ 已新增 ${toAdd.length} 個家務`);
   };
 
-  // FAB 根據目前頁面決定打開哪個 Modal
-  window.openFAB = function() {
-    const active = document.querySelector('.tab-pane.active')?.id;
-    if (active === 'tab-chores') openModal('modal-add-chore');
-    else openModal('modal-add-item');
+  // ══ UI helpers ══
+  window.openItemModal = function(editId=null) {
+    document.getElementById('edit-item-id').value = editId || '';
+    if (editId) {
+      document.getElementById('item-modal-title').innerHTML = '✏️ 編輯庫存物品';
+      const item = inventoryItems.find(i=>i.id===editId);
+      if (item) {
+        document.getElementById('item-name').value      = item.name;
+        document.getElementById('item-qty').value       = item.quantity??1;
+        document.getElementById('item-alert-qty').value = item.alertQty??1;
+        document.getElementById('item-expiry').value    = item.expiryDate||'';
+        document.getElementById('item-purchase').value  = item.purchaseDate||'';
+        document.getElementById('item-memo').value      = item.memo||'';
+        selectType(item.isCountable ? 'countable' : 'uncountable');
+        document.querySelectorAll('.color-option').forEach(c=>c.classList.remove('selected'));
+        const matched = document.querySelector(`.color-option[data-color="${item.colorTag}"]`);
+        if (matched) matched.classList.add('selected');
+        else document.querySelector('.color-option').classList.add('selected');
+        if (!item.isCountable) {
+          document.querySelectorAll('#status-field [data-status]').forEach(b =>
+            b.classList.toggle('selected', b.dataset.status===item.status)
+          );
+        }
+      }
+    } else {
+      document.getElementById('item-modal-title').innerHTML = '➕ 新增庫存物品';
+      resetItemForm();
+    }
+    openModal('modal-add-item');
+    // Focus name field after animation
+    setTimeout(() => document.getElementById('item-name').focus(), 350);
   };
 
-  window.openModal  = (id) => document.getElementById(id).classList.add('open');
-  window.closeModal = (id) => document.getElementById(id).classList.remove('open');
+  window.openModal  = id => document.getElementById(id).classList.add('open');
+  window.closeModal = id => document.getElementById(id).classList.remove('open');
 
-  window.openMemberModal = function() {
-    renderMembersUI();
-    openModal('modal-member');
-  };
-
-  // 物品類型切換（可計數 / 不可數）
   window.selectType = function(type) {
-    document.getElementById('type-countable')  .classList.toggle('selected', type==='countable');
+    document.getElementById('type-countable').classList.toggle('selected',   type==='countable');
     document.getElementById('type-uncountable').classList.toggle('selected', type==='uncountable');
-    document.getElementById('qty-field')   .style.display = type==='countable'   ? 'block' : 'none';
+    document.getElementById('qty-field').style.display    = type==='countable'   ? 'block' : 'none';
     document.getElementById('status-field').style.display = type==='uncountable' ? 'block' : 'none';
   };
-
-  // 不可數物品狀態選擇
   window.selectStatus = function(btn) {
-    document.querySelectorAll('#status-field [data-status]')
-      .forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('#status-field [data-status]').forEach(b=>b.classList.remove('selected'));
     btn.classList.add('selected');
   };
+  window.selectColor = function(btn) {
+    document.querySelectorAll('.color-option').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+  };
+  window.toggleChip = el => el.classList.toggle('selected');
 
-  // 家務 Chip 切換
-  window.toggleChip = function(el) { el.classList.toggle('selected'); };
-
-  // 點遮罩關閉 Modal
+  // Close modal on backdrop click
   document.querySelectorAll('.modal-overlay').forEach(ov =>
-    ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('open'); })
+    ov.addEventListener('click', e => { if (e.target===ov) ov.classList.remove('open'); })
   );
 
-  // 清空表單
   function resetItemForm() {
-    document.getElementById('item-name').value  = '';
-    document.getElementById('item-qty').value   = '1';
-    document.getElementById('item-expiry').value = '';
+    document.getElementById('item-name').value      = '';
+    document.getElementById('item-qty').value       = '1';
+    document.getElementById('item-alert-qty').value = '1';
+    document.getElementById('item-expiry').value    = '';
+    document.getElementById('item-purchase').value  = '';
+    document.getElementById('item-memo').value      = '';
     selectType('countable');
-    document.querySelectorAll('#status-field [data-status]').forEach((b,i) =>
-      b.classList.toggle('selected', i===0)
-    );
-  }
-  function resetChoreForm() {
-    document.querySelectorAll('#chore-chips .chore-chip').forEach(c => c.classList.remove('selected'));
-    document.getElementById('custom-chore').value = '';
+    document.querySelectorAll('.color-option').forEach((b,i) => b.classList.toggle('selected', i===0));
+    document.querySelectorAll('#status-field [data-status]').forEach((b,i) => b.classList.toggle('selected', i===0));
   }
 
-  // 更新日期標籤
+  function updateMemberChip() {
+    document.getElementById('current-member-name').textContent = currentMemberName;
+    document.getElementById('member-avatar').textContent       = currentMemberName[0]||'?';
+  }
   function updateTodayBadge() {
-    const d = new Date();
     document.getElementById('today-badge').textContent =
-      `📅 ${d.toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric',weekday:'long'})}`;
+      `📅 ${new Date().toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric',weekday:'long'})}`;
   }
 
-  // 顯示主 App
-  function showApp() {
-    document.getElementById('app').style.display    = 'block';
-    document.getElementById('fab-btn').style.display = 'flex';
-    updateMemberChip();
-    renderChoreChips();
-    updateTodayBadge();
-  }
+  // ══ Member management ══
+  window.openMemberModal = function() {
+    const ul = document.getElementById('members-list-ui');
+    ul.innerHTML = members.length
+      ? members.map(m=>`
+          <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);">
+            <div class="m-avatar">${m.name[0]}</div>
+            <span style="font-weight:800;flex:1;">${m.name}</span>
+            <button onclick="switchMember('${m.id}','${m.name}')" style="padding:5px 12px;background:${currentMemberId===m.id?'var(--primary-light)':'var(--bg2)'};border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:0.79rem;font-weight:800;cursor:pointer;">
+              ${currentMemberId===m.id?'✅ 使用中':'切換'}
+            </button>
+          </div>`).join('')
+      : '<div style="color:var(--text-dim);padding:8px 0;font-size:0.85rem;">暫無成員</div>';
+    openModal('modal-member');
+  };
+  window.switchMember = function(id, name) {
+    currentMemberId = id; currentMemberName = name;
+    localStorage.setItem('hsa_member_name', name);
+    localStorage.setItem('hsa_member_id',   id);
+    updateMemberChip(); closeModal('modal-member');
+    showToast(`👤 切換到 ${name}`);
+  };
+  window.addMember = function() {
+    const input = document.getElementById('new-member-input');
+    const name  = input.value.trim();
+    if (!name) { showToast('⚠️ 請輸入名字','error'); return; }
+    if (members.find(m=>m.name===name)) { showToast('⚠️ 此名字已存在','error'); return; }
+    members.push({ id:'u_'+Date.now(), name });
+    input.value = '';
+    openMemberModal();
+    showToast(`✅ 已新增成員 ${name}`);
+  };
 
-  // ── 假資料模式初始化 ──
-  function loadMockData() {
-    inventoryItems = [...MOCK_INVENTORY];
-    choresItems    = [...MOCK_CHORES];
-    members           = [{ id:'demo', name:'示範用戶' }];
-    currentMemberId   = 'demo';
-    currentMemberName = '示範用戶';
-    showApp();
-    renderInventory();
-    renderShoppingList();
-    renderChores();
-  }
-
-
-  // ══════════════════════════════════════
-  //  🏁 啟動！
-  // ══════════════════════════════════════
+  // ══ Boot ══
   initApp();
-
 </script>
 </body>
 </html>
