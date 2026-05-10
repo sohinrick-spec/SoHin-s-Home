@@ -98,6 +98,8 @@
       padding: 12px 14px; margin-bottom: 8px; position: relative; transition: border-color 0.2s;
     }
     .card:hover { border-color: var(--border2); }
+    .card:has(.inv-row):hover { border-color: var(--border2); box-shadow: 0 2px 12px rgba(0,0,0,0.25); }
+    .card:has(.inv-row):active { transform: scale(0.995); }
 
     /* ══ Color Filter Bar ══ */
     .color-filter-bar { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 10px; scrollbar-width: none; }
@@ -191,7 +193,7 @@
       justify-content: center; font-size: 0.8rem; font-weight: 900;
       color: var(--bg); transition: all 0.2s;
     }
-    .buy-check.checked { background: var(--green); border-color: var(--green); }
+    .buy-check.checked { background: var(--green); border-color: var(--green); animation: checkBounce 0.35s ease; }
     .restock-all-btn {
       width: 100%; margin-top: 10px; padding: 11px;
       background: var(--green-light); border: 1px solid rgba(116,198,157,0.35);
@@ -221,7 +223,13 @@
       cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
       transition: all 0.2s; margin-top: 1px; font-size: 0.78rem; font-weight: 900; color: var(--bg); background: var(--bg2);
     }
-    .chore-check.done { background: var(--green); border-color: var(--green); }
+    .chore-check.done { background: var(--green); border-color: var(--green); animation: checkBounce 0.35s ease; }
+    @keyframes checkBounce {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.3); }
+      70%  { transform: scale(0.9); }
+      100% { transform: scale(1); }
+    }
     .chore-title { font-weight: 800; font-size: 0.92rem; flex: 1; transition: all 0.2s; }
     .chore-title.done { text-decoration: line-through; color: var(--text-dim); }
     .chore-sub { font-size: 0.71rem; color: var(--text-muted); margin-top: 2px; }
@@ -248,11 +256,6 @@
       backdrop-filter: blur(5px); z-index: 50; display: none; align-items: flex-end; justify-content: center;
     }
     .modal-overlay.open { display: flex; }
-    .modal-sheet {
-      background: var(--card); border-radius: 24px 24px 0 0; padding: 18px 18px 44px;
-      width: 100%; max-width: 500px; animation: slideUp 0.3s cubic-bezier(0.34,1.2,0.64,1);
-      max-height: 93vh; overflow-y: auto; border-top: 1px solid var(--border2);
-    }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     .modal-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 99px; margin: 0 auto 16px; }
     .modal-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 16px; color: var(--text); }
@@ -267,7 +270,7 @@
       font-family: 'Nunito', sans-serif; font-size: 0.93rem; font-weight: 700; color: var(--text);
       background: var(--bg2); outline: none; transition: border-color 0.2s, background 0.2s;
     }
-    .field-input:focus { border-color: var(--border2); background: var(--bg); }
+    .field-input:focus { border-color: var(--primary-dim); background: var(--bg); box-shadow: 0 0 0 3px rgba(232,232,232,0.07); }
 
     .color-picker { display: flex; gap: 10px; padding: 8px 4px 12px; overflow-x: auto; scrollbar-width: none; }
     .color-picker::-webkit-scrollbar { display: none; }
@@ -290,8 +293,14 @@
       width: 100%; padding: 13px; background: var(--primary); color: var(--bg); border: none;
       border-radius: var(--radius-md); font-family: 'Nunito', sans-serif; font-size: 0.95rem;
       font-weight: 900; cursor: pointer; margin-top: 16px; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
     .btn-primary:hover { background: #fff; }
+    .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-primary.loading::before {
+      content: ''; width: 16px; height: 16px; border: 2px solid rgba(0,0,0,0.2);
+      border-top-color: var(--bg); border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0;
+    }
     .btn-cancel { width: 100%; margin-top: 8px; padding: 11px; background: none; border: none; color: var(--text-muted); font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; }
 
     /* ══ Alert badge ══ */
@@ -374,6 +383,14 @@
       font-family:'Playfair Display',serif; font-size:2.6rem; font-weight:700; line-height:1;
       transition: color 0.4s;
     }
+    .budget-remaining-amount.pulse {
+      animation: amountPulse 0.45s ease;
+    }
+    @keyframes amountPulse {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.07); }
+      100% { transform: scale(1); }
+    }
     .budget-remaining-amount.healthy { color: var(--green); }
     .budget-remaining-amount.warn    { color: var(--yellow); }
     .budget-remaining-amount.danger  { color: var(--red); }
@@ -395,7 +412,7 @@
       font-family:'Nunito',sans-serif; font-size:1.05rem; font-weight:800; color:var(--text);
       outline:none; transition: border-color 0.2s, background 0.2s;
     }
-    .budget-main-input:focus { border-color: var(--green); background: var(--bg); }
+    .budget-main-input:focus { border-color: var(--green); background: var(--bg); box-shadow: 0 0 0 3px rgba(116,198,157,0.1); }
     .budget-main-input::placeholder { color: var(--text-dim); font-weight:700; font-size:0.92rem; }
     .budget-input-send {
       position:absolute; right:8px; top:50%; transform:translateY(-50%);
@@ -471,6 +488,23 @@
       display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--border);
     }
     .fixed-exp-item:last-child { border-bottom:none; }
+
+    /* ══ Modal mobile fix ══ */
+    .modal-sheet {
+      background: var(--card); border-radius: 24px 24px 0 0; padding: 18px 18px 44px;
+      width: 100%; max-width: 500px; animation: slideUp 0.3s cubic-bezier(0.34,1.2,0.64,1);
+      max-height: 93vh; overflow-y: auto; border-top: 1px solid var(--border2);
+      overflow-x: hidden; /* prevent horizontal scroll on iPhone */
+      -webkit-overflow-scrolling: touch;
+    }
+    /* Room tag picker overflow fix */
+    #room-tag-picker { flex-wrap: wrap !important; overflow-x: visible !important; }
+
+    /* Income entry style */
+    .income-row { background: rgba(116,198,157,0.05); border-left: 2px solid var(--green); }
+
+    /* Ledger member chips - auto-wrap for multiple members */
+    #ledger-member-chips { flex-wrap: wrap !important; }
 
     /* Ledger member chips */
     .ledger-member-chip { transition: all 0.15s; }
@@ -621,9 +655,14 @@
       <!-- Today's ledger -->
       <div class="section-title" style="margin-top:6px;">
         <i class="fa fa-receipt" style="color:var(--primary); font-size:0.85rem;"></i> 今日紀錄
-        <button onclick="openBudgetSettings()" style="margin-left:auto; background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:4px 10px; color:var(--text-muted); font-family:'Nunito',sans-serif; font-size:0.72rem; font-weight:800; cursor:pointer;">
-          <i class="fa fa-gear"></i> 設定
-        </button>
+        <div style="margin-left:auto;display:flex;gap:6px;">
+          <button onclick="openModal('modal-income')" style="background:rgba(116,198,157,0.12);border:1px solid rgba(116,198,157,0.3);border-radius:8px;padding:4px 10px;color:var(--green);font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:800;cursor:pointer;">
+            <i class="fa fa-plus"></i> 收入
+          </button>
+          <button onclick="openBudgetSettings()" style="background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:4px 10px; color:var(--text-muted); font-family:'Nunito',sans-serif; font-size:0.72rem; font-weight:800; cursor:pointer;">
+            <i class="fa fa-gear"></i> 設定
+          </button>
+        </div>
       </div>
       <div id="ledger-today-list">
         <div class="empty"><i class="fa fa-receipt"></i>今天還沒有支出<br/><small style="display:block;margin-top:4px;">輸入金額開始記帳</small></div>
@@ -632,14 +671,18 @@
       <!-- Monthly summary -->
       <div class="section-title" style="margin-top:10px;"><i class="fa fa-calendar-days" style="color:var(--primary); font-size:0.85rem;"></i> 本月概況</div>
       <div class="card" id="monthly-summary-card">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
           <div style="text-align:center; padding:6px 0;">
             <div style="font-size:0.66rem; font-weight:900; color:var(--text-muted); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:4px;">本月支出</div>
-            <div style="font-family:'Playfair Display',serif; font-size:1.35rem; color:var(--red);" id="monthly-total-display">$0</div>
+            <div style="font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--red);" id="monthly-total-display">$0</div>
           </div>
           <div style="text-align:center; padding:6px 0;">
             <div style="font-size:0.66rem; font-weight:900; color:var(--text-muted); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:4px;">月預算剩餘</div>
-            <div style="font-family:'Playfair Display',serif; font-size:1.35rem;" id="monthly-remaining-display">$0</div>
+            <div style="font-family:'Playfair Display',serif; font-size:1.2rem;" id="monthly-remaining-display">$0</div>
+          </div>
+          <div style="text-align:center; padding:6px 0;">
+            <div style="font-size:0.66rem; font-weight:900; color:var(--green); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:4px;">本月收入</div>
+            <div style="font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--green);" id="monthly-income-display">$0</div>
           </div>
         </div>
         <div id="top-categories-bar" style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border);"></div>
@@ -665,6 +708,10 @@
           <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--red);" id="rpt-total">$0</div>
         </div>
         <div class="card" style="text-align:center;padding:14px 8px;">
+          <div style="font-size:0.62rem;font-weight:900;color:var(--green);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:6px;">月收入</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--green);" id="rpt-income">$0</div>
+        </div>
+        <div class="card" style="text-align:center;padding:14px 8px;">
           <div style="font-size:0.62rem;font-weight:900;color:var(--text-muted);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:6px;">預算剩餘</div>
           <div style="font-family:'Playfair Display',serif;font-size:1.6rem;" id="rpt-remaining">$0</div>
         </div>
@@ -672,7 +719,7 @@
           <div style="font-size:0.62rem;font-weight:900;color:var(--text-muted);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:6px;">記帳天數</div>
           <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--blue);" id="rpt-days">0天</div>
         </div>
-        <div class="card" style="text-align:center;padding:14px 8px;">
+        <div class="card" style="text-align:center;padding:14px 8px;grid-column:span 2;">
           <div style="font-size:0.62rem;font-weight:900;color:var(--text-muted);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:6px;">日均支出</div>
           <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--yellow);" id="rpt-avg">$0</div>
         </div>
@@ -684,12 +731,19 @@
 
       <!-- Family breakdown -->
       <div class="section-title" style="margin-top:10px;"><i class="fa fa-users" style="color:var(--primary);font-size:0.85rem;"></i> 家庭成員消費</div>
-      <div class="card" id="rpt-members" style="padding:10px 14px;"></div>
+      <div class="card" id="rpt-members" style="padding:10px 14px;">
+        <div style="font-size:0.7rem;color:var(--text-dim);margin-bottom:8px;"><i class="fa fa-circle-info" style="font-size:0.65rem;"></i> 已連線 Firebase 時可查看所有成員消費</div>
+      </div>
 
       <!-- Daily spending chart -->
       <div class="section-title" style="margin-top:10px;"><i class="fa fa-chart-bar" style="color:var(--primary);font-size:0.85rem;"></i> 每日支出</div>
-      <div class="card" style="padding:10px 14px;">
-        <canvas id="rpt-daily-chart" style="width:100%;height:120px;"></canvas>
+      <div class="card" style="padding:14px 14px 10px;">
+        <div id="rpt-daily-chart-legend" style="display:flex;gap:12px;margin-bottom:8px;font-size:0.7rem;font-weight:800;">
+          <span style="display:flex;align-items:center;gap:4px;color:var(--text-muted);"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--green);"></span>今日</span>
+          <span style="display:flex;align-items:center;gap:4px;color:var(--text-muted);"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#3C3C3C;"></span>其他日</span>
+          <span id="rpt-chart-peak" style="margin-left:auto;color:var(--text-dim);"></span>
+        </div>
+        <canvas id="rpt-daily-chart" style="width:100%;display:block;"></canvas>
       </div>
 
       <!-- Full transaction list -->
@@ -730,20 +784,11 @@
     </div>
 
     <div>
-      <div class="field-label">自訂分類顏色</div>
-      <div class="color-picker" id="color-picker">
-        <div class="color-option selected" data-color="#E0E0E0" style="background:#E0E0E0;" onclick="selectColor(this)"></div>
-        <div class="color-option" data-color="#74C69D" style="background:#74C69D;" onclick="selectColor(this)"></div>
-        <div class="color-option" data-color="#E07070" style="background:#E07070;" onclick="selectColor(this)"></div>
-        <div class="color-option" data-color="#64B5F6" style="background:#64B5F6;" onclick="selectColor(this)"></div>
-        <div class="color-option" data-color="#BA68C8" style="background:#BA68C8;" onclick="selectColor(this)"></div>
-        <div class="color-option" data-color="#F0A849" style="background:#F0A849;" onclick="selectColor(this)"></div>
-        <div class="color-option" data-color="#FF8A80" style="background:#FF8A80;" onclick="selectColor(this)"></div>
-        <div class="color-option" data-color="#80DEEA" style="background:#80DEEA;" onclick="selectColor(this)"></div>
-        <div class="color-option" data-color="#A5D6A7" style="background:#A5D6A7;" onclick="selectColor(this)"></div>
-        <div class="color-option" data-color="#FFCC80" style="background:#FFCC80;" onclick="selectColor(this)"></div>
-        <div class="color-option" data-color="#CE93D8" style="background:#CE93D8;" onclick="selectColor(this)"></div>
-        <div class="color-option" data-color="#90A4AE" style="background:#90A4AE;" onclick="selectColor(this)"></div>
+      <div class="field-label">房間分類</div>
+      <div id="room-tag-picker" style="display:flex;flex-wrap:wrap;gap:7px;padding:6px 0 10px;"></div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:0;">
+        <input id="custom-room-input" class="field-input" type="text" placeholder="自訂分類名稱…" maxlength="8" style="flex:1;padding:8px 12px;font-size:0.85rem;" />
+        <button onclick="addCustomRoom()" style="padding:8px 14px;background:var(--primary-light);border:1px solid var(--border2);border-radius:var(--radius-md);color:var(--primary);font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:900;cursor:pointer;white-space:nowrap;">＋ 新增</button>
       </div>
     </div>
 
@@ -840,7 +885,38 @@
   <button class="firework-close-btn" onclick="closeFireworks()">出發吧！🚀</button>
 </div>
 
-<!-- Modal: Budget Settings -->
+<!-- Modal: Restock Amount -->
+<div class="modal-overlay" id="modal-restock-amount">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">💰 記錄代購費用</div>
+    <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:14px;line-height:1.6;">已補入庫存 <strong id="restock-items-label" style="color:var(--text);"></strong>，是否同步記錄購物費用到記帳本？</p>
+    <div class="field-label" style="margin-top:0;">總金額（元）</div>
+    <input id="restock-amount-input" class="field-input" type="number" placeholder="例如：520" min="0"
+      onkeydown="if(event.key==='Enter') confirmRestockAmount()" />
+    <div class="field-label">備忘（選填）</div>
+    <input id="restock-note-input" class="field-input" type="text" placeholder="例如：全聯購物" maxlength="20" />
+    <button class="btn-primary" onclick="confirmRestockAmount()">💳 記帳並完成</button>
+    <button class="btn-cancel" onclick="skipRestockAmount()">跳過，不記帳</button>
+  </div>
+</div>
+
+<!-- Modal: Income -->
+<div class="modal-overlay" id="modal-income">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">💵 新增收入</div>
+    <div class="field-label" style="margin-top:0;">金額（元）*</div>
+    <input id="income-amount-input" class="field-input" type="number" placeholder="例如：2000" min="0"
+      onkeydown="if(event.key==='Enter') saveIncome()" />
+    <div class="field-label">來源備註</div>
+    <input id="income-note-input" class="field-input" type="text" placeholder="例如：接案、兼差、紅包" maxlength="20" />
+    <button class="btn-primary" onclick="saveIncome()">💰 記錄收入</button>
+    <button class="btn-cancel" onclick="closeModal('modal-income')">取消</button>
+  </div>
+</div>
+
+
 <div class="modal-overlay" id="modal-budget-settings">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -929,14 +1005,77 @@
   let members = [], inventoryItems = [], choresItems = [];
   let activeColorFilter = 'all';
   let currentTab = 'dashboard';
-  let inventoryUnsubscribe = null, choresUnsubscribe = null;
+  let inventoryUnsubscribe = null, choresUnsubscribe = null, ledgerUnsubscribe = null;
 
   // ══ Presets ══
   const CHORE_PRESETS = [
     { e:'🧹', n:'掃地拖地' }, { e:'🍽️', n:'洗碗' }, { e:'🧺', n:'洗衣服' },
     { e:'🗑️', n:'倒垃圾' }, { e:'🚿', n:'清潔浴室' }, { e:'🪟', n:'擦窗戶' },
-    { e:'🛏️', n:'整理床鋪' }, { e:'🧽', n:'清潔廚房' }
+    { e:'🛏️', n:'整理床鋪' }, { e:'🧽', n:'清潔廚房' }, { e:'🛒', n:'補充物資' }
   ];
+
+  // ══ Room Tags ══
+  const DEFAULT_ROOMS = [
+    { id:'room_living',   label:'客廳', icon:'🛋️', color:'#64B5F6' },
+    { id:'room_bedroom',  label:'房間', icon:'🛏️', color:'#BA68C8' },
+    { id:'room_kitchen',  label:'廚房', icon:'🍳', color:'#F0A849' },
+    { id:'room_bathroom', label:'廁所', icon:'🚿', color:'#80DEEA' },
+    { id:'room_fridge',   label:'冰箱', icon:'🧊', color:'#74C69D' },
+    { id:'room_other',    label:'其他', icon:'📦', color:'#90A4AE' },
+  ];
+  function getRooms() {
+    const custom = LS.get('custom_rooms') || [];
+    return [...DEFAULT_ROOMS, ...custom];
+  }
+  function addCustomRoomToStore(label) {
+    const custom = LS.get('custom_rooms') || [];
+    const id = 'room_c_' + Date.now();
+    const colors = ['#FF8A80','#FFCC80','#A5D6A7','#CE93D8','#E07070'];
+    const color = colors[custom.length % colors.length];
+    custom.push({ id, label, icon:'🏷️', color });
+    LS.set('custom_rooms', custom);
+    return id;
+  }
+
+  let selectedRoomId = DEFAULT_ROOMS[0].id; // default: 客廳
+
+  window.addCustomRoom = function() {
+    const input = document.getElementById('custom-room-input');
+    const label = input.value.trim();
+    if (!label) { showToast('⚠️ 請輸入分類名稱','error'); return; }
+    const rooms = getRooms();
+    if (rooms.find(r => r.label === label)) { showToast('⚠️ 此分類已存在','error'); return; }
+    const newId = addCustomRoomToStore(label);
+    input.value = '';
+    selectedRoomId = newId;
+    renderRoomTagPicker();
+    showToast(`✅ 已新增分類「${label}」`);
+  };
+
+  function renderRoomTagPicker() {
+    const el = document.getElementById('room-tag-picker');
+    if (!el) return;
+    const rooms = getRooms();
+    el.innerHTML = rooms.map(r => `
+      <button onclick="selectRoomTag('${r.id}')"
+        style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:50px;
+               border:2px solid ${r.id===selectedRoomId ? r.color : 'var(--border)'};
+               background:${r.id===selectedRoomId ? r.color+'22' : 'var(--bg2)'};
+               color:${r.id===selectedRoomId ? r.color : 'var(--text-muted)'};
+               font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:800;cursor:pointer;
+               transition:all 0.18s;white-space:nowrap;">
+        <span>${r.icon}</span>${r.label}
+      </button>`).join('');
+  }
+
+  window.selectRoomTag = function(id) {
+    selectedRoomId = id;
+    renderRoomTagPicker();
+  };
+
+  function getRoomById(id) {
+    return getRooms().find(r => r.id === id) || DEFAULT_ROOMS[DEFAULT_ROOMS.length-1];
+  }
   function daysFromNow(n) { const d = new Date(); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; }
   const MOCK_INVENTORY = [
     { id:'m1', order:0, name:'洗碗精', isCountable:false, status:'充足',    expiryDate:'',              colorTag:'#64B5F6', memo:'好市多買的', purchaseDate:'2024-03-01' },
@@ -953,6 +1092,9 @@
     if (type === 'success') { t.style.background='#162413'; t.style.color='#74C69D'; t.style.borderColor='rgba(116,198,157,0.3)'; }
     else if (type === 'error') { t.style.background='#2a1212'; t.style.color='#E07070'; t.style.borderColor='rgba(224,112,112,0.3)'; }
     else { t.style.background='#1e1a10'; t.style.color='#F0A849'; t.style.borderColor='rgba(240,168,73,0.3)'; }
+    t.className = '';
+    // Force reflow so animation restarts even for consecutive toasts
+    void t.offsetWidth;
     t.className = 'show';
     clearTimeout(t._tid);
     t._tid = setTimeout(() => { t.className = ''; }, 2900);
@@ -1006,6 +1148,18 @@
     // Unsubscribe any existing listeners first
     if (inventoryUnsubscribe) inventoryUnsubscribe();
     if (choresUnsubscribe)    choresUnsubscribe();
+
+    // ── Ledger listener (shared across members) ──
+    if (ledgerUnsubscribe) ledgerUnsubscribe();
+    ledgerUnsubscribe = onSnapshot(
+      collection(db, 'ledger'),
+      (snap) => {
+        const allEntries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        // Cache in localStorage for offline and report access
+        LS.set('fb_ledger_cache', allEntries);
+      },
+      (err) => { console.warn('ledger snapshot error:', err); }
+    );
 
     // ── Inventory listener ──
     inventoryUnsubscribe = onSnapshot(
@@ -1125,7 +1279,10 @@
     const exp      = document.getElementById('item-expiry').value;
     const pur      = document.getElementById('item-purchase').value;
     const memo     = document.getElementById('item-memo').value.trim();
-    const colorTag = document.querySelector('.color-option.selected')?.dataset.color || '#E0E0E0';
+    const room     = getRoomById(selectedRoomId);
+    const colorTag = room.color;
+    const roomId   = selectedRoomId;
+    const roomLabel= room.label;
     const isCountable = document.getElementById('type-countable').classList.contains('selected');
 
     let status = '充足';
@@ -1141,12 +1298,12 @@
       alertQty:     isCountable ? alertQty : 1,
       expiryDate:   exp || '',
       purchaseDate: pur || '',
-      memo, colorTag,
+      memo, colorTag, roomId, roomLabel,
       updatedAt: new Date().toISOString()
     };
 
     // Disable button to prevent double-tap
-    btn.disabled = true; btn.textContent = '儲存中…';
+    btn.disabled = true; btn.classList.add('loading'); btn.textContent = '儲存中…';
 
     try {
       if (editId) {
@@ -1178,7 +1335,7 @@
       console.error('saveItem error:', err);
       showToast('❌ 儲存失敗：' + err.message, 'error');
     } finally {
-      btn.disabled = false; btn.textContent = '💾 儲存物品';
+      btn.disabled = false; btn.classList.remove('loading'); btn.textContent = '💾 儲存物品';
     }
   };
 
@@ -1238,7 +1395,7 @@
     showToast('🗑️ 已刪除物品');
   };
 
-  // ══ Color filter ══
+  // ══ Color filter (room-based) ══
   window.setColorFilter = function(color, btn) {
     activeColorFilter = color;
     document.querySelectorAll('.cf-btn').forEach(b => b.classList.remove('active'));
@@ -1247,15 +1404,18 @@
   };
   function updateColorFilterBar() {
     const bar = document.getElementById('color-filter-bar');
-    const usedColors = [...new Set(inventoryItems.map(i=>i.colorTag).filter(Boolean))];
+    const rooms = getRooms();
+    // Only show rooms that have items
+    const usedRoomIds = [...new Set(inventoryItems.map(i=>i.roomId||'room_other').filter(Boolean))];
     let html = `<button class="cf-btn ${activeColorFilter==='all'?'active':''}" data-color="all" onclick="setColorFilter('all',this)">
-      <span style="font-size:0.8rem;">⬜</span> 全部 (${inventoryItems.length})
+      <span style="font-size:0.8rem;">🏠</span> 全部 (${inventoryItems.length})
     </button>`;
-    usedColors.forEach(c => {
-      const items = inventoryItems.filter(i=>i.colorTag===c);
-      const label = items.length<=2 ? items.map(i=>i.name).join('、') : items[0].name+'等';
-      html += `<button class="cf-btn ${activeColorFilter===c?'active':''}" data-color="${c}" onclick="setColorFilter('${c}',this)">
-        <span class="cf-dot" style="background:${c};"></span>${label} (${items.length})
+    rooms.forEach(r => {
+      if (!usedRoomIds.includes(r.id)) return;
+      const count = inventoryItems.filter(i=>(i.roomId||'room_other')===r.id).length;
+      html += `<button class="cf-btn ${activeColorFilter===r.id?'active':''}" data-color="${r.id}" onclick="setColorFilter('${r.id}',this)"
+        style="${activeColorFilter===r.id ? `border-color:${r.color};color:${r.color};background:${r.color}22;` : ''}">
+        <span class="cf-dot" style="background:${r.color};"></span>${r.icon} ${r.label} (${count})
       </button>`;
     });
     bar.innerHTML = html;
@@ -1270,10 +1430,10 @@
     }
 
     const sorted   = [...inventoryItems].sort((a,b) => (a.order??0) - (b.order??0));
-    const filtered = activeColorFilter === 'all' ? sorted : sorted.filter(i => i.colorTag === activeColorFilter);
+    const filtered = activeColorFilter === 'all' ? sorted : sorted.filter(i => (i.roomId||'room_other') === activeColorFilter);
 
     if (!filtered.length) {
-      el.innerHTML = `<div class="empty"><i class="fa fa-filter"></i>此顏色分類下沒有物品</div>`;
+      el.innerHTML = `<div class="empty"><i class="fa fa-filter"></i>此分類下沒有物品</div>`;
       return;
     }
 
@@ -1294,6 +1454,8 @@
 
       const needsAlert = item.isCountable && (item.quantity??0) <= (item.alertQty??1);
       const alertBadge = needsAlert ? `<span class="alert-badge"><i class="fa fa-bell" style="font-size:0.6rem;"></i>待購</span>` : '';
+      const room = getRoomById(item.roomId || 'room_other');
+      const roomBadge = `<span style="display:inline-flex;align-items:center;gap:3px;font-size:0.65rem;font-weight:900;padding:2px 8px;background:${room.color}18;border:1px solid ${room.color}44;border-radius:50px;color:${room.color};flex-shrink:0;">${room.icon} ${room.label}</span>`;
 
       const control = item.isCountable
         ? `<div class="qty-box">
@@ -1317,8 +1479,8 @@
               </button>
             </div>
             <div class="inv-info">
-              <div class="inv-name">${colorDot}${item.name}${alertBadge}</div>
-              <div class="inv-meta">${expText}${purText}</div>
+              <div class="inv-name">${item.name}${alertBadge}</div>
+              <div class="inv-meta">${roomBadge}${expText}${purText}</div>
               ${memoHtml}
             </div>
             ${control}
@@ -1395,7 +1557,6 @@
     const today = new Date().toISOString().split('T')[0];
     let updates;
     if (item.isCountable) {
-      // Restock to alertQty + 3 (sensible default top-up)
       const newQty = (item.alertQty ?? 1) + 3;
       updates = { quantity: newQty, purchaseDate: today };
     } else {
@@ -1404,13 +1565,42 @@
     if (isFirebaseOk) {
       await updateDoc(doc(db, 'inventory', id), updates);
       boughtIds.delete(id);
-      renderShoppingList(); // Firebase onSnapshot handles inventory; clear bought state now
+      renderShoppingList();
     } else {
       Object.assign(item, updates);
       boughtIds.delete(id);
       renderInventory(); renderShoppingList();
     }
+    // Auto-complete 補充物資 chore
+    autoCompleteRestockChore();
+    // Ask for amount
+    openRestockAmountModal([item.name]);
     showToast(`✅ ${item.name} 已補入庫存`);
+  };
+
+  // Pending restock items for amount modal
+  let pendingRestockItems = [];
+
+  function openRestockAmountModal(itemNames) {
+    pendingRestockItems = itemNames;
+    const label = itemNames.length <= 3 ? itemNames.join('、') : itemNames.slice(0,2).join('、') + ` 等 ${itemNames.length} 項`;
+    document.getElementById('restock-items-label').textContent = label;
+    document.getElementById('restock-amount-input').value = '';
+    document.getElementById('restock-note-input').value = label.length <= 10 ? label : '補充物資';
+    openModal('modal-restock-amount');
+  }
+
+  window.confirmRestockAmount = function() {
+    const amt = parseFloat(document.getElementById('restock-amount-input').value);
+    if (!amt || amt <= 0) { showToast('⚠️ 請輸入有效金額','error'); return; }
+    const note = document.getElementById('restock-note-input').value.trim() || '補充物資';
+    const cat = { icon:'🛒', label:'購物', bg:'rgba(100,181,246,0.12)', color:'var(--blue)' };
+    submitBudgetEntry(amt, note, cat);
+    closeModal('modal-restock-amount');
+  };
+
+  window.skipRestockAmount = function() {
+    closeModal('modal-restock-amount');
   };
 
   window.restockAll = async function() {
@@ -1419,7 +1609,11 @@
     if (!toRestock.length) return;
 
     const btn = document.querySelector('.restock-all-btn');
-    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 補入中…'; }
+    if (btn) {
+      if (btn._restocking) return; // debounce
+      btn._restocking = true;
+      btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 補入中…';
+    }
 
     const today = new Date().toISOString().split('T')[0];
     for (const item of toRestock) {
@@ -1437,8 +1631,66 @@
     }
     boughtIds.clear();
     if (!isFirebaseOk) { renderInventory(); renderShoppingList(); updateColorFilterBar(); }
-    else { renderShoppingList(); } // Firebase onSnapshot will update inventory; clear bought state immediately
+    else { renderShoppingList(); }
+    // Auto-complete 補充物資 chore
+    autoCompleteRestockChore();
     showToast(`🛒 已將 ${toRestock.length} 項物品補入庫存！`, 'success');
+    // Ask for purchase amount
+    openRestockAmountModal(toRestock.map(i=>i.name));
+  };
+
+  // Auto-complete the 補充物資 chore when restocking
+  async function autoCompleteRestockChore() {
+    const today = new Date().toISOString().split('T')[0];
+    const restockChore = choresItems.find(c =>
+      c.date === today && !c.completed && c.title.includes('補充物資')
+    );
+    if (!restockChore) return;
+    restockChore.completed   = true;
+    restockChore.completedBy = currentMemberName;
+    restockChore.completedAt = new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+    if (isFirebaseOk) {
+      await updateDoc(doc(db,'chores',restockChore.id), {
+        completed: true, completedBy: restockChore.completedBy, completedAt: restockChore.completedAt
+      });
+    }
+    renderChores();
+    showToast('✅ 家務「補充物資」已自動完成！');
+  }
+
+  // ── Income tracking ──
+  function getIncomeLedger() { return LS.get('income_ledger') || []; }
+  function saveIncomeLedger(l) { LS.set('income_ledger', l); }
+
+  window.saveIncome = function() {
+    const amt = parseFloat(document.getElementById('income-amount-input').value);
+    if (!amt || amt <= 0) { showToast('⚠️ 請輸入有效金額','error'); return; }
+    const note = document.getElementById('income-note-input').value.trim() || '收入';
+    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const entry = {
+      id: 'inc_' + Date.now(),
+      date: today,
+      amount: amt,
+      note,
+      time: now.toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit' }),
+      member: currentMemberName,
+    };
+    const income = getIncomeLedger();
+    income.push(entry);
+    saveIncomeLedger(income);
+    closeModal('modal-income');
+    document.getElementById('income-amount-input').value = '';
+    document.getElementById('income-note-input').value = '';
+    renderBudget();
+    showToast(`💵 已記錄收入 $${amt.toLocaleString()}`);
+  };
+
+  window.deleteIncomeEntry = function(id) {
+    const income = getIncomeLedger().filter(e => e.id !== id);
+    saveIncomeLedger(income);
+    renderBudget();
+    showToast('🗑️ 已刪除收入紀錄');
   };
 
   // ══ Render Chores ══
@@ -1532,10 +1784,8 @@
         document.getElementById('item-purchase').value  = item.purchaseDate||'';
         document.getElementById('item-memo').value      = item.memo||'';
         selectType(item.isCountable ? 'countable' : 'uncountable');
-        document.querySelectorAll('.color-option').forEach(c=>c.classList.remove('selected'));
-        const matched = document.querySelector(`.color-option[data-color="${item.colorTag}"]`);
-        if (matched) matched.classList.add('selected');
-        else document.querySelector('.color-option').classList.add('selected');
+        // Set room
+        selectedRoomId = item.roomId || DEFAULT_ROOMS[DEFAULT_ROOMS.length-1].id;
         if (!item.isCountable) {
           document.querySelectorAll('#status-field [data-status]').forEach(b =>
             b.classList.toggle('selected', b.dataset.status===item.status)
@@ -1546,6 +1796,7 @@
       document.getElementById('item-modal-title').innerHTML = '➕ 新增庫存物品';
       resetItemForm();
     }
+    renderRoomTagPicker();
     openModal('modal-add-item');
     // Focus name field after animation
     setTimeout(() => document.getElementById('item-name').focus(), 350);
@@ -1585,7 +1836,7 @@
     document.getElementById('item-purchase').value  = '';
     document.getElementById('item-memo').value      = '';
     selectType('countable');
-    document.querySelectorAll('.color-option').forEach((b,i) => b.classList.toggle('selected', i===0));
+    selectedRoomId = DEFAULT_ROOMS[0].id;
     document.querySelectorAll('#status-field [data-status]').forEach((b,i) => b.classList.toggle('selected', i===0));
   }
 
@@ -1715,7 +1966,7 @@
     }
   };
 
-  window.submitBudgetEntry = function(amount, note, catOverride) {
+  window.submitBudgetEntry = async function(amount, note, catOverride) {
     let parsed;
     if (amount !== undefined) {
       const hour = new Date().getHours();
@@ -1748,6 +1999,13 @@
     const ledger = getLedger();
     ledger.push(entry);
     saveLedger(ledger);
+
+    // Also sync to Firebase for cross-member visibility
+    if (isFirebaseOk) {
+      try {
+        await addDoc(collection(db, 'ledger'), entry);
+      } catch(e) { /* non-critical */ }
+    }
 
     if (amount === undefined) {
       document.getElementById('budget-input').value = '';
@@ -1851,6 +2109,11 @@
 
     const todaySpent = todayEntries.reduce((s, e) => s + e.amount, 0);
     const monthSpent = monthEntries.reduce((s, e) => s + e.amount, 0);
+
+    // Income
+    const allIncome = getIncomeLedger();
+    const todayIncome = allIncome.filter(e => e.date === today).reduce((s,e)=>s+e.amount, 0);
+    const monthIncome = allIncome.filter(e => e.date.startsWith(thisMonthPrefix)).reduce((s,e)=>s+e.amount, 0);
     const monthBudget = settings.monthlyBudget || 30000;
     const salaryDay   = parseInt(settings.salaryDay) || 1;
 
@@ -1873,6 +2136,10 @@
     const heroAmount = document.getElementById('budget-remaining-display');
     heroAmount.textContent = `$${Math.round(todayRemaining).toLocaleString()}`;
     heroAmount.className = 'budget-remaining-amount ' + (pct > 50 ? 'healthy' : pct > 20 ? 'warn' : 'danger');
+    // Pulse feedback on update
+    heroAmount.classList.remove('pulse');
+    void heroAmount.offsetWidth;
+    heroAmount.classList.add('pulse');
     const fill = document.getElementById('budget-progress-fill');
     fill.style.width = pct + '%';
     fill.style.background = pct > 50 ? 'var(--green)' : pct > 20 ? 'var(--yellow)' : 'var(--red)';
@@ -1885,6 +2152,8 @@
     const mr = document.getElementById('monthly-remaining-display');
     mr.textContent = '$' + monthRemaining2.toLocaleString();
     mr.style.color = monthRemaining2 > monthBudget * 0.3 ? 'var(--green)' : monthRemaining2 > 0 ? 'var(--yellow)' : 'var(--red)';
+    const incEl = document.getElementById('monthly-income-display');
+    if (incEl) incEl.textContent = '$' + monthIncome.toLocaleString();
 
     // Category breakdown bar
     const cats = {};
@@ -1916,11 +2185,23 @@
 
     // Today's ledger
     const listEl = document.getElementById('ledger-today-list');
-    if (!todayEntries.length) {
+    const todayIncomeEntries = allIncome.filter(e => e.date === today);
+    if (!todayEntries.length && !todayIncomeEntries.length) {
       listEl.innerHTML = `<div class="empty"><i class="fa fa-receipt"></i>今天還沒有支出<br/><small style="display:block;margin-top:4px;">輸入金額開始記帳</small></div>`;
     } else {
       const sorted = [...todayEntries].sort((a,b) => b.id.localeCompare(a.id));
+      const incSorted = [...todayIncomeEntries].sort((a,b) => b.id.localeCompare(a.id));
       listEl.innerHTML = `<div class="card" style="padding:6px 14px;">
+        ${incSorted.map(e => `
+          <div class="ledger-row">
+            <div class="ledger-cat-icon" style="background:rgba(116,198,157,0.15);">💵</div>
+            <div class="ledger-info">
+              <div class="ledger-name">${e.note}</div>
+              <div class="ledger-time">${e.time} · 收入${e.member ? ' · <span style="color:var(--blue);">'+e.member+'</span>' : ''}</div>
+            </div>
+            <div class="ledger-amount" style="color:var(--green);">+$${e.amount.toLocaleString()}</div>
+            <button class="ledger-del-btn" onclick="deleteIncomeEntry('${e.id}')"><i class="fa fa-trash"></i></button>
+          </div>`).join('')}
         ${sorted.map(e => `
           <div class="ledger-row">
             <div class="ledger-cat-icon" style="background:${e.catBg};">${e.catIcon}</div>
@@ -2076,8 +2357,10 @@
     const archiveKey = reportYear + '-' + String(reportMonth).padStart(2,'0');
     const archived   = LS.get('archive_' + archiveKey) || [];
     const archivedFiltered = archived.filter(e => e.date.startsWith(prefix));
+    // Also use shared Firebase ledger cache if available
+    const sharedEntries = (LS.get('fb_ledger_cache') || []).filter(e => e.date && e.date.startsWith(prefix));
     // Merge, deduplicate by id
-    const combined = [...currentMonthEntries, ...archivedFiltered];
+    const combined = [...currentMonthEntries, ...archivedFiltered, ...sharedEntries];
     const seen = new Set();
     return combined.filter(e => { if (seen.has(e.id)) return false; seen.add(e.id); return true; });
   }
@@ -2092,12 +2375,19 @@
     const settings = getBudgetSettings();
     const monthBudget = settings.monthlyBudget || 30000;
 
+    // Income for this month
+    const prefix = reportYear + '-' + String(reportMonth).padStart(2,'0');
+    const allIncome = getIncomeLedger();
+    const monthIncome = allIncome.filter(e => e.date.startsWith(prefix)).reduce((s,e)=>s+e.amount, 0);
+
     const total = entries.reduce((s,e) => s+e.amount, 0);
     const remaining = monthBudget - total;
     const activeDays = new Set(entries.map(e => e.date)).size;
     const avg = activeDays > 0 ? Math.round(total / activeDays) : 0;
 
     document.getElementById('rpt-total').textContent = '$' + total.toLocaleString();
+    const rptInc = document.getElementById('rpt-income');
+    if (rptInc) rptInc.textContent = '$' + monthIncome.toLocaleString();
     const rr = document.getElementById('rpt-remaining');
     rr.textContent = '$' + remaining.toLocaleString();
     rr.style.color = remaining > monthBudget * 0.3 ? 'var(--green)' : remaining > 0 ? 'var(--yellow)' : 'var(--red)';
@@ -2178,17 +2468,36 @@
 
     // All entries list
     const sorted = [...entries].sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));
+    const incomeForMonth = allIncome.filter(e => e.date.startsWith(prefix));
     const byDay = {};
-    sorted.forEach(e => { (byDay[e.date] = byDay[e.date]||[]).push(e); });
-    document.getElementById('rpt-all-entries').innerHTML = Object.entries(byDay).map(([date, dayEntries]) => {
-      const dayTotal = dayEntries.reduce((s,e)=>s+e.amount,0);
+    sorted.forEach(e => { (byDay[e.date] = byDay[e.date]||[]).push({ ...e, isIncome: false }); });
+    incomeForMonth.forEach(e => { (byDay[e.date] = byDay[e.date]||[]).push({ ...e, isIncome: true }); });
+
+    document.getElementById('rpt-all-entries').innerHTML = Object.entries(byDay)
+      .sort(([a],[b])=>b.localeCompare(a))
+      .map(([date, dayEntries]) => {
+      const daySpent  = dayEntries.filter(e=>!e.isIncome).reduce((s,e)=>s+e.amount,0);
+      const dayIncome = dayEntries.filter(e=>e.isIncome).reduce((s,e)=>s+e.amount,0);
+      const dayNet    = dayIncome - daySpent;
       return `
         <div style="margin-bottom:8px;">
           <div style="display:flex;justify-content:space-between;font-size:0.72rem;font-weight:900;color:var(--text-muted);letter-spacing:0.04em;padding:2px 4px 6px;">
-            <span>${date}</span><span>$${dayTotal.toLocaleString()}</span>
+            <span>${date}</span>
+            <span style="display:flex;gap:10px;">
+              ${dayIncome > 0 ? `<span style="color:var(--green);">+$${dayIncome.toLocaleString()}</span>` : ''}
+              <span>−$${daySpent.toLocaleString()}</span>
+            </span>
           </div>
           <div class="card" style="padding:4px 14px;">
-            ${dayEntries.map(e => `
+            ${dayEntries.sort((a,b)=>(b.time||'').localeCompare(a.time||'')).map(e => e.isIncome ? `
+              <div class="ledger-row">
+                <div class="ledger-cat-icon" style="background:rgba(116,198,157,0.15);width:30px;height:30px;font-size:0.9rem;">💵</div>
+                <div class="ledger-info">
+                  <div class="ledger-name" style="font-size:0.85rem;">${e.note}</div>
+                  <div class="ledger-time">${e.time||''}${e.member?' · <span style="color:var(--blue);">'+e.member+'</span>':''} · 收入</div>
+                </div>
+                <div class="ledger-amount" style="font-size:0.95rem;color:var(--green);">+$${e.amount.toLocaleString()}</div>
+              </div>` : `
               <div class="ledger-row">
                 <div class="ledger-cat-icon" style="background:${e.catBg};width:30px;height:30px;font-size:0.9rem;">${e.catIcon}</div>
                 <div class="ledger-info">
@@ -2212,8 +2521,13 @@
       if (d >= 0 && d < daysInMonth) dailyTotals[d] += e.amount;
     });
     const maxVal = Math.max(...dailyTotals, 1);
-    const W = canvas.offsetWidth || 300;
-    const H = 120;
+
+    // Update peak label
+    const peakEl = document.getElementById('rpt-chart-peak');
+    if (peakEl) peakEl.textContent = `峰值 $${maxVal.toLocaleString()}`;
+
+    const W = canvas.parentElement.clientWidth - 28 || 300;
+    const H = 130;
     canvas.width  = W * window.devicePixelRatio;
     canvas.height = H * window.devicePixelRatio;
     canvas.style.width  = W + 'px';
@@ -2221,25 +2535,50 @@
     const ctx = canvas.getContext('2d');
     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     ctx.clearRect(0,0,W,H);
-    const barW   = (W - 10) / daysInMonth;
+
+    const padBottom = 20;
+    const padTop    = 8;
+    const chartH    = H - padBottom - padTop;
+    const barW      = (W - 10) / daysInMonth;
+
     const today  = new Date();
     const todayD = (reportYear===today.getFullYear()&&reportMonth===today.getMonth()+1) ? today.getDate()-1 : -1;
+
+    // Grid line at max/2
+    const midY = padTop + chartH * 0.5;
+    ctx.strokeStyle = '#2C2C2C';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath(); ctx.moveTo(5, midY); ctx.lineTo(W-5, midY); ctx.stroke();
+    ctx.setLineDash([]);
+
     dailyTotals.forEach((val, i) => {
-      if (!val) return;
-      const barH = Math.max(2, (val/maxVal)*(H-20));
+      const barH = val > 0 ? Math.max(4, (val/maxVal) * chartH) : 0;
       const x    = 5 + i * barW;
-      const y    = H - barH - 5;
-      ctx.fillStyle = i === todayD ? '#74C69D' : '#3C3C3C';
-      ctx.beginPath();
-      ctx.roundRect(x, y, Math.max(barW-1,1), barH, 3);
-      ctx.fill();
+      const y    = padTop + chartH - barH;
+      const isToday = i === todayD;
+      const hasVal = val > 0;
+
+      if (hasVal) {
+        ctx.fillStyle = isToday ? '#74C69D' : '#3C3C3C';
+        ctx.beginPath();
+        ctx.roundRect(x + 1, y, Math.max(barW - 2, 1), barH, [3, 3, 0, 0]);
+        ctx.fill();
+      } else {
+        // Show faint line for empty days
+        ctx.fillStyle = '#1E1E1E';
+        ctx.fillRect(x + barW*0.3, padTop + chartH - 2, barW*0.4, 2);
+      }
     });
-    // Day labels: 1, middle, last
+
+    // Day labels: 1, ~10, ~20, last
     ctx.fillStyle = '#555';
-    ctx.font = `${9 * window.devicePixelRatio}px Nunito`;
+    ctx.font = `${8.5 * window.devicePixelRatio}px Nunito, sans-serif`;
     ctx.textAlign = 'center';
-    [0, Math.floor(daysInMonth/2), daysInMonth-1].forEach(i => {
-      ctx.fillText(i+1, 5 + i*barW + barW/2, H-1);
+    const labelIdxs = [0, Math.floor(daysInMonth/3), Math.floor(daysInMonth*2/3), daysInMonth-1];
+    [...new Set(labelIdxs)].forEach(i => {
+      ctx.fillStyle = i === todayD ? '#74C69D' : '#555';
+      ctx.fillText(i+1, 5 + i*barW + barW/2, H - 5);
     });
   }
 
