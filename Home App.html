@@ -4,9 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>🏠 Sohin's Home</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js" />
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js" />
+
+  <script src="https://cdn.tailwindcss.com" defer></script>
 
   <style>
     :root {
@@ -509,9 +516,59 @@
     /* Ledger member chips */
     .ledger-member-chip { transition: all 0.15s; }
     .ledger-member-chip:hover { border-color: var(--primary-dim) !important; }
+
+    /* ══ Undo Toast ══ */
+    #undo-toast {
+      visibility: hidden; display: flex; align-items: center; gap: 10px;
+      min-width: 220px; text-align: left; border-radius: var(--radius-md);
+      padding: 10px 14px; position: fixed; z-index: 9999; left: 50%;
+      bottom: calc(var(--nav-h) + 24px); transform: translateX(-50%);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.6); font-weight: 700; font-size: 0.85rem;
+      border: 1px solid rgba(100,181,246,0.3); background: #0e1a26; color: var(--blue);
+      white-space: nowrap;
+    }
+    #undo-toast.show { visibility: visible; animation: toastIn 0.28s ease; }
+    .undo-action-btn {
+      padding: 4px 12px; background: var(--blue-light); border: 1px solid rgba(100,181,246,0.4);
+      border-radius: 6px; color: var(--blue); font-family: 'Nunito', sans-serif;
+      font-size: 0.8rem; font-weight: 900; cursor: pointer; flex-shrink: 0;
+    }
+    .undo-action-btn:hover { background: var(--blue); color: var(--bg); }
+
+    /* ══ Room management edit button ══ */
+    .cf-edit-rooms-btn {
+      display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 50px;
+      border: 1px solid var(--border2); background: var(--card2); color: var(--text-dim);
+      font-size: 0.76rem; font-weight: 800; cursor: pointer; white-space: nowrap;
+      transition: all 0.18s; flex-shrink: 0;
+    }
+    .cf-edit-rooms-btn:hover { border-color: var(--primary-dim); color: var(--text); }
+
+    /* ══ Custom shopping items ══ */
+    .custom-shop-row {
+      display: flex; align-items: center; gap: 9px; padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .custom-shop-row:last-child { border-bottom: none; }
+    .custom-shop-badge {
+      font-size: 0.62rem; font-weight: 900; padding: 2px 7px;
+      background: var(--yellow-light); color: var(--yellow);
+      border-radius: 50px; border: 1px solid rgba(240,168,73,0.25); flex-shrink: 0;
+    }
+    /* ══ Ledger edit button ══ */
+    .ledger-edit-btn {
+      width: 28px; height: 28px; border-radius: 7px; border: none; cursor: pointer;
+      background: var(--blue-light); color: var(--blue); font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0;
+    }
+    .ledger-edit-btn:hover { background: var(--blue); color: var(--bg); }
   </style>
 </head>
 <body>
+  <div id="initial-loader" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0D0D0D; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; color: white; font-family: 'Nunito', sans-serif; transition: opacity 0.5s ease;">
+    <i class="fas fa-circle-notch fa-spin fa-3x" style="color: #E8E8E8; margin-bottom: 20px;"></i>
+    <h2 style="font-size: 1.5rem; font-weight: 600; letter-spacing: 2px;">Sohin's Home Loading...</h2>
+  </div>
 <script>
   // Canvas roundRect polyfill for older browsers
   if (!CanvasRenderingContext2D.prototype.roundRect) {
@@ -533,11 +590,13 @@
 
 <!-- Loading -->
 <div id="loading-overlay">
-  <div class="loading-spinner"></div>
-  <div style="color:var(--text-muted); font-size:0.83rem; font-weight:700;">連線中…</div>
+  <div style="font-size:2.6rem;line-height:1;margin-bottom:8px;">🏠</div>
+  <div style="font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--text);margin-bottom:6px;">Sohin's Home</div>
+  <div class="loading-spinner" style="width:24px;height:24px;border-width:2px;margin-top:4px;"></div>
 </div>
 
 <div id="toast"></div>
+<div id="undo-toast"><span id="undo-toast-msg"></span><button class="undo-action-btn" onclick="triggerUndo()">↩ 撤銷</button></div>
 
 <div id="conn-banner">
   <i class="fa fa-triangle-exclamation"></i>
@@ -586,15 +645,20 @@
   <div id="tab-dashboard" class="tab-pane active">
     <div class="container">
       <div style="margin-bottom:18px;">
-        <div class="section-title"><i class="fa fa-cart-shopping" style="color:var(--primary); font-size:0.85rem;"></i> 待購清單</div>
+        <div class="section-title"><i class="fa fa-cart-shopping" style="color:var(--primary); font-size:0.85rem;"></i> 待購清單
+          <button onclick="openModal('modal-custom-shop')" style="margin-left:auto;background:rgba(240,168,73,0.12);border:1px solid rgba(240,168,73,0.3);border-radius:8px;padding:4px 10px;color:var(--yellow);font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:800;cursor:pointer;"><i class="fa fa-plus"></i> 臨時代購</button>
+        </div>
         <div id="shopping-list"></div>
       </div>
       <div>
         <div class="section-title"><i class="fa fa-box-open" style="color:var(--primary); font-size:0.85rem;"></i> 家庭庫存</div>
-        <div class="color-filter-bar" id="color-filter-bar">
-          <button class="cf-btn active" data-color="all" onclick="setColorFilter('all', this)">
-            <span style="font-size:0.8rem;">⬜</span> 全部
-          </button>
+        <div style="display:flex;align-items:center;gap:0;">
+          <div class="color-filter-bar" id="color-filter-bar" style="flex:1;margin-bottom:0;padding-bottom:10px;">
+            <button class="cf-btn active" data-color="all" onclick="setColorFilter('all', this)">
+              <span style="font-size:0.8rem;">🏠</span> 全部
+            </button>
+          </div>
+          <button class="cf-edit-rooms-btn" onclick="openRoomMgmt()" title="管理分類" style="flex-shrink:0;margin-left:6px;margin-bottom:10px;"><i class="fa fa-pen-to-square"></i></button>
         </div>
         <div id="inventory-list"><div class="empty"><i class="fa fa-spinner fa-spin"></i>載入中...</div></div>
       </div>
@@ -981,12 +1045,88 @@
   </div>
 </div>
 
+<!-- Modal: Room Management -->
+<div class="modal-overlay" id="modal-room-mgmt">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🏷️ 管理庫存分類</div>
+    <div style="font-size:0.76rem;color:var(--text-dim);margin-bottom:12px;">預設分類無法刪除，自訂分類可重新命名或刪除</div>
+    <div id="room-mgmt-list" style="margin-bottom:14px;"></div>
+    <button class="btn-cancel" onclick="closeModal('modal-room-mgmt')">關閉</button>
+  </div>
+</div>
+
+<!-- Modal: Edit Room Name -->
+<div class="modal-overlay" id="modal-edit-room">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">✏️ 重新命名分類</div>
+    <input type="hidden" id="edit-room-id" />
+    <div class="field-label" style="margin-top:0;">分類名稱</div>
+    <input id="edit-room-name" class="field-input" type="text" maxlength="10"
+      onkeydown="if(event.key==='Enter') saveRoomEdit()" />
+    <button class="btn-primary" onclick="saveRoomEdit()">💾 儲存</button>
+    <button class="btn-cancel" onclick="closeModal('modal-edit-room')">取消</button>
+  </div>
+</div>
+
+<!-- Modal: Custom Shopping Item -->
+<div class="modal-overlay" id="modal-custom-shop">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🛍️ 新增臨時代購物品</div>
+    <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:14px;line-height:1.6;">此物品不計入家庭庫存，僅加入待購清單</p>
+    <div class="field-label" style="margin-top:0;">物品名稱 *</div>
+    <input id="custom-shop-name" class="field-input" type="text" placeholder="例如：生日蛋糕、禮物" maxlength="20"
+      onkeydown="if(event.key==='Enter') saveCustomShopItem()" />
+    <div class="field-label">備註 <span style="opacity:0.45;font-size:0.68rem;font-weight:600;">選填</span></div>
+    <input id="custom-shop-note" class="field-input" type="text" placeholder="例如：2個、家樂福買" maxlength="30" />
+    <button class="btn-primary" onclick="saveCustomShopItem()">🛒 加入待購清單</button>
+    <button class="btn-cancel" onclick="closeModal('modal-custom-shop')">取消</button>
+  </div>
+</div>
+
+<!-- Modal: Custom Shop Purchase Price -->
+<div class="modal-overlay" id="modal-custom-shop-buy">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">💰 記錄購買費用</div>
+    <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:14px;line-height:1.6;">已購入 <strong id="custom-shop-buy-label" style="color:var(--text);"></strong>，請輸入購買金額</p>
+    <input type="hidden" id="custom-shop-buy-id" />
+    <div class="field-label" style="margin-top:0;">購買金額（元）*</div>
+    <input id="custom-shop-buy-amount" class="field-input" type="number" placeholder="例如：350" min="0"
+      onkeydown="if(event.key==='Enter') confirmCustomShopBuy()" />
+    <div class="field-label">備註（選填）</div>
+    <input id="custom-shop-buy-note" class="field-input" type="text" placeholder="" maxlength="20" />
+    <button class="btn-primary" onclick="confirmCustomShopBuy()">💳 記帳並完成</button>
+    <button class="btn-cancel" onclick="closeModal('modal-custom-shop-buy')">跳過，不記帳</button>
+  </div>
+</div>
+
+<!-- Modal: Edit Ledger Entry -->
+<div class="modal-overlay" id="modal-edit-ledger">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">✏️ 編輯記帳紀錄</div>
+    <input type="hidden" id="edit-ledger-id" />
+    <input type="hidden" id="edit-ledger-type" /> <!-- expense / income -->
+    <div class="field-label" style="margin-top:0;">金額（元）*</div>
+    <input id="edit-ledger-amount" class="field-input" type="number" min="0" placeholder="例如：150" />
+    <div class="field-label">備註</div>
+    <input id="edit-ledger-note" class="field-input" type="text" maxlength="30" />
+    <div class="field-label">日期</div>
+    <input id="edit-ledger-date" class="field-input" type="date" />
+    <button class="btn-primary" onclick="saveLedgerEdit()">💾 儲存修改</button>
+    <button class="btn-cancel" onclick="closeModal('modal-edit-ledger')">取消</button>
+  </div>
+</div>
+
 <!-- ════════════════ SCRIPT ════════════════ -->
 <script type="module">
   import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-  import { getFirestore, enableIndexedDbPersistence,
+  import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
            collection, doc, onSnapshot,
-           addDoc, updateDoc, deleteDoc, query, orderBy }
+           addDoc, setDoc, updateDoc, deleteDoc, query, orderBy }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
   // ══ Config ══
@@ -1005,7 +1145,15 @@
   let members = [], inventoryItems = [], choresItems = [];
   let activeColorFilter = 'all';
   let currentTab = 'dashboard';
-  let inventoryUnsubscribe = null, choresUnsubscribe = null, ledgerUnsubscribe = null;
+  let inventoryUnsubscribe = null, choresUnsubscribe = null, ledgerUnsubscribe = null, incomeUnsubscribe = null;
+
+  // ── Undo stack ──
+  let undoStack = [];
+  let undoTimer = null;
+
+  // ── Custom shopping items (临时代购) ──
+  let customShoppingItems = [];
+  let customShoppingUnsubscribe = null;
 
   // ══ Presets ══
   const CHORE_PRESETS = [
@@ -1032,7 +1180,7 @@
     const id = 'room_c_' + Date.now();
     const colors = ['#FF8A80','#FFCC80','#A5D6A7','#CE93D8','#E07070'];
     const color = colors[custom.length % colors.length];
-    custom.push({ id, label, icon:'🏷️', color });
+    custom.push({ id, label, icon:'', color });
     LS.set('custom_rooms', custom);
     return id;
   }
@@ -1064,7 +1212,7 @@
                color:${r.id===selectedRoomId ? r.color : 'var(--text-muted)'};
                font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:800;cursor:pointer;
                transition:all 0.18s;white-space:nowrap;">
-        <span>${r.icon}</span>${r.label}
+        <span>${r.icon || ''}</span>${r.label}
       </button>`).join('');
   }
 
@@ -1076,6 +1224,84 @@
   function getRoomById(id) {
     return getRooms().find(r => r.id === id) || DEFAULT_ROOMS[DEFAULT_ROOMS.length-1];
   }
+
+  // ── Room Management ──
+  window.openRoomMgmt = function() {
+    renderRoomMgmtList();
+    openModal('modal-room-mgmt');
+  };
+
+  function renderRoomMgmtList() {
+    const el = document.getElementById('room-mgmt-list');
+    const defaultIds = DEFAULT_ROOMS.map(r => r.id);
+    const rooms = getRooms();
+    el.innerHTML = rooms.map(r => {
+      const isDefault = defaultIds.includes(r.id);
+      const usedCount = inventoryItems.filter(i => (i.roomId||'room_other') === r.id).length;
+      return `
+      <div style="display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border);">
+        <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${r.color};flex-shrink:0;"></span>
+        <span id="room-name-display-${r.id}" style="font-weight:800;flex:1;font-size:0.9rem;">${r.icon ? r.icon+' ' : ''}${r.label}</span>
+        <span style="font-size:0.7rem;color:var(--text-dim);">${usedCount} 項</span>
+        ${isDefault ? `<span style="font-size:0.68rem;color:var(--text-dim);padding:2px 8px;border:1px solid var(--border);border-radius:50px;">預設</span>` :
+          `<button onclick="openRoomEdit('${r.id}','${r.label}')" style="background:var(--blue-light);border:none;border-radius:6px;color:var(--blue);width:28px;height:28px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;"><i class="fa fa-pen"></i></button>
+           <button onclick="confirmDeleteRoom('${r.id}','${r.label}')" style="background:var(--red-light);border:none;border-radius:6px;color:var(--red);width:28px;height:28px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;"><i class="fa fa-trash"></i></button>`
+        }
+      </div>`;
+    }).join('');
+  }
+
+  window.openRoomEdit = function(id, currentLabel) {
+    document.getElementById('edit-room-id').value = id;
+    document.getElementById('edit-room-name').value = currentLabel;
+    openModal('modal-edit-room');
+    setTimeout(() => document.getElementById('edit-room-name').focus(), 350);
+  };
+
+  window.saveRoomEdit = function() {
+    const id = document.getElementById('edit-room-id').value;
+    const newLabel = document.getElementById('edit-room-name').value.trim();
+    if (!newLabel) { showToast('⚠️ 請輸入分類名稱','error'); return; }
+    const custom = LS.get('custom_rooms') || [];
+    const idx = custom.findIndex(r => r.id === id);
+    if (idx > -1) {
+      custom[idx].label = newLabel;
+      LS.set('custom_rooms', custom);
+      // Update items using this room
+      inventoryItems.filter(i => i.roomId === id).forEach(i => i.roomLabel = newLabel);
+      updateColorFilterBar();
+      renderInventory();
+      renderRoomMgmtList();
+    }
+    closeModal('modal-edit-room');
+    showToast(`✅ 分類已更名為「${newLabel}」`);
+  };
+
+  window.confirmDeleteRoom = function(id, label) {
+    const count = inventoryItems.filter(i => (i.roomId||'room_other') === id).length;
+    if (count > 0) {
+      if (!confirm(`「${label}」下還有 ${count} 個物品，刪除後這些物品將移至「其他」分類。確定刪除？`)) return;
+      // Move items to "other"
+      const otherRoom = DEFAULT_ROOMS.find(r => r.id === 'room_other');
+      inventoryItems.filter(i => i.roomId === id).forEach(async item => {
+        item.roomId = 'room_other';
+        item.roomLabel = otherRoom.label;
+        item.colorTag = otherRoom.color;
+        if (isFirebaseOk) {
+          try { await updateDoc(doc(db,'inventory',item.id), { roomId:'room_other', roomLabel:otherRoom.label, colorTag:otherRoom.color }); } catch(e) {}
+        }
+      });
+    } else {
+      if (!confirm(`確定要刪除「${label}」分類嗎？`)) return;
+    }
+    const custom = (LS.get('custom_rooms') || []).filter(r => r.id !== id);
+    LS.set('custom_rooms', custom);
+    if (activeColorFilter === id) activeColorFilter = 'all';
+    updateColorFilterBar();
+    renderInventory();
+    renderRoomMgmtList();
+    showToast(`🗑️ 已刪除分類「${label}」`);
+  };
   function daysFromNow(n) { const d = new Date(); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; }
   const MOCK_INVENTORY = [
     { id:'m1', order:0, name:'洗碗精', isCountable:false, status:'充足',    expiryDate:'',              colorTag:'#64B5F6', memo:'好市多買的', purchaseDate:'2024-03-01' },
@@ -1100,7 +1326,22 @@
     t._tid = setTimeout(() => { t.className = ''; }, 2900);
   };
 
-  // ══ DB status indicator ══
+  // ══ Undo Toast ══
+  window.showUndoToast = function(label, undoFn) {
+    undoStack.push({ label, fn: undoFn });
+    const ut = document.getElementById('undo-toast');
+    document.getElementById('undo-toast-msg').textContent = label;
+    clearTimeout(undoTimer);
+    ut.className = 'show';
+    undoTimer = setTimeout(() => { ut.className = ''; }, 5000);
+  };
+  window.triggerUndo = function() {
+    const last = undoStack.pop();
+    if (!last) return;
+    clearTimeout(undoTimer);
+    document.getElementById('undo-toast').className = '';
+    last.fn();
+  };
   function setDbStatus(state) {
     const dot  = document.getElementById('db-dot');
     const text = document.getElementById('db-status-text');
@@ -1110,36 +1351,78 @@
   }
 
   // ══ Init ══
-  async function initApp() {
-    // Hide loading after max 6s regardless
-    const loadingTimeout = setTimeout(hideLoading, 6000);
+  // ══ Hard failsafe: if loading is still showing after 5s, force it away ══
+  const _loadingFailsafe = setTimeout(() => {
+    const lo = document.getElementById('loading-overlay');
+    if (lo) {
+      console.warn('Loading failsafe triggered — forcing app visible');
+      hideLoading();
+      showAppFrame();
+    }
+  }, 5000);
 
+  async function initApp() {
+    const savedName = localStorage.getItem('hsa_member_name');
+    const savedId   = localStorage.getItem('hsa_member_id');
+
+    // ── INSTANT PATH: returning user with cached data ──
+    // Show app immediately without waiting for Firebase
+    if (savedName && savedId) {
+      currentMemberName = savedName;
+      currentMemberId   = savedId;
+
+      // Hydrate from localStorage caches (< 5ms)
+      inventoryItems      = LS.get('inventory_cache')        || [];
+      choresItems         = LS.get('chores_cache')           || [];
+      customShoppingItems = LS.get('custom_shopping_cache')  || [];
+
+      // Show app right away — no network needed
+      clearTimeout(_loadingFailsafe);
+      hideLoading();
+      document.getElementById('app').style.display = 'block';
+      document.getElementById('fab-btn').style.display = 'flex';
+      updateMemberChip();
+      renderChoreChips();
+      updateTodayBadge();
+      initBudget();
+      renderInventory();
+      renderShoppingList();
+      updateColorFilterBar();
+      renderChores();
+      setDbStatus('offline');
+    }
+
+    // ── BACKGROUND: connect Firebase, silently update UI ──
     try {
       if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'YOUR_API_KEY') throw new Error('no key');
 
       const app = initializeApp(firebaseConfig);
-      db = getFirestore(app);
-
-      // Enable offline persistence (IndexedDB cache)
-      try {
-        await enableIndexedDbPersistence(db);
-      } catch (e) {
-        // persistence may already be enabled or not supported – ignore
-      }
+      // Use persistentLocalCache (replaces deprecated enableIndexedDbPersistence)
+      db = initializeFirestore(app, {
+        localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+      });
 
       isFirebaseOk = true;
+      clearTimeout(_loadingFailsafe);
       setDbStatus('online');
-      clearTimeout(loadingTimeout);
 
-      // Start real-time listeners immediately
+      // Start listeners (will silently update UI when data arrives)
       startListeners();
+
+      // New user: hide loading immediately, Firebase data will populate in background
+      if (!savedName) hideLoading();
 
     } catch (err) {
       console.warn('Firebase init failed:', err);
-      clearTimeout(loadingTimeout);
-      document.getElementById('conn-banner').style.display = 'flex';
-      setDbStatus('error');
-      loadMockData();
+      clearTimeout(_loadingFailsafe);
+      if (!savedName) {
+        hideLoading();
+        document.getElementById('conn-banner').style.display = 'flex';
+        setDbStatus('error');
+        loadMockData();
+      } else {
+        setDbStatus('error');
+      }
     }
   }
 
@@ -1154,11 +1437,38 @@
     ledgerUnsubscribe = onSnapshot(
       collection(db, 'ledger'),
       (snap) => {
-        const allEntries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        // Cache in localStorage for offline and report access
+        const allEntries = snap.docs.map(d => ({ fbDocId: d.id, ...d.data() }));
         LS.set('fb_ledger_cache', allEntries);
+        // Re-render budget & monthly report if active
+        if (currentTab === 'budget') renderBudget();
+        if (currentTab === 'monthly') renderMonthlyReport();
       },
       (err) => { console.warn('ledger snapshot error:', err); }
+    );
+
+    // ── Income listener ──
+    if (incomeUnsubscribe) incomeUnsubscribe();
+    incomeUnsubscribe = onSnapshot(
+      collection(db, 'income'),
+      (snap) => {
+        const allIncome = snap.docs.map(d => ({ fbDocId: d.id, ...d.data() }));
+        LS.set('fb_income_cache', allIncome);
+        if (currentTab === 'budget') renderBudget();
+        if (currentTab === 'monthly') renderMonthlyReport();
+      },
+      (err) => { console.warn('income snapshot error:', err); }
+    );
+
+    // ── Custom shopping listener ──
+    if (customShoppingUnsubscribe) customShoppingUnsubscribe();
+    customShoppingUnsubscribe = onSnapshot(
+      collection(db, 'custom_shopping'),
+      (snap) => {
+        customShoppingItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        LS.set('custom_shopping_cache', customShoppingItems); // persist for instant next boot
+        renderShoppingList();
+      },
+      (err) => { console.warn('custom_shopping snapshot error:', err); }
     );
 
     // ── Inventory listener ──
@@ -1166,16 +1476,16 @@
       collection(db, 'inventory'),
       (snap) => {
         inventoryItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        LS.set('inventory_cache', inventoryItems); // persist for instant next boot
         renderInventory();
         renderShoppingList();
         updateColorFilterBar();
         setDbStatus('online');
-        hideLoading(); // hide on first data
+        hideLoading(); // no-op if already hidden
       },
       (err) => {
         console.error('inventory snapshot error:', err);
         setDbStatus('offline');
-        showToast('⚠️ 資料庫連線中斷，使用快取', 'warn');
       }
     );
 
@@ -1185,18 +1495,23 @@
       collection(db, 'chores'),
       (snap) => {
         choresItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        LS.set('chores_cache', choresItems); // persist for instant next boot
         renderChores();
       },
       (err) => { console.error('chores snapshot error:', err); }
     );
 
-    // Show app & welcome after listeners attach (data will populate via callbacks)
-    showAppFrame();
+    // Show app frame only for new users (returning users already shown in initApp)
+    const _savedName = localStorage.getItem('hsa_member_name');
+    if (!_savedName) showAppFrame();
   }
 
   function hideLoading() {
     const lo = document.getElementById('loading-overlay');
-    if (lo) { lo.style.opacity='0'; lo.style.transition='opacity 0.4s'; setTimeout(()=>lo.remove(), 400); }
+    if (!lo) return; // already removed
+    lo.style.opacity = '0';
+    lo.style.transition = 'opacity 0.25s';
+    setTimeout(() => lo.remove(), 260);
   }
 
   function showAppFrame() {
@@ -1321,14 +1636,24 @@
         // ── ADD ──
         const maxOrder = inventoryItems.length > 0 ? Math.max(...inventoryItems.map(i => i.order ?? 0)) : -1;
         data.order = maxOrder + 1;
+        let newDocId = null;
         if (isFirebaseOk) {
-          await addDoc(collection(db, 'inventory'), data);
+          const ref = await addDoc(collection(db, 'inventory'), data);
+          newDocId = ref.id;
           // onSnapshot will update UI
         } else {
-          inventoryItems.push({ id:'local_'+Date.now(), ...data });
+          newDocId = 'local_'+Date.now();
+          inventoryItems.push({ id: newDocId, ...data });
           renderInventory(); renderShoppingList(); updateColorFilterBar();
         }
         showToast('✅ 已新增物品！');
+        if (newDocId) {
+          showUndoToast(`撤銷新增「${data.name}」`, async () => {
+            if (isFirebaseOk) await deleteDoc(doc(db,'inventory', newDocId));
+            else { inventoryItems = inventoryItems.filter(i=>i.id!==newDocId); renderInventory(); renderShoppingList(); updateColorFilterBar(); }
+            showToast(`↩️ 已撤銷新增「${data.name}」`);
+          });
+        }
       }
       closeModal('modal-add-item');
     } catch (err) {
@@ -1389,10 +1714,23 @@
     else { const item = inventoryItems.find(i=>i.id===id); if(item) item.status=newStatus; renderInventory(); renderShoppingList(); }
   };
   window.deleteItem = async function(id) {
-    if (!confirm('確定要刪除這個物品嗎？')) return;
+    const item = inventoryItems.find(i => i.id === id);
+    const itemCopy = item ? { ...item } : null;
     if (isFirebaseOk) await deleteDoc(doc(db,'inventory',id));
     else { inventoryItems = inventoryItems.filter(i=>i.id!==id); renderInventory(); renderShoppingList(); updateColorFilterBar(); }
     showToast('🗑️ 已刪除物品');
+    if (itemCopy) {
+      showUndoToast(`撤銷刪除「${itemCopy.name}」`, async () => {
+        if (isFirebaseOk) {
+          const { id: _id, ...data } = itemCopy;
+          await setDoc(doc(db,'inventory', itemCopy.id), { ...data });
+        } else {
+          inventoryItems.push(itemCopy);
+          renderInventory(); renderShoppingList(); updateColorFilterBar();
+        }
+        showToast(`↩️ 已還原「${itemCopy.name}」`);
+      });
+    }
   };
 
   // ══ Color filter (room-based) ══
@@ -1405,7 +1743,6 @@
   function updateColorFilterBar() {
     const bar = document.getElementById('color-filter-bar');
     const rooms = getRooms();
-    // Only show rooms that have items
     const usedRoomIds = [...new Set(inventoryItems.map(i=>i.roomId||'room_other').filter(Boolean))];
     let html = `<button class="cf-btn ${activeColorFilter==='all'?'active':''}" data-color="all" onclick="setColorFilter('all',this)">
       <span style="font-size:0.8rem;">🏠</span> 全部 (${inventoryItems.length})
@@ -1415,7 +1752,7 @@
       const count = inventoryItems.filter(i=>(i.roomId||'room_other')===r.id).length;
       html += `<button class="cf-btn ${activeColorFilter===r.id?'active':''}" data-color="${r.id}" onclick="setColorFilter('${r.id}',this)"
         style="${activeColorFilter===r.id ? `border-color:${r.color};color:${r.color};background:${r.color}22;` : ''}">
-        <span class="cf-dot" style="background:${r.color};"></span>${r.icon} ${r.label} (${count})
+        <span class="cf-dot" style="background:${r.color};"></span>${r.icon ? r.icon+' ' : ''}${r.label} (${count})
       </button>`;
     });
     bar.innerHTML = html;
@@ -1502,28 +1839,41 @@
     const needed = inventoryItems.filter(i =>
       i.isCountable ? (i.quantity??0) <= (i.alertQty??1) : i.status === '快用完了'
     );
+
+    // Custom shopping items section
+    const customHtml = customShoppingItems.length > 0 ? `
+      <div class="card" style="padding:8px 14px; margin-bottom:8px; border-color:rgba(240,168,73,0.3);">
+        <div style="font-size:0.68rem;font-weight:900;color:var(--yellow);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;"><i class="fa fa-tag"></i> 臨時代購清單</div>
+        ${customShoppingItems.map(i => `
+          <div class="custom-shop-row">
+            <div class="shop-dot" style="background:var(--yellow);"></div>
+            <div style="flex:1;min-width:0;">
+              <span style="font-weight:800;font-size:0.9rem;">${i.name}</span>
+              ${i.note ? `<span style="font-size:0.72rem;color:var(--text-muted);margin-left:6px;">${i.note}</span>` : ''}
+            </div>
+            <button onclick="openCustomShopBuy('${i.id}')" style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:var(--green-light);color:var(--green);font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:900;white-space:nowrap;flex-shrink:0;">購入</button>
+            <button onclick="deleteCustomShopItem('${i.id}')" style="width:26px;height:26px;border-radius:6px;border:none;cursor:pointer;background:var(--red-light);color:var(--red);font-size:0.72rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fa fa-trash"></i></button>
+          </div>`).join('')}
+      </div>` : '';
+
     if (!needed.length) {
       boughtIds.clear();
-      el.innerHTML = `<div class="card" style="text-align:center;padding:11px;color:var(--green);font-size:0.86rem;font-weight:800;">
+      el.innerHTML = customHtml + `<div class="card" style="text-align:center;padding:11px;color:var(--green);font-size:0.86rem;font-weight:800;">
         <i class="fa fa-check-circle"></i> 太棒了！目前不需補貨
       </div>`; return;
     }
 
-    // Remove boughtIds for items no longer in needing list
     boughtIds = new Set([...boughtIds].filter(id => needed.some(i => i.id === id)));
-
     const boughtCount = needed.filter(i => boughtIds.has(i.id)).length;
     const allBought   = boughtCount === needed.length;
 
-    el.innerHTML = `<div class="card" style="padding:8px 14px;">
+    el.innerHTML = customHtml + `<div class="card" style="padding:8px 14px;">
       ${needed.map(i => {
         const isBought = boughtIds.has(i.id);
         const statusText = i.isCountable
           ? `剩 ${i.quantity??0}（需 >${i.alertQty??1}）`
           : i.status;
-        const restockLabel = i.isCountable
-          ? `補入 ${(i.alertQty??1) + 1} 個`
-          : `補足`;
+        const restockLabel = i.isCountable ? `補入 ${(i.alertQty??1) + 1} 個` : `補足`;
         return `
         <div class="shop-row ${isBought ? 'bought' : ''}" id="shop-row-${i.id}">
           <div class="buy-check ${isBought ? 'checked' : ''}" onclick="toggleBought('${i.id}')">
@@ -1555,6 +1905,9 @@
     const item = inventoryItems.find(i => i.id === id);
     if (!item) return;
     const today = new Date().toISOString().split('T')[0];
+    const prevQty = item.quantity;
+    const prevStatus = item.status;
+    const prevPurchaseDate = item.purchaseDate;
     let updates;
     if (item.isCountable) {
       const newQty = (item.alertQty ?? 1) + 3;
@@ -1571,11 +1924,17 @@
       boughtIds.delete(id);
       renderInventory(); renderShoppingList();
     }
-    // Auto-complete 補充物資 chore
     autoCompleteRestockChore();
-    // Ask for amount
     openRestockAmountModal([item.name]);
     showToast(`✅ ${item.name} 已補入庫存`);
+    showUndoToast(`撤銷補入「${item.name}」`, async () => {
+      const undoUpdates = item.isCountable
+        ? { quantity: prevQty, purchaseDate: prevPurchaseDate || '' }
+        : { status: prevStatus, purchaseDate: prevPurchaseDate || '' };
+      if (isFirebaseOk) { try { await updateDoc(doc(db,'inventory',id), undoUpdates); } catch(e){} }
+      else { Object.assign(item, undoUpdates); renderInventory(); renderShoppingList(); }
+      showToast(`↩️ 已撤銷補入「${item.name}」`);
+    });
   };
 
   // Pending restock items for amount modal
@@ -1658,11 +2017,79 @@
     showToast('✅ 家務「補充物資」已自動完成！');
   }
 
-  // ── Income tracking ──
-  function getIncomeLedger() { return LS.get('income_ledger') || []; }
-  function saveIncomeLedger(l) { LS.set('income_ledger', l); }
+  // ── Custom Shopping Items (臨時代購) ──
+  window.saveCustomShopItem = async function() {
+    const name = document.getElementById('custom-shop-name').value.trim();
+    const note = document.getElementById('custom-shop-note').value.trim();
+    if (!name) { showToast('⚠️ 請輸入物品名稱','error'); return; }
+    const item = {
+      name, note, bought: false,
+      createdAt: new Date().toISOString(),
+      createdBy: currentMemberName,
+    };
+    if (isFirebaseOk) {
+      try {
+        await addDoc(collection(db, 'custom_shopping'), item);
+      } catch(e) {
+        customShoppingItems.push({ id: 'cs_'+Date.now(), ...item });
+        renderShoppingList();
+      }
+    } else {
+      customShoppingItems.push({ id: 'cs_'+Date.now(), ...item });
+      renderShoppingList();
+    }
+    document.getElementById('custom-shop-name').value = '';
+    document.getElementById('custom-shop-note').value = '';
+    closeModal('modal-custom-shop');
+    showToast(`🛒 已加入待購清單：${name}`);
+  };
 
-  window.saveIncome = function() {
+  window.deleteCustomShopItem = async function(id) {
+    const item = customShoppingItems.find(i => i.id === id);
+    if (isFirebaseOk) {
+      try { await deleteDoc(doc(db, 'custom_shopping', id)); } catch(e) {}
+    } else {
+      customShoppingItems = customShoppingItems.filter(i => i.id !== id);
+      renderShoppingList();
+    }
+    if (item) {
+      showUndoToast(`撤銷刪除「${item.name}」`, async () => {
+        if (isFirebaseOk) { try { await setDoc(doc(db,'custom_shopping',id), item); } catch(e){} }
+        else { customShoppingItems.push(item); renderShoppingList(); }
+        showToast(`↩️ 已還原「${item.name}」`);
+      });
+    }
+  };
+
+  window.openCustomShopBuy = function(id) {
+    const item = customShoppingItems.find(i => i.id === id);
+    if (!item) return;
+    document.getElementById('custom-shop-buy-id').value   = id;
+    document.getElementById('custom-shop-buy-label').textContent = item.name;
+    document.getElementById('custom-shop-buy-amount').value = '';
+    document.getElementById('custom-shop-buy-note').value = item.name;
+    openModal('modal-custom-shop-buy');
+  };
+
+  window.confirmCustomShopBuy = async function() {
+    const id  = document.getElementById('custom-shop-buy-id').value;
+    const amt = parseFloat(document.getElementById('custom-shop-buy-amount').value);
+    const note = document.getElementById('custom-shop-buy-note').value.trim() || '臨時代購';
+    if (!amt || amt <= 0) { showToast('⚠️ 請輸入有效金額','error'); return; }
+    const cat = { icon:'🛍️', label:'購物', bg:'rgba(240,168,73,0.12)', color:'var(--yellow)' };
+    await submitBudgetEntry(amt, note, cat);
+    // Remove from custom shopping list
+    if (isFirebaseOk) {
+      try { await deleteDoc(doc(db, 'custom_shopping', id)); } catch(e) {}
+    } else {
+      customShoppingItems = customShoppingItems.filter(i => i.id !== id);
+      renderShoppingList();
+    }
+    closeModal('modal-custom-shop-buy');
+    showToast(`✅ ${note} $${amt} 已記帳並完成`);
+  };
+
+  window.saveIncome = async function() {
     const amt = parseFloat(document.getElementById('income-amount-input').value);
     if (!amt || amt <= 0) { showToast('⚠️ 請輸入有效金額','error'); return; }
     const note = document.getElementById('income-note-input').value.trim() || '收入';
@@ -1679,6 +2106,10 @@
     const income = getIncomeLedger();
     income.push(entry);
     saveIncomeLedger(income);
+    // Sync to Firebase
+    if (isFirebaseOk) {
+      try { await setDoc(doc(db, 'income', entry.id), entry); } catch(e) {}
+    }
     closeModal('modal-income');
     document.getElementById('income-amount-input').value = '';
     document.getElementById('income-note-input').value = '';
@@ -1687,10 +2118,29 @@
   };
 
   window.deleteIncomeEntry = function(id) {
-    const income = getIncomeLedger().filter(e => e.id !== id);
-    saveIncomeLedger(income);
+    const allIncome = getIncomeLedger();
+    const entry = allIncome.find(e => e.id === id);
+    const entryCopy = entry ? { ...entry } : null;
+    // Filter from both local and fb cache
+    saveIncomeLedger(allIncome.filter(e => e.id !== id));
+    const fbIncCache = LS.get('fb_income_cache') || [];
+    LS.set('fb_income_cache', fbIncCache.filter(e => e.id !== id));
+    if (isFirebaseOk) {
+      deleteDoc(doc(db, 'income', id)).catch(() => {});
+    }
     renderBudget();
+    if (currentTab === 'monthly') renderMonthlyReport();
     showToast('🗑️ 已刪除收入紀錄');
+    if (entryCopy) {
+      showUndoToast(`撤銷刪除收入「${entryCopy.note}」`, async () => {
+        const l = getIncomeLedger(); l.push(entryCopy); saveIncomeLedger(l);
+        const c = LS.get('fb_income_cache') || []; c.push(entryCopy); LS.set('fb_income_cache', c);
+        if (isFirebaseOk) { try { await setDoc(doc(db,'income', entryCopy.id), entryCopy); } catch(e){} }
+        renderBudget();
+        if (currentTab === 'monthly') renderMonthlyReport();
+        showToast(`↩️ 已還原收入「${entryCopy.note}」`);
+      });
+    }
   };
 
   // ══ Render Chores ══
@@ -1741,10 +2191,18 @@
     showToast(chore.completed ? '✅ 家務完成！' : '↩️ 已取消完成');
   };
   window.deleteChore = async function(id) {
-    if (!confirm('確定刪除此家務？')) return;
+    const chore = choresItems.find(c => c.id === id);
+    const choreCopy = chore ? { ...chore } : null;
     if (isFirebaseOk) await deleteDoc(doc(db,'chores',id));
     else choresItems = choresItems.filter(c=>c.id!==id);
     renderChores();
+    if (choreCopy) {
+      showUndoToast(`撤銷刪除「${choreCopy.title}」`, async () => {
+        if (isFirebaseOk) { try { await setDoc(doc(db,'chores',id), choreCopy); } catch(e){} }
+        else { choresItems.push(choreCopy); renderChores(); }
+        showToast(`↩️ 已還原「${choreCopy.title}」`);
+      });
+    }
   };
 
   function renderChoreChips() {
@@ -1795,6 +2253,8 @@
     } else {
       document.getElementById('item-modal-title').innerHTML = '➕ 新增庫存物品';
       resetItemForm();
+      // Default to current tab's room filter
+      if (activeColorFilter !== 'all') selectedRoomId = activeColorFilter;
     }
     renderRoomTagPicker();
     openModal('modal-add-item');
@@ -2003,7 +2463,7 @@
     // Also sync to Firebase for cross-member visibility
     if (isFirebaseOk) {
       try {
-        await addDoc(collection(db, 'ledger'), entry);
+        await setDoc(doc(db, 'ledger', entry.id), entry);
       } catch(e) { /* non-critical */ }
     }
 
@@ -2017,13 +2477,92 @@
   };
 
   window.deleteLedgerEntry = function(id) {
-    const ledger = getLedger().filter(e => e.id !== id);
-    saveLedger(ledger);
+    const ledger = getLedger();
+    const entry = ledger.find(e => e.id === id);
+    // Also search fb_ledger_cache if not found locally
+    const fbCache = LS.get('fb_ledger_cache') || [];
+    const entryCopy = entry ? { ...entry } : (fbCache.find(e => e.id === id) ? { ...fbCache.find(e => e.id === id) } : null);
+    saveLedger(ledger.filter(e => e.id !== id));
+    // Remove from fb_ledger_cache too so monthly report updates
+    const updatedCache = fbCache.filter(e => e.id !== id);
+    LS.set('fb_ledger_cache', updatedCache);
+    // Also delete from Firebase
+    if (isFirebaseOk) {
+      deleteDoc(doc(db, 'ledger', id)).catch(() => {});
+    }
     renderBudget();
+    if (currentTab === 'monthly') renderMonthlyReport();
     showToast('🗑️ 已刪除紀錄');
+    if (entryCopy) {
+      showUndoToast(`撤銷刪除「${entryCopy.note}」`, async () => {
+        const l = getLedger(); l.push(entryCopy); saveLedger(l);
+        const c = LS.get('fb_ledger_cache') || []; c.push(entryCopy); LS.set('fb_ledger_cache', c);
+        if (isFirebaseOk) { try { await setDoc(doc(db,'ledger', entryCopy.id), entryCopy); } catch(e){} }
+        renderBudget();
+        if (currentTab === 'monthly') renderMonthlyReport();
+        showToast(`↩️ 已還原「${entryCopy.note}」`);
+      });
+    }
   };
 
-  // ── Fixed expense check (runs on app open and tab switch) ──
+  // ── Edit ledger entry ──
+  window.openLedgerEdit = function(id, type) {
+    // Search in both local ledger and Firebase cache
+    let entry = null;
+    if (type === 'income') {
+      entry = getIncomeLedger().find(e => e.id === id);
+    } else {
+      entry = getLedger().find(e => e.id === id);
+      if (!entry) {
+        entry = (LS.get('fb_ledger_cache') || []).find(e => e.id === id);
+      }
+    }
+    if (!entry) { showToast('⚠️ 找不到此紀錄','error'); return; }
+    document.getElementById('edit-ledger-id').value   = id;
+    document.getElementById('edit-ledger-type').value = type;
+    document.getElementById('edit-ledger-amount').value = entry.amount;
+    document.getElementById('edit-ledger-note').value   = entry.note;
+    document.getElementById('edit-ledger-date').value   = entry.date || '';
+    openModal('modal-edit-ledger');
+  };
+
+  window.saveLedgerEdit = async function() {
+    const id     = document.getElementById('edit-ledger-id').value;
+    const type   = document.getElementById('edit-ledger-type').value;
+    const amount = parseFloat(document.getElementById('edit-ledger-amount').value);
+    const note   = document.getElementById('edit-ledger-note').value.trim();
+    const date   = document.getElementById('edit-ledger-date').value;
+    if (!amount || amount <= 0) { showToast('⚠️ 請輸入有效金額','error'); return; }
+    if (!note)                  { showToast('⚠️ 請輸入備註','error'); return; }
+
+    if (type === 'income') {
+      const income = getIncomeLedger();
+      const idx = income.findIndex(e => e.id === id);
+      if (idx > -1) { income[idx].amount = amount; income[idx].note = note; if (date) income[idx].date = date; }
+      saveIncomeLedger(income);
+      // Also update fb_income_cache
+      const fbInc = LS.get('fb_income_cache') || [];
+      const fbIdx = fbInc.findIndex(e => e.id === id);
+      if (fbIdx > -1) { fbInc[fbIdx].amount = amount; fbInc[fbIdx].note = note; if (date) fbInc[fbIdx].date = date; LS.set('fb_income_cache', fbInc); }
+      if (isFirebaseOk && idx > -1) { try { await setDoc(doc(db,'income',id), income[idx]); } catch(e){} }
+    } else {
+      const ledger = getLedger();
+      const idx = ledger.findIndex(e => e.id === id);
+      if (idx > -1) { ledger[idx].amount = amount; ledger[idx].note = note; if (date) ledger[idx].date = date; }
+      saveLedger(ledger);
+      // Also update fb_ledger_cache so monthly report reflects edit immediately
+      const fbCache = LS.get('fb_ledger_cache') || [];
+      const fbIdx = fbCache.findIndex(e => e.id === id);
+      if (fbIdx > -1) { fbCache[fbIdx].amount = amount; fbCache[fbIdx].note = note; if (date) fbCache[fbIdx].date = date; LS.set('fb_ledger_cache', fbCache); }
+      if (isFirebaseOk) {
+        try { await setDoc(doc(db,'ledger',id), ledger[idx] || { id, amount, note, date }); } catch(e){}
+      }
+    }
+    closeModal('modal-edit-ledger');
+    renderBudget();
+    if (currentTab === 'monthly') renderMonthlyReport();
+    showToast('✅ 紀錄已更新');
+  };
   function checkFixedExpenses() {
     const settings = getBudgetSettings();
     if (!settings.fixedExpenses || !settings.fixedExpenses.length) return;
@@ -2200,6 +2739,7 @@
               <div class="ledger-time">${e.time} · 收入${e.member ? ' · <span style="color:var(--blue);">'+e.member+'</span>' : ''}</div>
             </div>
             <div class="ledger-amount" style="color:var(--green);">+$${e.amount.toLocaleString()}</div>
+            <button class="ledger-edit-btn" onclick="openLedgerEdit('${e.id}','income')"><i class="fa fa-pen"></i></button>
             <button class="ledger-del-btn" onclick="deleteIncomeEntry('${e.id}')"><i class="fa fa-trash"></i></button>
           </div>`).join('')}
         ${sorted.map(e => `
@@ -2210,6 +2750,7 @@
               <div class="ledger-time">${e.time} · ${e.catLabel}${e.member ? ' · <span style="color:var(--blue);">'+e.member+'</span>' : ''}</div>
             </div>
             <div class="ledger-amount">−$${e.amount.toLocaleString()}</div>
+            <button class="ledger-edit-btn" onclick="openLedgerEdit('${e.id}','expense')"><i class="fa fa-pen"></i></button>
             <button class="ledger-del-btn" onclick="deleteLedgerEntry('${e.id}')"><i class="fa fa-trash"></i></button>
           </div>`).join('')}
       </div>`;
@@ -2351,19 +2892,39 @@
 
   function getReportLedger() {
     const prefix = reportYear + '-' + String(reportMonth).padStart(2,'0');
-    const current = getLedger();
-    const currentMonthEntries = current.filter(e => e.date.startsWith(prefix));
-    // Also check archive
-    const archiveKey = reportYear + '-' + String(reportMonth).padStart(2,'0');
-    const archived   = LS.get('archive_' + archiveKey) || [];
-    const archivedFiltered = archived.filter(e => e.date.startsWith(prefix));
-    // Also use shared Firebase ledger cache if available
-    const sharedEntries = (LS.get('fb_ledger_cache') || []).filter(e => e.date && e.date.startsWith(prefix));
-    // Merge, deduplicate by id
-    const combined = [...currentMonthEntries, ...archivedFiltered, ...sharedEntries];
+    // Firebase cache is the source of truth when connected
+    const fbEntries = (LS.get('fb_ledger_cache') || []).filter(e => e.date && e.date.startsWith(prefix));
+    if (isFirebaseOk && fbEntries.length > 0) {
+      // When Firebase is connected, use its data merged with local-only entries
+      const localEntries = getLedger().filter(e => e.date.startsWith(prefix));
+      const fbIds = new Set(fbEntries.map(e => e.id || e.fbDocId));
+      // Include local entries not yet synced to Firebase (very fresh entries)
+      const localOnly = localEntries.filter(e => !fbIds.has(e.id));
+      const combined = [...fbEntries, ...localOnly];
+      const seen = new Set();
+      return combined.filter(e => { const k = e.id || e.fbDocId; if (seen.has(k)) return false; seen.add(k); return true; });
+    }
+    // Fallback: local + archive (offline mode)
+    const current = getLedger().filter(e => e.date.startsWith(prefix));
+    const archived = (LS.get('archive_' + prefix) || []).filter(e => e.date.startsWith(prefix));
+    const combined = [...current, ...archived];
     const seen = new Set();
-    return combined.filter(e => { if (seen.has(e.id)) return false; seen.add(e.id); return true; });
+    return combined.filter(e => { const k = e.id || e.fbDocId; if (seen.has(k)) return false; seen.add(k); return true; });
   }
+
+  function getIncomeLedger() {
+    const local = LS.get('income_ledger') || [];
+    const fbCache = LS.get('fb_income_cache') || [];
+    const combined = [...local, ...fbCache];
+    const seen = new Set();
+    return combined.filter(e => {
+      const key = e.id || e.fbDocId;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+  function saveIncomeLedger(l) { LS.set('income_ledger', l); }
 
   function renderMonthlyReport() {
     const label = document.getElementById('report-month-label');
@@ -2497,6 +3058,8 @@
                   <div class="ledger-time">${e.time||''}${e.member?' · <span style="color:var(--blue);">'+e.member+'</span>':''} · 收入</div>
                 </div>
                 <div class="ledger-amount" style="font-size:0.95rem;color:var(--green);">+$${e.amount.toLocaleString()}</div>
+                <button class="ledger-edit-btn" onclick="openLedgerEdit('${e.id}','income')" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-pen"></i></button>
+                <button class="ledger-del-btn" onclick="deleteIncomeEntry('${e.id}');renderMonthlyReport();" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-trash"></i></button>
               </div>` : `
               <div class="ledger-row">
                 <div class="ledger-cat-icon" style="background:${e.catBg};width:30px;height:30px;font-size:0.9rem;">${e.catIcon}</div>
@@ -2505,6 +3068,8 @@
                   <div class="ledger-time">${e.time||''}${e.member?' · <span style="color:var(--blue);">'+e.member+'</span>':''}</div>
                 </div>
                 <div class="ledger-amount" style="font-size:0.95rem;">−$${e.amount.toLocaleString()}</div>
+                <button class="ledger-edit-btn" onclick="openLedgerEdit('${e.id}','expense')" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-pen"></i></button>
+                <button class="ledger-del-btn" onclick="deleteLedgerEntry('${e.id}');renderMonthlyReport();" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-trash"></i></button>
               </div>`).join('')}
           </div>
         </div>`;
@@ -2646,5 +3211,20 @@
   // ══ Boot ══
   initApp();
 </script>
-</body>
+<script>
+    // 等待整個網頁（包含 Tailwind CSS、圖片等）都載入完成後執行
+    window.addEventListener('load', function() {
+      const loader = document.getElementById('initial-loader');
+      if (loader) {
+        // 1. 先讓畫面變透明 (觸發淡出動畫)
+        loader.style.opacity = '0';
+        // 2. 等待 0.5 秒動畫播完後，徹底移除這個遮罩
+        setTimeout(() => {
+          loader.style.display = 'none';
+          loader.remove();
+        }, 500);
+      }
+    });
+  </script>
+  </body>
 </html>
