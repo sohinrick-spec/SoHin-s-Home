@@ -556,6 +556,12 @@
       display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0;
     }
     .ledger-edit-btn:hover { background: var(--blue); color: var(--bg); }
+    .ledger-del-btn {
+      width: 28px; height: 28px; border-radius: 7px; border: none; cursor: pointer;
+      background: var(--red-light); color: var(--red); font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0;
+    }
+    .ledger-del-btn:hover { background: var(--red); color: #fff; }
 
     /* ══ Avatar image support ══ */
     .m-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
@@ -2443,6 +2449,7 @@
             <button onclick="switchMember('${m.id}','${m.name}')" style="padding:5px 12px;background:${currentMemberId===m.id?'var(--primary-light)':'var(--bg2)'};border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:0.79rem;font-weight:800;cursor:pointer;">
               ${currentMemberId===m.id?'✅ 使用中':'切換'}
             </button>
+            ${currentMemberId===m.id ? '' : `<button onclick="deleteMember('${m.id}','${m.name}')" style="width:28px;height:28px;background:var(--red-light);border:none;border-radius:7px;color:var(--red);cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;" onmouseover="this.style.background='var(--red)';this.style.color='#fff'" onmouseout="this.style.background='var(--red-light)';this.style.color='var(--red)'"><i class="fa fa-trash"></i></button>`}
           </div>`;
         }).join('')
       : '<div style="color:var(--text-dim);padding:8px 0;font-size:0.85rem;">暫無成員</div>';
@@ -2512,6 +2519,18 @@
     input.value = '';
     openMemberModal();
     showToast(`✅ 已新增成員 ${name}`);
+  };
+
+  window.deleteMember = async function(id, name) {
+    if (!confirm(`確定要刪除成員「${name}」嗎？此操作無法復原。`)) return;
+    members = members.filter(m => m.id !== id);
+    LS.set('members_cache', members);
+    localStorage.removeItem('hsa_avatar_' + id);
+    if (isFirebaseOk) {
+      try { await deleteDoc(doc(db, 'members', id)); } catch(e) { console.warn('delete member failed', e); }
+    }
+    openMemberModal();
+    showToast(`🗑️ 已刪除成員「${name}」`);
   };
 
   // ════════════════════════════════════════
@@ -2651,6 +2670,18 @@
       wrap.style.display = 'none';
       selectedCatOverride = null;
     } else {
+      // Reset override so auto-guess reflects fresh input; user can still click a chip to override
+      if (!selectedCatOverride) {
+        selectedCatOverride = null;
+      } else {
+        // Keep the override only if it was set during THIS input session (chip click updates preview),
+        // but re-run auto-guess to detect note changes
+        const freshGuess = parseBudgetInput(val);
+        if (freshGuess && freshGuess.cat.label !== selectedCatOverride.label) {
+          // Note changed significantly — reset to fresh guess
+          selectedCatOverride = null;
+        }
+      }
       const activeCat = selectedCatOverride || parsed.cat;
       preview.innerHTML = `<span style="color:var(--green);">✓</span> ${activeCat.icon} <strong>${parsed.note}</strong>　$${parsed.amount} → 將記為「${activeCat.label}」`;
       preview.className = 'budget-parsed-preview ready';
@@ -3242,6 +3273,16 @@
   }
   function saveIncomeLedger(l) { LS.set('income_ledger', l); }
 
+  function getMemberAvatarHtml(memberName, size = 16) {
+    const m = members.find(mm => mm.name === memberName);
+    const avatarUrl = m ? getMemberAvatar(m.id) : '';
+    if (avatarUrl) {
+      if (isEmoji(avatarUrl)) return `<span style="font-size:${size*0.75}px;line-height:1;vertical-align:middle;">${avatarUrl}</span>`;
+      return `<img src="${avatarUrl}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;vertical-align:middle;display:inline-block;" />`;
+    }
+    return `<span style="display:inline-flex;width:${size}px;height:${size}px;border-radius:50%;background:var(--blue);color:var(--bg);font-size:${Math.round(size*0.55)}px;font-weight:900;align-items:center;justify-content:center;vertical-align:middle;">${(memberName||'?')[0]}</span>`;
+  }
+
   function renderMonthlyReport() {
     const label = document.getElementById('report-month-label');
     if (!label) return;
@@ -3343,34 +3384,34 @@
       memberTotals[name] = (memberTotals[name]||0) + e.amount;
     });
     const memberArr = Object.entries(memberTotals).sort((a,b)=>b[1]-a[1]);
-    const memberTotal = memberArr.reduce((s,[,v])=>s+v,0)||1;
+    const maxMemberAmt = memberArr.length > 0 ? memberArr[0][1] : 1;
     const memberColors = ['var(--blue)','var(--green)','var(--yellow)','#BA68C8','#FF8A80'];
     document.getElementById('rpt-members').innerHTML = memberArr.length
       ? memberArr.map(([name, amt], idx) => {
           const color = memberColors[idx % memberColors.length];
-          const pctW  = Math.round((amt/memberTotal)*100);
+          const barPct  = Math.round((amt/maxMemberAmt)*100);
           // Try to find avatar
           const m = members.find(mm => mm.name === name);
           const avatarUrl = m ? getMemberAvatar(m.id) : '';
           let avatarBlock;
           if (avatarUrl) {
             if (isEmoji(avatarUrl)) {
-              avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;background:${color};opacity:0.15;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;"><span style="position:absolute;font-size:1rem;">${avatarUrl}</span></div>`;
+              avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;background:${color}22;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:1rem;line-height:1;">${avatarUrl}</span></div>`;
             } else {
-              avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;flex-shrink:0;overflow:hidden;"><img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.style.background='${color}';this.parentElement.style.opacity='0.15';this.parentElement.innerHTML='<span style=&quot;font-size:0.78rem;font-weight:900;color:${color};opacity:1;display:flex;align-items:center;justify-content:center;height:100%;&quot;>${name[0]}</span>'" /></div>`;
+              avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;flex-shrink:0;overflow:hidden;"><img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.style.background='${color}22';this.parentElement.innerHTML='<span style=&quot;font-size:0.78rem;font-weight:900;color:${color};display:flex;align-items:center;justify-content:center;height:100%;&quot;>${name[0]}</span>'" /></div>`;
             }
           } else {
-            avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;background:${color};opacity:0.15;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;"><span style="position:absolute;font-size:0.78rem;font-weight:900;color:${color};opacity:1;">${name[0]}</span></div>`;
+            avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;background:${color}22;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:0.78rem;font-weight:900;color:${color};">${name[0]}</span></div>`;
           }
-          return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
             ${avatarBlock}
             <div style="flex:1;">
-              <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:800;margin-bottom:3px;">
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:800;margin-bottom:4px;">
                 <span style="color:${color};">${name}</span>
-                <span style="color:var(--text-muted);">${pctW}%&nbsp;&nbsp;$${amt.toLocaleString()}</span>
+                <span style="color:var(--text);font-family:'Playfair Display',serif;font-size:0.88rem;">$${amt.toLocaleString()}</span>
               </div>
               <div style="height:5px;background:var(--primary-light);border-radius:99px;overflow:hidden;">
-                <div style="height:100%;width:${pctW}%;background:${color};border-radius:99px;"></div>
+                <div style="height:100%;width:${barPct}%;background:${color};border-radius:99px;"></div>
               </div>
             </div>
           </div>`;
@@ -3380,12 +3421,12 @@
             <div style="font-size:0.7rem;font-weight:900;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">家庭結算</div>
             ${memberArr.map(([name, amt]) => `
               <div style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:800;padding:3px 0;">
-                <span style="color:var(--text);">${name}</span>
+                <span style="color:var(--text);">${getMemberAvatarHtml(name,14)} ${name}</span>
                 <span style="color:var(--red);">$${amt.toLocaleString()}</span>
               </div>`).join('')}
             <div style="display:flex;justify-content:space-between;font-size:0.82rem;font-weight:900;padding:5px 0 0;border-top:1px solid var(--border);margin-top:4px;">
               <span style="color:var(--text);">合計</span>
-              <span style="color:var(--red);font-family:'Playfair Display',serif;">$${memberTotal.toLocaleString()}</span>
+              <span style="color:var(--red);font-family:'Playfair Display',serif;">$${memberArr.reduce((s,[,v])=>s+v,0).toLocaleString()}</span>
             </div>
           </div>` : '')
       : '<div style="color:var(--text-dim);font-size:0.8rem;padding:4px 0;text-align:center;">尚無記帳資料</div>';
@@ -3418,7 +3459,7 @@
                 <div class="ledger-cat-icon" style="background:rgba(116,198,157,0.15);width:30px;height:30px;font-size:0.9rem;">${e.catIcon||'💵'}</div>
                 <div class="ledger-info">
                   <div class="ledger-name" style="font-size:0.85rem;">${e.note}</div>
-                  <div class="ledger-time">${e.time||''}${e.member?' · <span style="color:var(--blue);">'+e.member+'</span>':''} · ${e.catLabel||'收入'}</div>
+                  <div class="ledger-time">${e.time||''}${e.member?' · '+getMemberAvatarHtml(e.member)+' <span style="color:var(--blue);">'+e.member+'</span>':''} · ${e.catLabel||'收入'}</div>
                 </div>
                 <div class="ledger-amount" style="font-size:0.95rem;color:var(--green);">+$${e.amount.toLocaleString()}</div>
                 <button class="ledger-edit-btn" onclick="openLedgerEdit('${e.id}','income')" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-pen"></i></button>
@@ -3428,7 +3469,7 @@
                 <div class="ledger-cat-icon" style="background:${e.catBg};width:30px;height:30px;font-size:0.9rem;">${e.catIcon}</div>
                 <div class="ledger-info">
                   <div class="ledger-name" style="font-size:0.85rem;">${e.note}${e.fixed?'&nbsp;<span class="fixed-badge">固定</span>':''}</div>
-                  <div class="ledger-time">${e.time||''}${e.member?' · <span style="color:var(--blue);">'+e.member+'</span>':''}</div>
+                  <div class="ledger-time">${e.time||''}${e.member?' · '+getMemberAvatarHtml(e.member)+' <span style="color:var(--blue);">'+e.member+'</span>':''}</div>
                 </div>
                 <div class="ledger-amount" style="font-size:0.95rem;">−$${e.amount.toLocaleString()}</div>
                 <button class="ledger-edit-btn" onclick="openLedgerEdit('${e.id}','expense')" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-pen"></i></button>
