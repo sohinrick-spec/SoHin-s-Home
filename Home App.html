@@ -1899,14 +1899,15 @@
             ${item.status==='充足'?'✅ 充足':item.status==='夠用'?'🟡 夠用':'🔴 快用完了'}
            </button>`;
 
+      const isFiltered = activeColorFilter !== 'all';
       return `
         <div class="card" id="card-${item.id}">
           <div class="inv-row">
             <div class="sort-controls">
-              <button class="sort-btn" ${index===0?'disabled':''} onclick="moveItemOrder('${item.id}',-1)" title="上移一格">
+              <button class="sort-btn" ${isFiltered || index===0?'disabled':''} onclick="moveItemOrder('${item.id}',-1)" title="${isFiltered?'請切換至「全部」後再排序':'上移一格'}">
                 <i class="fa fa-chevron-up"></i>
               </button>
-              <button class="sort-btn" ${index===filtered.length-1?'disabled':''} onclick="moveItemOrder('${item.id}',1)" title="下移一格">
+              <button class="sort-btn" ${isFiltered || index===filtered.length-1?'disabled':''} onclick="moveItemOrder('${item.id}',1)" title="${isFiltered?'請切換至「全部」後再排序':'下移一格'}">
                 <i class="fa fa-chevron-down"></i>
               </button>
             </div>
@@ -3026,7 +3027,7 @@
     const prevKey = prevMonth.getFullYear() + '-' + String(prevMonth.getMonth()+1).padStart(2,'0');
     const archive = LS.get('archive_' + prevKey) || [];
     const thisMonthPrefix = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0');
-    const toArchive = ledger.filter(e => !e.date.startsWith(thisMonthPrefix));
+    const toArchive = ledger.filter(e => e.date.startsWith(prevKey));
     LS.set('archive_' + prevKey, [...archive, ...toArchive]);
     const remaining = ledger.filter(e => e.date.startsWith(thisMonthPrefix));
     saveLedger(remaining);
