@@ -12,6 +12,7 @@
 
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js" />
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js" />
+  <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js" />
 
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -50,7 +51,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ══ Header ══ */
     .app-header {
       background: var(--card); padding: 14px 18px 12px;
       position: sticky; top: 0; z-index: 40;
@@ -71,7 +71,6 @@
       font-size: 0.72rem; font-weight: 900; overflow: hidden;
     }
 
-    /* ══ Bottom Nav ══ */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h);
       background: var(--card); border-top: 1px solid var(--border);
@@ -86,7 +85,6 @@
     .nav-btn.active { color: var(--primary); }
     .nav-btn.active i { transform: scale(1.1); }
 
-    /* ══ Tabs ══ */
     .tab-pane { display: none; padding: 14px 14px 6px; animation: fadeUp 0.28s ease; }
     .tab-pane.active { display: block; }
     @keyframes fadeUp { from { opacity:0; transform:translateY(10px);} to { opacity:1; transform:translateY(0);} }
@@ -99,7 +97,6 @@
     .section-title::after { content:''; flex:1; height:1px; background: var(--border); }
     .container { max-width: 500px; margin: 0 auto; }
 
-    /* ══ Cards ══ */
     .card {
       background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border);
       padding: 12px 14px; margin-bottom: 8px; position: relative; transition: border-color 0.2s;
@@ -108,7 +105,6 @@
     .card:has(.inv-row):hover { border-color: var(--border2); box-shadow: 0 2px 12px rgba(0,0,0,0.25); }
     .card:has(.inv-row):active { transform: scale(0.995); }
 
-    /* ══ Color Filter Bar ══ */
     .color-filter-bar { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 10px; scrollbar-width: none; }
     .color-filter-bar::-webkit-scrollbar { display: none; }
     .cf-btn {
@@ -121,7 +117,6 @@
     .cf-btn.active { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
     .cf-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 
-    /* ══ Inventory Row ══ */
     .inv-row { display: flex; align-items: center; gap: 8px; }
     .inv-info { flex: 1; min-width: 0; }
     .inv-name { font-weight: 800; font-size: 0.93rem; display: flex; align-items: center; gap: 7px; line-height: 1.3; flex-wrap: wrap; }
@@ -136,7 +131,6 @@
       border-radius: 8px; font-size: 0.72rem; color: var(--yellow); font-weight: 700;
     }
 
-    /* ══ Sort Buttons ══ */
     .sort-controls { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
     .sort-btn {
       background: var(--bg2); border: 1px solid var(--border); border-radius: 6px;
@@ -146,7 +140,6 @@
     .sort-btn:hover:not(:disabled) { background: var(--primary-light); color: var(--primary); border-color: var(--border2); }
     .sort-btn:disabled { opacity: 0.18; cursor: not-allowed; pointer-events: none; }
 
-    /* ══ Qty ══ */
     .qty-box {
       display: flex; align-items: center; gap: 5px; background: var(--bg2);
       border: 1px solid var(--border); border-radius: 50px; padding: 3px 8px; flex-shrink: 0;
@@ -162,7 +155,6 @@
     .qty-btn.plus { background: var(--green-light); color: var(--green); }
     .qty-btn.plus:hover { background: var(--green); color: var(--bg); }
 
-    /* ══ Status ══ */
     .status-btn {
       padding: 5px 11px; border-radius: 50px; font-size: 0.76rem; font-weight: 800;
       cursor: pointer; border: 1px solid transparent; user-select: none; white-space: nowrap;
@@ -172,7 +164,6 @@
     .status-btn.warn { background: var(--yellow-light); color: var(--yellow); border-color: rgba(240,168,73,0.25); }
     .status-btn.bad  { background: var(--red-light);    color: var(--red);    border-color: rgba(224,112,112,0.25); }
 
-    /* ══ Icon Buttons ══ */
     .action-btn-group { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
     .icon-btn {
       width: 30px; height: 30px; border-radius: var(--radius-sm); border: none; cursor: pointer;
@@ -181,18 +172,12 @@
     .del-btn  { background: var(--red-light);  color: var(--red);  } .del-btn:hover  { background: var(--red);  color: #fff; }
     .edit-btn { background: var(--blue-light); color: var(--blue); } .edit-btn:hover { background: var(--blue); color: var(--bg); }
 
-    /* ══ Shopping List ══ */
     .shop-row { display: flex; align-items: center; gap: 9px; padding: 8px 0; border-bottom: 1px solid var(--border); }
     .shop-row:last-child { border-bottom: none; }
     .shop-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
-    /* ══ Shopping restock ══ */
-    .shop-row.bought {
-      opacity: 0.52;
-    }
-    .shop-row.bought .shop-name {
-      text-decoration: line-through; color: var(--text-dim);
-    }
+    .shop-row.bought { opacity: 0.52; }
+    .shop-row.bought .shop-name { text-decoration: line-through; color: var(--text-dim); }
     .buy-check {
       width: 26px; height: 26px; border-radius: 8px;
       border: 2px solid var(--border2); background: var(--bg2);
@@ -223,7 +208,6 @@
       text-decoration: line-through; cursor: default;
     }
 
-    /* ══ Chores ══ */
     .chore-row { display: flex; align-items: flex-start; gap: 12px; }
     .chore-check {
       width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--border2);
@@ -247,7 +231,6 @@
     }
     .chore-chip.selected { border-color: var(--green); background: var(--green-light); color: var(--green); }
 
-    /* ══ FAB ══ */
     .fab {
       position: fixed; bottom: calc(var(--nav-h) + 14px); right: 18px;
       width: 52px; height: 52px; border-radius: 50%; background: var(--primary); color: var(--bg);
@@ -257,7 +240,6 @@
     .fab:hover { transform: scale(1.08); background: #fff; }
     .fab:active { transform: scale(0.94) !important; }
 
-    /* ══ Modal ══ */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.75);
       backdrop-filter: blur(5px); z-index: 50; display: none; align-items: flex-end; justify-content: center;
@@ -267,7 +249,6 @@
     .modal-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 99px; margin: 0 auto 16px; }
     .modal-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 16px; color: var(--text); }
 
-    /* ══ Forms ══ */
     .field-label {
       font-size: 0.7rem; font-weight: 900; color: var(--text-muted); margin-bottom: 6px;
       letter-spacing: 0.07em; text-transform: uppercase; margin-top: 14px;
@@ -310,21 +291,18 @@
     }
     .btn-cancel { width: 100%; margin-top: 8px; padding: 11px; background: none; border: none; color: var(--text-muted); font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; }
 
-    /* ══ Alert badge ══ */
     .alert-badge {
       display: inline-flex; align-items: center; gap: 3px;
       font-size: 0.64rem; font-weight: 900; padding: 2px 7px;
       background: var(--red-light); color: var(--red); border-radius: 50px; border: 1px solid rgba(224,112,112,0.2);
     }
 
-    /* ══ Connection Banner ══ */
     #conn-banner {
       display: none; align-items: center; gap: 8px;
       background: rgba(240,168,73,0.1); border-bottom: 1px solid var(--border);
       color: var(--yellow); padding: 9px 16px; font-size: 0.79rem; font-weight: 700; line-height: 1.4;
     }
 
-    /* ══ Firebase Status Dot ══ */
     .db-status {
       display: inline-flex; align-items: center; gap: 5px;
       font-size: 0.66rem; font-weight: 800; color: var(--text-dim);
@@ -334,7 +312,6 @@
     .db-dot.offline { background: var(--yellow); }
     .db-dot.error   { background: var(--red); }
 
-    /* ══ Toast ══ */
     #toast {
       visibility: hidden; min-width: 200px; text-align: center; border-radius: var(--radius-md);
       padding: 11px 22px; position: fixed; z-index: 9999; left: 50%;
@@ -346,14 +323,12 @@
     @keyframes toastIn  { from { opacity:0; bottom: calc(var(--nav-h) + 8px); } to { opacity:1; bottom: calc(var(--nav-h) + 24px); } }
     @keyframes toastOut { from { opacity:1; } to { opacity:0; } }
 
-    /* ══ Welcome ══ */
     #welcome-screen {
       position: fixed; inset: 0; background: var(--bg); z-index: 60;
       display: none; flex-direction: column; align-items: center; justify-content: center; padding: 36px 28px; gap: 22px;
     }
     .welcome-title { font-family: 'Playfair Display', serif; font-size: 1.85rem; text-align: center; color: var(--text); line-height: 1.25; }
 
-    /* ══ Loading overlay ══ */
     #loading-overlay {
       position: fixed; inset: 0; background: var(--bg); z-index: 55;
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
@@ -375,7 +350,6 @@
     button { transition: transform 0.12s ease, background-color 0.18s ease, opacity 0.18s ease !important; }
     button:active { transform: scale(0.93) !important; }
 
-    /* ══ Budget Module ══ */
     .budget-hero {
       background: var(--card); border-radius: var(--radius-lg); border: 1px solid var(--border);
       padding: 18px 18px 14px; margin-bottom: 10px; position: relative; overflow: hidden;
@@ -390,9 +364,7 @@
       font-family:'Playfair Display',serif; font-size:2.6rem; font-weight:700; line-height:1;
       transition: color 0.4s;
     }
-    .budget-remaining-amount.pulse {
-      animation: amountPulse 0.45s ease;
-    }
+    .budget-remaining-amount.pulse { animation: amountPulse 0.45s ease; }
     @keyframes amountPulse {
       0%   { transform: scale(1); }
       40%  { transform: scale(1.07); }
@@ -401,18 +373,11 @@
     .budget-remaining-amount.healthy { color: var(--green); }
     .budget-remaining-amount.warn    { color: var(--yellow); }
     .budget-remaining-amount.danger  { color: var(--red); }
-    .budget-progress-bar {
-      width:100%; height:6px; background: var(--primary-light); border-radius:99px; margin: 10px 0 8px; overflow:hidden;
-    }
-    .budget-progress-fill {
-      height:100%; border-radius:99px; transition: width 0.6s cubic-bezier(0.34,1.2,0.64,1), background 0.4s;
-    }
+    .budget-progress-bar { width:100%; height:6px; background: var(--primary-light); border-radius:99px; margin: 10px 0 8px; overflow:hidden; }
+    .budget-progress-fill { height:100%; border-radius:99px; transition: width 0.6s cubic-bezier(0.34,1.2,0.64,1), background 0.4s; }
     .budget-meta-row { display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-muted); font-weight:700; }
 
-    /* Quick input */
-    .budget-input-wrap {
-      position:relative; margin-bottom:8px;
-    }
+    .budget-input-wrap { position:relative; margin-bottom:8px; }
     .budget-main-input {
       width:100%; padding: 14px 52px 14px 16px;
       background: var(--card); border: 1.5px solid var(--border2); border-radius: var(--radius-lg);
@@ -434,7 +399,6 @@
     }
     .budget-parsed-preview.ready { color:var(--green); }
 
-    /* Shortcuts */
     .budget-shortcuts { display:flex; gap:7px; margin-bottom:10px; }
     .shortcut-btn {
       flex:1; padding:9px 6px; background: var(--card2); border:1px solid var(--border);
@@ -446,35 +410,18 @@
     .shortcut-btn .sc-amount { font-size:0.95rem; color:var(--green); font-family:'Playfair Display',serif; }
     .shortcut-btn .sc-label  { font-size:0.68rem; color:var(--text-muted); }
 
-    /* Ledger list */
-    .ledger-row {
-      display:flex; align-items:center; gap:10px; padding:10px 0;
-      border-bottom:1px solid var(--border); transition: opacity 0.2s;
-    }
+    .ledger-row { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); transition: opacity 0.2s; }
     .ledger-row:last-child { border-bottom:none; }
-    .ledger-cat-icon {
-      width:36px; height:36px; border-radius:10px; display:flex; align-items:center;
-      justify-content:center; font-size:1.1rem; flex-shrink:0;
-    }
+    .ledger-cat-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
     .ledger-info { flex:1; min-width:0; }
     .ledger-name { font-weight:800; font-size:0.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .ledger-time { font-size:0.68rem; color:var(--text-dim); margin-top:2px; }
     .ledger-amount { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:700; color:var(--red); flex-shrink:0; }
-    .ledger-del-btn {
-      width:28px; height:28px; border-radius:7px; border:none; cursor:pointer;
-      background:var(--red-light); color:var(--red); font-size:0.75rem;
-      display:flex; align-items:center; justify-content:center; transition:all 0.15s; flex-shrink:0;
-    }
+    .ledger-del-btn { width:28px; height:28px; border-radius:7px; border:none; cursor:pointer; background:var(--red-light); color:var(--red); font-size:0.75rem; display:flex; align-items:center; justify-content:center; transition:all 0.15s; flex-shrink:0; }
     .ledger-del-btn:hover { background:var(--red); color:#fff; }
 
-    /* Fixed expenses badge */
-    .fixed-badge {
-      display:inline-flex; align-items:center; gap:3px; font-size:0.62rem; font-weight:900;
-      padding:2px 7px; background:var(--blue-light); color:var(--blue);
-      border-radius:50px; border:1px solid rgba(100,181,246,0.2);
-    }
+    .fixed-badge { display:inline-flex; align-items:center; gap:3px; font-size:0.62rem; font-weight:900; padding:2px 7px; background:var(--blue-light); color:var(--blue); border-radius:50px; border:1px solid rgba(100,181,246,0.2); }
 
-    /* Salary reset firework overlay */
     #firework-overlay {
       position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:200;
       display:none; flex-direction:column; align-items:center; justify-content:center; gap:18px;
@@ -490,13 +437,9 @@
       font-weight:900; cursor:pointer; z-index:1; margin-top:10px;
     }
 
-    /* Budget settings modal specifics */
-    .fixed-exp-item {
-      display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--border);
-    }
+    .fixed-exp-item { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--border); }
     .fixed-exp-item:last-child { border-bottom:none; }
 
-    /* ══ Modal mobile fix ══ */
     .modal-sheet {
       background: var(--card); border-radius: 24px 24px 0 0; padding: 18px 18px 44px;
       width: 100%; max-width: 500px; animation: slideUp 0.3s cubic-bezier(0.34,1.2,0.64,1);
@@ -508,11 +451,9 @@
     .income-row { background: rgba(116,198,157,0.05); border-left: 2px solid var(--green); }
 
     #ledger-member-chips { flex-wrap: wrap !important; }
-
     .ledger-member-chip { transition: all 0.15s; }
     .ledger-member-chip:hover { border-color: var(--primary-dim) !important; }
 
-    /* ══ Undo Toast ══ */
     #undo-toast {
       visibility: hidden; display: flex; align-items: center; gap: 10px;
       min-width: 220px; text-align: left; border-radius: var(--radius-md);
@@ -530,7 +471,6 @@
     }
     .undo-action-btn:hover { background: var(--blue); color: var(--bg); }
 
-    /* ══ Room management edit button ══ */
     .cf-edit-rooms-btn {
       display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 50px;
       border: 1px solid var(--border2); background: var(--card2); color: var(--text-dim);
@@ -539,31 +479,12 @@
     }
     .cf-edit-rooms-btn:hover { border-color: var(--primary-dim); color: var(--text); }
 
-    /* ══ Custom shopping items ══ */
-    .custom-shop-row {
-      display: flex; align-items: center; gap: 9px; padding: 8px 0;
-      border-bottom: 1px solid var(--border);
-    }
+    .custom-shop-row { display: flex; align-items: center; gap: 9px; padding: 8px 0; border-bottom: 1px solid var(--border); }
     .custom-shop-row:last-child { border-bottom: none; }
-    .custom-shop-badge {
-      font-size: 0.62rem; font-weight: 900; padding: 2px 7px;
-      background: var(--yellow-light); color: var(--yellow);
-      border-radius: 50px; border: 1px solid rgba(240,168,73,0.25); flex-shrink: 0;
-    }
-    .ledger-edit-btn {
-      width: 28px; height: 28px; border-radius: 7px; border: none; cursor: pointer;
-      background: var(--blue-light); color: var(--blue); font-size: 0.75rem;
-      display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0;
-    }
+    .custom-shop-badge { font-size: 0.62rem; font-weight: 900; padding: 2px 7px; background: var(--yellow-light); color: var(--yellow); border-radius: 50px; border: 1px solid rgba(240,168,73,0.25); flex-shrink: 0; }
+    .ledger-edit-btn { width: 28px; height: 28px; border-radius: 7px; border: none; cursor: pointer; background: var(--blue-light); color: var(--blue); font-size: 0.75rem; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
     .ledger-edit-btn:hover { background: var(--blue); color: var(--bg); }
-    .ledger-del-btn {
-      width: 28px; height: 28px; border-radius: 7px; border: none; cursor: pointer;
-      background: var(--red-light); color: var(--red); font-size: 0.75rem;
-      display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0;
-    }
-    .ledger-del-btn:hover { background: var(--red); color: #fff; }
 
-    /* ══ Avatar image support ══ */
     .m-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
     .m-avatar-lg {
       width: 38px; height: 38px; background: var(--primary); color: var(--bg);
@@ -578,7 +499,6 @@
     }
     .avatar-set-btn:hover { border-color: var(--primary-dim); color: var(--primary); }
 
-    /* ══ Budget category picker - ENHANCED ══ */
     .budget-cat-picker { display: flex; gap: 6px; flex-wrap: wrap; padding: 6px 0 8px; }
     .budget-cat-chip {
       padding: 6px 13px; border-radius: 50px; border: 1.5px solid var(--border);
@@ -586,21 +506,10 @@
       font-size: 0.78rem; font-weight: 800; cursor: pointer; transition: all 0.15s;
     }
     .budget-cat-chip:hover { border-color: var(--primary-dim); color: var(--text); }
-    .budget-cat-chip.active { 
-      border-color: var(--green); background: var(--green-light); color: var(--green); 
-      transform: scale(1.05); 
-      box-shadow: 0 0 0 2px rgba(116,198,157,0.15);
-    }
-    .budget-cat-picker-wrap {
-      background: var(--bg2); border: 1px dashed var(--border2); border-radius: var(--radius-md);
-      padding: 8px 10px 4px; margin-bottom: 8px;
-    }
-    .budget-cat-picker-label {
-      font-size: 0.68rem; font-weight: 900; color: var(--text-muted); 
-      letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;
-    }
+    .budget-cat-chip.active { border-color: var(--green); background: var(--green-light); color: var(--green); transform: scale(1.05); box-shadow: 0 0 0 2px rgba(116,198,157,0.15); }
+    .budget-cat-picker-wrap { background: var(--bg2); border: 1px dashed var(--border2); border-radius: var(--radius-md); padding: 8px 10px 4px; margin-bottom: 8px; }
+    .budget-cat-picker-label { font-size: 0.68rem; font-weight: 900; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
 
-    /* ══ Edit ledger category ══ */
     .edit-cat-row { display: flex; gap: 6px; flex-wrap: wrap; padding: 4px 0 4px; }
     .edit-cat-chip {
       padding: 5px 11px; border-radius: 50px; border: 1px solid var(--border);
@@ -609,17 +518,13 @@
     }
     .edit-cat-chip.active { border-color: var(--green); background: var(--green-light); color: var(--green); }
 
-    /* ══ Pie chart ══ */
     #rpt-pie-wrap { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
     #rpt-pie-canvas { flex-shrink: 0; }
     #rpt-pie-legend { flex: 1; display: flex; flex-direction: column; gap: 6px; }
     .pie-legend-row { display: flex; align-items: center; gap: 7px; font-size: 0.78rem; font-weight: 800; }
     .pie-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
-    /* ══ Avatar preset picker ══ */
-    .avatar-preset-grid {
-      display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; padding: 8px 0;
-    }
+    .avatar-preset-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; padding: 8px 0; }
     .avatar-preset-btn {
       aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--border);
       background: var(--bg2); cursor: pointer; font-size: 1.4rem; display: flex;
@@ -627,6 +532,60 @@
     }
     .avatar-preset-btn:hover { transform: scale(1.1); border-color: var(--primary-dim); }
     .avatar-preset-btn.selected { border-color: var(--green); background: var(--green-light); transform: scale(1.1); }
+
+    /* ══ NEW: Search bar ══ */
+    .search-wrap { position: relative; margin-bottom: 10px; }
+    .search-input {
+      width: 100%; padding: 10px 40px 10px 38px;
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      background: var(--bg2); color: var(--text);
+      font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 700;
+      outline: none; transition: all 0.18s;
+    }
+    .search-input:focus { border-color: var(--primary-dim); background: var(--bg); box-shadow: 0 0 0 3px rgba(232,232,232,0.07); }
+    .search-input::placeholder { color: var(--text-dim); }
+    .search-icon {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      color: var(--text-dim); font-size: 0.9rem; pointer-events: none;
+    }
+    .search-clear {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      width: 26px; height: 26px; border-radius: 50%; border: none;
+      background: var(--primary-light); color: var(--text-muted);
+      cursor: pointer; display: none; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+    }
+    .search-clear.visible { display: flex; }
+    .search-clear:hover { background: var(--red-light); color: var(--red); }
+
+    /* ══ NEW: Recurring task ══ */
+    .recurring-card { padding: 10px 14px; }
+    .rt-status-badge {
+      font-size: 0.68rem; font-weight: 900; padding: 2px 9px; border-radius: 50px;
+      border: 1px solid transparent; white-space: nowrap;
+    }
+    .rt-overdue { background: var(--red-light); color: var(--red); border-color: rgba(224,112,112,0.25); }
+    .rt-today { background: var(--yellow-light); color: var(--yellow); border-color: rgba(240,168,73,0.25); }
+    .rt-upcoming { background: var(--green-light); color: var(--green); border-color: rgba(116,198,157,0.25); }
+
+    /* ══ NEW: Avatar upload ══ */
+    .avatar-upload-btn {
+      width: 100%; padding: 10px;
+      background: var(--blue-light); border: 1px solid rgba(100,181,246,0.35);
+      border-radius: var(--radius-md); color: var(--blue);
+      font-family: 'Nunito', sans-serif; font-weight: 900; cursor: pointer;
+      font-size: 0.86rem; display: flex; align-items: center; justify-content: center; gap: 7px;
+      transition: all 0.2s;
+    }
+    .avatar-upload-btn:hover { background: var(--blue); color: var(--bg); }
+    .avatar-upload-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ══ NEW: Custom category list ══ */
+    .custom-cat-item {
+      display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+      background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-md);
+      margin-bottom: 6px;
+    }
   </style>
 </head>
 <body>
@@ -714,6 +673,17 @@
       </div>
       <div>
         <div class="section-title"><i class="fa fa-box-open" style="color:var(--primary); font-size:0.85rem;"></i> 家庭庫存</div>
+        
+        <!-- NEW: Search bar -->
+        <div class="search-wrap">
+          <i class="fa fa-search search-icon"></i>
+          <input id="inventory-search" class="search-input" type="text"
+            placeholder="搜尋物品名稱、備註..." oninput="onInventorySearch()" autocomplete="off" />
+          <button class="search-clear" id="search-clear-btn" onclick="clearInventorySearch()" title="清除">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+        
         <div style="display:flex;align-items:center;gap:0;">
           <div class="color-filter-bar" id="color-filter-bar" style="flex:1;margin-bottom:0;padding-bottom:10px;">
             <button class="cf-btn active" data-color="all" onclick="setColorFilter('all', this)">
@@ -732,6 +702,16 @@
       <div class="date-badge" id="today-badge">📅</div>
       <div class="section-title"><i class="fa fa-broom" style="color:var(--primary); font-size:0.85rem;"></i> 今日家務</div>
       <div id="chores-list"></div>
+
+      <!-- NEW: Recurring tasks section -->
+      <div style="margin-top:22px;">
+        <div class="section-title">
+          <i class="fa fa-arrows-rotate" style="color:var(--primary); font-size:0.85rem;"></i> 週期性任務
+          <button onclick="openRecurringTaskModal()" style="margin-left:auto;background:rgba(100,181,246,0.12);border:1px solid rgba(100,181,246,0.3);border-radius:8px;padding:4px 10px;color:var(--blue);font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:800;cursor:pointer;"><i class="fa fa-plus"></i> 新增</button>
+        </div>
+        <div id="recurring-tasks-list"></div>
+      </div>
+
       <div style="margin-top:22px;">
         <div class="section-title"><i class="fa fa-medal" style="color:var(--primary); font-size:0.85rem;"></i> 今日完成紀錄</div>
         <div id="recent-log"></div>
@@ -973,6 +953,46 @@
   </div>
 </div>
 
+<!-- Modal: Recurring Task -->
+<div class="modal-overlay" id="modal-recurring-task">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="rt-modal-title">🔁 新增週期性任務</div>
+    <input type="hidden" id="rt-edit-id" />
+    <p style="font-size:0.82rem;color:var(--text-muted);line-height:1.6;margin-bottom:4px;">設定後會依照週期自動加入「今日家務」清單。例如:每半年換濾網、每季消毒水塔、每月更換牙刷等。</p>
+
+    <div class="field-label">任務名稱 *</div>
+    <input id="rt-name" class="field-input" type="text" placeholder="例如:更換冷氣濾網、清洗洗衣槽" maxlength="20"
+      onkeydown="if(event.key==='Enter') saveRecurringTask()" />
+
+    <div class="field-label">重複週期 *</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <span style="color:var(--text-muted);font-size:0.85rem;font-weight:800;">每</span>
+      <input id="rt-interval" class="field-input" type="number" value="6" min="1" max="365" style="width:80px;text-align:center;" />
+      <select id="rt-unit" class="field-input" style="flex:1;">
+        <option value="day">天</option>
+        <option value="week">週</option>
+        <option value="month" selected>個月</option>
+        <option value="year">年</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+      <button onclick="setRtQuick(1,'month')" style="padding:4px 11px;border-radius:50px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);font-size:0.73rem;font-weight:800;cursor:pointer;">每月</button>
+      <button onclick="setRtQuick(3,'month')" style="padding:4px 11px;border-radius:50px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);font-size:0.73rem;font-weight:800;cursor:pointer;">每季</button>
+      <button onclick="setRtQuick(6,'month')" style="padding:4px 11px;border-radius:50px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);font-size:0.73rem;font-weight:800;cursor:pointer;">每半年</button>
+      <button onclick="setRtQuick(1,'year')" style="padding:4px 11px;border-radius:50px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);font-size:0.73rem;font-weight:800;cursor:pointer;">每年</button>
+      <button onclick="setRtQuick(1,'week')" style="padding:4px 11px;border-radius:50px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);font-size:0.73rem;font-weight:800;cursor:pointer;">每週</button>
+    </div>
+
+    <div class="field-label">下次執行日期 *</div>
+    <input id="rt-next-date" class="field-input" type="date" />
+    <div style="font-size:0.72rem;color:var(--text-dim);margin-top:4px;">到期當天會自動加入今日家務</div>
+
+    <button class="btn-primary" onclick="saveRecurringTask()">💾 儲存任務</button>
+    <button class="btn-cancel" onclick="closeModal('modal-recurring-task')">取消</button>
+  </div>
+</div>
+
 <!-- Modal: Members -->
 <div class="modal-overlay" id="modal-member">
   <div class="modal-sheet">
@@ -985,22 +1005,31 @@
         onkeydown="if(event.key==='Enter') addMember()" />
       <button onclick="addMember()" style="padding:11px 15px; background:var(--primary); color:var(--bg); border:none; border-radius:var(--radius-md); font-family:'Nunito',sans-serif; font-weight:900; cursor:pointer; white-space:nowrap; font-size:0.88rem;">新增</button>
     </div>
+
+    <!-- UPDATED Avatar Edit Section -->
     <div id="avatar-edit-section" style="display:none;margin-top:12px;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-md);">
       <div class="field-label" style="margin-top:0;">設定頭像</div>
-      <div style="font-size:0.72rem;color:var(--text-dim);margin-bottom:8px;">選擇 Emoji 或貼上圖片連結（同步到所有裝置）</div>
+      <div style="font-size:0.72rem;color:var(--text-dim);margin-bottom:8px;">選擇 Emoji 圖示或直接上傳圖片（自動同步所有裝置）</div>
       
-      <div style="font-size:0.7rem;font-weight:900;color:var(--text-muted);margin-bottom:6px;letter-spacing:0.05em;">🎨 快速選擇</div>
+      <div style="font-size:0.7rem;font-weight:900;color:var(--text-muted);margin-bottom:6px;letter-spacing:0.05em;">🎨 Emoji 快速選擇</div>
       <div class="avatar-preset-grid" id="avatar-preset-grid"></div>
       
-      <div style="font-size:0.7rem;font-weight:900;color:var(--text-muted);margin-top:10px;margin-bottom:6px;letter-spacing:0.05em;">🔗 或使用圖片連結</div>
-      <input id="avatar-url-input" class="field-input" type="url" placeholder="https://i.imgur.com/xxxxxx.jpg" />
-      <div style="display:flex;gap:8px;margin-top:8px;">
-        <button onclick="saveAvatarUrl()" style="flex:1;padding:9px;background:var(--primary);border:none;border-radius:var(--radius-md);color:var(--bg);font-family:'Nunito',sans-serif;font-weight:900;cursor:pointer;font-size:0.85rem;">✅ 儲存頭像</button>
+      <div style="font-size:0.7rem;font-weight:900;color:var(--text-muted);margin-top:10px;margin-bottom:6px;letter-spacing:0.05em;">📸 上傳圖片至雲端 (Firebase)</div>
+      <input id="avatar-file-input" type="file" accept="image/*" style="display:none;" onchange="uploadAvatarFile(event)" />
+      <button class="avatar-upload-btn" id="avatar-upload-btn" onclick="document.getElementById('avatar-file-input').click()">
+        <i class="fa fa-cloud-arrow-up"></i> 選擇本地圖片上傳
+      </button>
+      <div id="avatar-upload-progress" style="display:none;font-size:0.75rem;color:var(--text-muted);margin-top:6px;text-align:center;"></div>
+      <div style="font-size:0.68rem;color:var(--text-dim);margin-top:6px;">支援 JPG / PNG,檔案大小建議 < 5MB,會自動壓縮</div>
+
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button onclick="saveSelectedEmoji()" id="save-emoji-btn" style="flex:1;padding:9px;background:var(--primary);border:none;border-radius:var(--radius-md);color:var(--bg);font-family:'Nunito',sans-serif;font-weight:900;cursor:pointer;font-size:0.85rem;">✅ 儲存 Emoji</button>
         <button onclick="clearAvatarUrl()" style="padding:9px 14px;background:var(--red-light);border:1px solid rgba(224,112,112,0.3);border-radius:var(--radius-md);color:var(--red);font-family:'Nunito',sans-serif;font-weight:900;cursor:pointer;font-size:0.85rem;">🗑 清除</button>
         <button onclick="cancelAvatarEdit()" style="padding:9px 14px;background:none;border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-muted);font-family:'Nunito',sans-serif;font-weight:800;cursor:pointer;font-size:0.85rem;">取消</button>
       </div>
     </div>
     <input type="hidden" id="avatar-edit-member-id" />
+    <input type="hidden" id="avatar-selected-emoji" />
     <button onclick="closeModal('modal-member')" style="width:100%; margin-top:14px; padding:11px; background:none; border:1px solid var(--border); border-radius:var(--radius-md); color:var(--text); font-family:'Nunito',sans-serif; font-size:0.88rem; font-weight:700; cursor:pointer;">關閉</button>
   </div>
 </div>
@@ -1084,6 +1113,17 @@
         <input class="field-input sc-amount-input" type="number" placeholder="金額" style="width:90px; flex-shrink:0;" />
         <input class="field-input sc-label-input"  type="text"   placeholder="備註(其他)" style="flex:1;" maxlength="6" />
       </div>
+    </div>
+
+    <!-- NEW: Custom categories section -->
+    <div class="field-label">自訂消費分類
+      <span style="text-transform:none;font-size:0.68rem;font-weight:600;opacity:0.6;">(除了預設的13種分類外)</span>
+    </div>
+    <div id="custom-cat-list" style="margin-bottom:8px;"></div>
+    <div style="display:flex;gap:6px;">
+      <input id="cc-icon" class="field-input" type="text" placeholder="😀" style="width:64px;text-align:center;font-size:1.1rem;" maxlength="2" />
+      <input id="cc-label" class="field-input" type="text" placeholder="分類名稱" style="flex:1;" maxlength="6" />
+      <button onclick="addCustomCategory()" style="padding:10px 14px;background:var(--blue-light);border:1px solid rgba(100,181,246,0.3);border-radius:var(--radius-md);color:var(--blue);font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:900;cursor:pointer;white-space:nowrap;">＋ 新增</button>
     </div>
 
     <div class="field-label">固定支出(自動扣除)</div>
@@ -1200,6 +1240,8 @@
            collection, doc, onSnapshot,
            addDoc, setDoc, updateDoc, deleteDoc, query, orderBy, where }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 
   const firebaseConfig = {
     apiKey:            "AIzaSyDQ6lycJWKBnINu1Qbu8kTT_PGYP2rPzrs",
@@ -1210,7 +1252,7 @@
     appId:             "1:116703485136:web:2a21ea6ac010ae685152d5",
   };
 
-  let db = null, isFirebaseOk = false;
+  let db = null, storage = null, isFirebaseOk = false;
   let currentMemberId = '', currentMemberName = '我';
   let members = [], inventoryItems = [], choresItems = [];
   let activeColorFilter = 'all';
@@ -1223,7 +1265,16 @@
   let customShoppingItems = [];
   let customShoppingUnsubscribe = null;
 
-  // ── Helper: 取得本地日期字串 (YYYY-MM-DD)，避免 UTC 偏移造成跨日錯誤 ──
+  // NEW: inventory search
+  let inventorySearchQuery = '';
+
+  // NEW: recurring tasks
+  let recurringTasks = [];
+  let recurringTasksUnsubscribe = null;
+
+  // NEW: custom categories
+  let customCategoriesUnsubscribe = null;
+
   function getLocalDateString(date) {
     const d = date || new Date();
     const y = d.getFullYear();
@@ -1437,6 +1488,7 @@
       inventoryItems      = LS.get('inventory_cache')        || [];
       choresItems         = LS.get('chores_cache')           || [];
       customShoppingItems = LS.get('custom_shopping_cache')  || [];
+      recurringTasks      = LS.get('recurring_tasks_cache')  || [];
       const cachedMembers = LS.get('members_cache') || [];
       members = cachedMembers.length ? cachedMembers : [{ id: currentMemberId, name: currentMemberName, avatarUrl: '' }];
 
@@ -1452,6 +1504,7 @@
       renderShoppingList();
       updateColorFilterBar();
       renderChores();
+      renderRecurringTasks();
       setDbStatus('offline');
     }
 
@@ -1462,6 +1515,7 @@
       db = initializeFirestore(app, {
         localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
       });
+      try { storage = getStorage(app); } catch(e) { console.warn('storage init failed', e); }
 
       isFirebaseOk = true;
       clearTimeout(_loadingFailsafe);
@@ -1489,7 +1543,6 @@
     if (inventoryUnsubscribe) inventoryUnsubscribe();
     if (choresUnsubscribe)    choresUnsubscribe();
 
-    // ── Members listener (NEW: cross-device sync for avatars and members) ──
     if (membersUnsubscribe) membersUnsubscribe();
     membersUnsubscribe = onSnapshot(
       collection(db, 'members'),
@@ -1498,21 +1551,17 @@
         if (fbMembers.length > 0) {
           members = fbMembers;
           LS.set('members_cache', members);
-          // Cache avatars locally for instant display
           members.forEach(m => {
             if (m.avatarUrl) localStorage.setItem('hsa_avatar_' + m.id, m.avatarUrl);
             else localStorage.removeItem('hsa_avatar_' + m.id);
           });
-          // Make sure current member is in the list
           if (currentMemberId && !members.find(m => m.id === currentMemberId)) {
             registerCurrentMember();
           }
           updateMemberChip();
           renderLedgerMemberChips();
-          // Re-render budget if visible to update names
           if (currentTab === 'budget') renderBudget();
         } else if (currentMemberId) {
-          // No members in Firestore yet - register current
           registerCurrentMember();
         }
       },
@@ -1543,12 +1592,6 @@
       query(collection(db, 'income'), where('date', '>=', _prevMonthFirst)),
       (snap) => {
         const tombstones = getIncomeTombstones();
-        
-        // ⚠️ 已經把這三行導致 Bug 的邏輯刪除了：
-        // const fbIds = new Set(snap.docs.map(d => d.id));
-        // const remaining = [...tombstones].filter(id => fbIds.has(id));
-        // if (remaining.length !== tombstones.size) LS.set('income_tombstones', remaining);
-
         const allIncome = snap.docs
           .filter(d => !tombstones.has(d.id) && !tombstones.has((d.data()||{}).id))
           .map(d => ({ fbDocId: d.id, ...d.data() }));
@@ -1568,6 +1611,32 @@
         renderShoppingList();
       },
       (err) => { console.warn('custom_shopping snapshot error:', err); }
+    );
+
+    // NEW: recurring tasks listener
+    if (recurringTasksUnsubscribe) recurringTasksUnsubscribe();
+    recurringTasksUnsubscribe = onSnapshot(
+      collection(db, 'recurring_tasks'),
+      (snap) => {
+        recurringTasks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        LS.set('recurring_tasks_cache', recurringTasks);
+        renderRecurringTasks();
+        // Check whether any task is due today
+        checkAndTriggerRecurringTasks();
+      },
+      (err) => { console.warn('recurring_tasks snapshot error:', err); }
+    );
+
+    // NEW: custom categories listener
+    if (customCategoriesUnsubscribe) customCategoriesUnsubscribe();
+    customCategoriesUnsubscribe = onSnapshot(
+      collection(db, 'custom_categories'),
+      (snap) => {
+        const cats = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        LS.set('custom_categories', cats);
+        if (currentTab === 'budget') renderBudget();
+      },
+      (err) => { console.warn('custom_categories snapshot error:', err); }
     );
 
     inventoryUnsubscribe = onSnapshot(
@@ -1605,7 +1674,6 @@
     if (!_savedName) showAppFrame();
   }
 
-  // ── Register current member to Firestore ──
   async function registerCurrentMember() {
     if (!isFirebaseOk || !currentMemberId) return;
     try {
@@ -1658,7 +1726,6 @@
     document.getElementById('fab-btn').style.display = 'flex';
     updateMemberChip(); renderChoreChips(); updateTodayBadge();
     initBudget();
-    // Register to Firestore for cross-device sync
     await registerCurrentMember();
     showToast(`👋 歡迎,${name}!`);
   };
@@ -1678,7 +1745,7 @@
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-'+tab).classList.add('active');
     document.getElementById('nav-'+tab).classList.add('active');
-    if (tab === 'chores') renderChores();
+    if (tab === 'chores') { renderChores(); renderRecurringTasks(); checkAndTriggerRecurringTasks(); }
     if (tab === 'budget') { checkFixedExpenses(); renderBudget(); }
     if (tab === 'monthly') {
       reportYear  = new Date().getFullYear();
@@ -1856,6 +1923,34 @@
     bar.innerHTML = html;
   }
 
+  // NEW: inventory search functions
+  window.onInventorySearch = function() {
+    const input = document.getElementById('inventory-search');
+    inventorySearchQuery = input.value.trim().toLowerCase();
+    const clearBtn = document.getElementById('search-clear-btn');
+    if (clearBtn) clearBtn.classList.toggle('visible', inventorySearchQuery.length > 0);
+    renderInventory();
+  };
+  window.clearInventorySearch = function() {
+    const input = document.getElementById('inventory-search');
+    input.value = '';
+    inventorySearchQuery = '';
+    document.getElementById('search-clear-btn').classList.remove('visible');
+    renderInventory();
+    input.focus();
+  };
+
+  // Highlight helper
+  function highlightMatch(text, query) {
+    if (!query || !text) return text;
+    const idx = text.toLowerCase().indexOf(query);
+    if (idx === -1) return text;
+    return text.substring(0, idx) +
+           `<mark style="background:rgba(240,168,73,0.35);color:var(--yellow);padding:0 2px;border-radius:3px;">` +
+           text.substring(idx, idx + query.length) +
+           `</mark>` + text.substring(idx + query.length);
+  }
+
   function renderInventory() {
     const el = document.getElementById('inventory-list');
     if (!inventoryItems.length) {
@@ -1864,14 +1959,34 @@
     }
 
     const sorted   = [...inventoryItems].sort((a,b) => (a.order??0) - (b.order??0));
-    const filtered = activeColorFilter === 'all' ? sorted : sorted.filter(i => (i.roomId||'room_other') === activeColorFilter);
+    let filtered = activeColorFilter === 'all' ? sorted : sorted.filter(i => (i.roomId||'room_other') === activeColorFilter);
+
+    // NEW: apply search filter
+    if (inventorySearchQuery) {
+      const q = inventorySearchQuery;
+      filtered = filtered.filter(i =>
+        (i.name && i.name.toLowerCase().includes(q)) ||
+        (i.memo && i.memo.toLowerCase().includes(q)) ||
+        (i.roomLabel && i.roomLabel.toLowerCase().includes(q))
+      );
+    }
 
     if (!filtered.length) {
-      el.innerHTML = `<div class="empty"><i class="fa fa-filter"></i>此分類下沒有物品</div>`;
+      el.innerHTML = inventorySearchQuery
+        ? `<div class="empty"><i class="fa fa-magnifying-glass"></i>找不到符合「${inventorySearchQuery}」的物品<br/><small style="display:block;margin-top:4px;">試試其他關鍵字</small></div>`
+        : `<div class="empty"><i class="fa fa-filter"></i>此分類下沒有物品</div>`;
       return;
     }
 
-    el.innerHTML = filtered.map((item, index) => {
+    // Show result count when searching
+    let headerHtml = '';
+    if (inventorySearchQuery) {
+      headerHtml = `<div style="font-size:0.75rem;color:var(--text-muted);padding:2px 4px 10px;">
+        🔍 找到 <strong style="color:var(--yellow);">${filtered.length}</strong> 個結果
+      </div>`;
+    }
+
+    el.innerHTML = headerHtml + filtered.map((item, index) => {
       let expText = '';
       if (item.expiryDate) {
         const diff = Math.floor((new Date(item.expiryDate) - new Date().setHours(0,0,0,0)) / 86400000);
@@ -1882,7 +1997,8 @@
           : `<span>📅 效期 ${item.expiryDate}</span>`;
       }
       const purText  = item.purchaseDate ? `<span>🛒 ${item.purchaseDate}</span>` : '';
-      const memoHtml = item.memo ? `<div class="inv-memo"><i class="fa fa-thumbtack" style="font-size:0.68rem;"></i>${item.memo}</div>` : '';
+      const memoText = item.memo ? highlightMatch(item.memo, inventorySearchQuery) : '';
+      const memoHtml = item.memo ? `<div class="inv-memo"><i class="fa fa-thumbtack" style="font-size:0.68rem;"></i>${memoText}</div>` : '';
 
       const needsAlert = item.isCountable && (item.quantity??0) <= (item.alertQty??1);
       const alertBadge = needsAlert ? `<span class="alert-badge"><i class="fa fa-bell" style="font-size:0.6rem;"></i>待購</span>` : '';
@@ -1899,20 +2015,24 @@
             ${item.status==='充足'?'✅ 充足':item.status==='夠用'?'🟡 夠用':'🔴 快用完了'}
            </button>`;
 
-      const isFiltered = activeColorFilter !== 'all';
+      const nameHtml = highlightMatch(item.name, inventorySearchQuery);
+
+      // When searching, disable sort buttons (they reflect filtered order, not real order)
+      const sortDisabled = inventorySearchQuery ? 'disabled' : '';
+      
       return `
         <div class="card" id="card-${item.id}">
           <div class="inv-row">
             <div class="sort-controls">
-              <button class="sort-btn" ${isFiltered || index===0?'disabled':''} onclick="moveItemOrder('${item.id}',-1)" title="${isFiltered?'請切換至「全部」後再排序':'上移一格'}">
+              <button class="sort-btn" ${sortDisabled || (index===0?'disabled':'')} onclick="moveItemOrder('${item.id}',-1)" title="上移一格">
                 <i class="fa fa-chevron-up"></i>
               </button>
-              <button class="sort-btn" ${isFiltered || index===filtered.length-1?'disabled':''} onclick="moveItemOrder('${item.id}',1)" title="${isFiltered?'請切換至「全部」後再排序':'下移一格'}">
+              <button class="sort-btn" ${sortDisabled || (index===filtered.length-1?'disabled':'')} onclick="moveItemOrder('${item.id}',1)" title="下移一格">
                 <i class="fa fa-chevron-down"></i>
               </button>
             </div>
             <div class="inv-info">
-              <div class="inv-name">${item.name}${alertBadge}</div>
+              <div class="inv-name">${nameHtml}${alertBadge}</div>
               <div class="inv-meta">${roomBadge}${expText}${purText}</div>
               ${memoHtml}
             </div>
@@ -2176,7 +2296,6 @@
     showToast(`✅ ${note} $${amt} 已記帳並完成`);
   };
 
-  // ── Income categories (NEW) ──
   const INCOME_CATEGORIES = [
     { icon:'💼', label:'薪水' },
     { icon:'🧧', label:'紅包' },
@@ -2233,18 +2352,14 @@
   window.deleteIncomeEntry = function(id) {
     addIncomeTombstone(id);
     const allIncome = getIncomeLedger();
-    const fbIncCache = LS.get('fb_income_cache') || []; // 統一變數名稱
-    
+    const fbIncCache = LS.get('fb_income_cache') || [];
+
     const entry = allIncome.find(e => e.id === id) || fbIncCache.find(e => e.id === id || e.fbDocId === id);
     const entryCopy = entry ? { ...entry } : null;
 
-    // 1. 從本地 ledger 移除
     saveIncomeLedger(allIncome.filter(e => e.id !== id));
-    
-    // 2. 從 Firebase 快取移除 (修正變數名稱錯誤)
     LS.set('fb_income_cache', fbIncCache.filter(e => e.id !== id && e.fbDocId !== id));
 
-    // 3. 從 Firebase 移除
     if (isFirebaseOk) {
       deleteDoc(doc(db, 'income', id)).catch(() => {});
     }
@@ -2282,7 +2397,7 @@
               ${c.completed?'<i class="fa fa-check"></i>':''}
             </div>
             <div style="flex:1;">
-              <div class="chore-title ${c.completed?'done':''}">${c.title}</div>
+              <div class="chore-title ${c.completed?'done':''}">${c.title}${c.recurringId?' <span style="font-size:0.6rem;padding:1px 6px;border-radius:50px;background:var(--blue-light);color:var(--blue);border:1px solid rgba(100,181,246,0.3);">週期</span>':''}</div>
               ${c.completedBy?`<div class="chore-sub">✅ ${c.completedBy}${c.completedAt?' · '+c.completedAt:''}</div>`:''}
             </div>
             <button class="icon-btn del-btn" onclick="deleteChore('${c.id}')"><i class="fa fa-trash"></i></button>
@@ -2348,6 +2463,238 @@
     document.querySelectorAll('.chore-chip').forEach(c=>c.classList.remove('selected'));
     showToast(`✅ 已新增 ${toAdd.length} 個家務`);
   };
+
+  // ════════════════════════════════════════
+  // ══      RECURRING TASKS (NEW)         ══
+  // ════════════════════════════════════════
+
+  function calculateNextDate(fromDateStr, interval, unit) {
+    const d = new Date(fromDateStr + 'T00:00:00');
+    if (unit === 'day') d.setDate(d.getDate() + interval);
+    else if (unit === 'week') d.setDate(d.getDate() + interval * 7);
+    else if (unit === 'month') d.setMonth(d.getMonth() + interval);
+    else if (unit === 'year') d.setFullYear(d.getFullYear() + interval);
+    return getLocalDateString(d);
+  }
+
+  function unitLabel(unit) {
+    return { day:'天', week:'週', month:'個月', year:'年' }[unit] || unit;
+  }
+
+  window.openRecurringTaskModal = function(editId = null) {
+    document.getElementById('rt-edit-id').value = editId || '';
+    document.getElementById('rt-modal-title').innerHTML = editId ? '✏️ 編輯週期性任務' : '🔁 新增週期性任務';
+    if (editId) {
+      const t = recurringTasks.find(x => x.id === editId);
+      if (t) {
+        document.getElementById('rt-name').value = t.name;
+        document.getElementById('rt-interval').value = t.interval;
+        document.getElementById('rt-unit').value = t.unit;
+        document.getElementById('rt-next-date').value = t.nextDate;
+      }
+    } else {
+      document.getElementById('rt-name').value = '';
+      document.getElementById('rt-interval').value = 6;
+      document.getElementById('rt-unit').value = 'month';
+      // default next date = today + 6 months
+      const next = new Date(); next.setMonth(next.getMonth() + 6);
+      document.getElementById('rt-next-date').value = getLocalDateString(next);
+    }
+    openModal('modal-recurring-task');
+    setTimeout(() => document.getElementById('rt-name').focus(), 350);
+  };
+
+  window.setRtQuick = function(interval, unit) {
+    document.getElementById('rt-interval').value = interval;
+    document.getElementById('rt-unit').value = unit;
+    // auto-update next date based on today + interval
+    const next = new Date();
+    if (unit === 'day') next.setDate(next.getDate() + interval);
+    else if (unit === 'week') next.setDate(next.getDate() + interval * 7);
+    else if (unit === 'month') next.setMonth(next.getMonth() + interval);
+    else if (unit === 'year') next.setFullYear(next.getFullYear() + interval);
+    document.getElementById('rt-next-date').value = getLocalDateString(next);
+  };
+
+  window.saveRecurringTask = async function() {
+    const editId = document.getElementById('rt-edit-id').value;
+    const name = document.getElementById('rt-name').value.trim();
+    const interval = parseInt(document.getElementById('rt-interval').value);
+    const unit = document.getElementById('rt-unit').value;
+    const nextDate = document.getElementById('rt-next-date').value;
+    if (!name) { showToast('⚠️ 請輸入任務名稱','error'); return; }
+    if (!interval || interval < 1) { showToast('⚠️ 請輸入有效週期','error'); return; }
+    if (!nextDate) { showToast('⚠️ 請選擇下次執行日期','error'); return; }
+
+    const taskData = {
+      name, interval, unit, nextDate,
+      createdAt: new Date().toISOString(),
+      createdBy: currentMemberName,
+    };
+
+    if (editId) {
+      if (isFirebaseOk) {
+        try { await updateDoc(doc(db, 'recurring_tasks', editId), taskData); } catch(e) {}
+      } else {
+        const idx = recurringTasks.findIndex(t => t.id === editId);
+        if (idx > -1) Object.assign(recurringTasks[idx], taskData);
+        renderRecurringTasks();
+      }
+      showToast('✅ 任務已更新');
+    } else {
+      if (isFirebaseOk) {
+        try {
+          await addDoc(collection(db, 'recurring_tasks'), taskData);
+        } catch(e) {
+          recurringTasks.push({ id: 'rt_' + Date.now(), ...taskData });
+          renderRecurringTasks();
+        }
+      } else {
+        recurringTasks.push({ id: 'rt_' + Date.now(), ...taskData });
+        renderRecurringTasks();
+      }
+      showToast(`✅ 已新增週期性任務「${name}」`);
+    }
+    closeModal('modal-recurring-task');
+    setTimeout(checkAndTriggerRecurringTasks, 500);
+  };
+
+  window.deleteRecurringTask = async function(id) {
+    const task = recurringTasks.find(t => t.id === id);
+    if (!task) return;
+    if (!confirm(`確定刪除週期性任務「${task.name}」嗎？`)) return;
+    const copy = { ...task };
+    if (isFirebaseOk) {
+      try { await deleteDoc(doc(db, 'recurring_tasks', id)); } catch(e) {}
+    } else {
+      recurringTasks = recurringTasks.filter(t => t.id !== id);
+      renderRecurringTasks();
+    }
+    showToast(`🗑️ 已刪除「${copy.name}」`);
+    showUndoToast(`撤銷刪除「${copy.name}」`, async () => {
+      if (isFirebaseOk) { try { await setDoc(doc(db,'recurring_tasks',id), copy); } catch(e){} }
+      else { recurringTasks.push(copy); renderRecurringTasks(); }
+      showToast(`↩️ 已還原「${copy.name}」`);
+    });
+  };
+
+  window.triggerRecurringNow = async function(id) {
+    const task = recurringTasks.find(t => t.id === id);
+    if (!task) return;
+    const today = getLocalDateString();
+    // Check if already added for this task today
+    const existing = choresItems.find(c => c.date === today && c.recurringId === task.id);
+    if (existing) { showToast('⚠️ 今日已加入此任務','warn'); return; }
+    const chore = {
+      title: `🔁 ${task.name}`,
+      completed: false,
+      completedBy: '',
+      completedAt: '',
+      date: today,
+      recurringId: task.id,
+    };
+    if (isFirebaseOk) {
+      try { await addDoc(collection(db, 'chores'), chore); } catch(e) {}
+    } else {
+      choresItems.push({ id: 'c_' + Date.now(), ...chore });
+      renderChores();
+    }
+    // Update next date
+    const newNext = calculateNextDate(today, task.interval, task.unit);
+    if (isFirebaseOk) {
+      try { await updateDoc(doc(db, 'recurring_tasks', task.id), { nextDate: newNext }); } catch(e) {}
+    } else {
+      task.nextDate = newNext;
+      renderRecurringTasks();
+    }
+    showToast(`✅ 已加入家務「${task.name}」,下次:${newNext}`);
+  };
+
+  async function checkAndTriggerRecurringTasks() {
+    if (!recurringTasks || !recurringTasks.length) return;
+    const today = getLocalDateString();
+    const checkedKey = 'hsa_rt_checked_' + today;
+    if (localStorage.getItem(checkedKey)) return;
+    for (const task of recurringTasks) {
+      if (!task.nextDate) continue;
+      if (task.nextDate <= today) {
+        const existing = choresItems.find(c => c.date === today && c.recurringId === task.id);
+        if (existing) continue;
+        const chore = {
+          title: `🔁 ${task.name}`,
+          completed: false,
+          completedBy: '',
+          completedAt: '',
+          date: today,
+          recurringId: task.id,
+        };
+        try {
+          if (isFirebaseOk) {
+            await addDoc(collection(db, 'chores'), chore);
+          } else {
+            choresItems.push({ id: 'c_' + Date.now() + '_' + Math.random(), ...chore });
+          }
+          // Advance nextDate: keep advancing until future
+          let newNext = calculateNextDate(task.nextDate, task.interval, task.unit);
+          while (newNext <= today) {
+            newNext = calculateNextDate(newNext, task.interval, task.unit);
+          }
+          if (isFirebaseOk) {
+            try { await updateDoc(doc(db, 'recurring_tasks', task.id), { nextDate: newNext }); } catch(e) {}
+          } else {
+            task.nextDate = newNext;
+          }
+        } catch(e) { console.warn('trigger recurring task failed', e); }
+      }
+    }
+    localStorage.setItem(checkedKey, '1');
+    if (!isFirebaseOk) { renderChores(); renderRecurringTasks(); }
+  }
+
+  function renderRecurringTasks() {
+    const el = document.getElementById('recurring-tasks-list');
+    if (!el) return;
+    if (!recurringTasks.length) {
+      el.innerHTML = `<div class="empty" style="padding:16px 10px;"><i class="fa fa-arrows-rotate"></i>尚無週期性任務<br/><small style="display:block;margin-top:4px;">例如:每半年換濾網、每季消毒水塔</small></div>`;
+      return;
+    }
+    const today = getLocalDateString();
+    const sorted = [...recurringTasks].sort((a,b) => (a.nextDate||'').localeCompare(b.nextDate||''));
+    el.innerHTML = sorted.map(t => {
+      const daysDiff = Math.round((new Date(t.nextDate + 'T00:00:00') - new Date(today + 'T00:00:00')) / 86400000);
+      let badgeClass, badgeText;
+      if (daysDiff < 0) { badgeClass = 'rt-overdue'; badgeText = `⚠️ 逾期 ${Math.abs(daysDiff)} 天`; }
+      else if (daysDiff === 0) { badgeClass = 'rt-today'; badgeText = '📍 今天到期'; }
+      else if (daysDiff <= 7) { badgeClass = 'rt-today'; badgeText = `⏰ ${daysDiff} 天後`; }
+      else { badgeClass = 'rt-upcoming'; badgeText = `📅 ${daysDiff} 天後`; }
+      return `
+        <div class="card recurring-card">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:36px;height:36px;border-radius:10px;background:var(--blue-light);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">
+              <i class="fa fa-arrows-rotate"></i>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:800;font-size:0.92rem;">${t.name}</div>
+              <div style="font-size:0.71rem;color:var(--text-muted);margin-top:3px;">
+                每 ${t.interval} ${unitLabel(t.unit)} · 下次 ${t.nextDate}
+              </div>
+            </div>
+            <span class="rt-status-badge ${badgeClass}">${badgeText}</span>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);">
+            <button onclick="triggerRecurringNow('${t.id}')" style="flex:1;padding:6px 10px;background:var(--green-light);border:1px solid rgba(116,198,157,0.3);border-radius:8px;color:var(--green);font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:900;cursor:pointer;">
+              <i class="fa fa-plus"></i> 加入今日家務
+            </button>
+            <button onclick="openRecurringTaskModal('${t.id}')" style="padding:6px 12px;background:var(--blue-light);border:1px solid rgba(100,181,246,0.3);border-radius:8px;color:var(--blue);font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:900;cursor:pointer;">
+              <i class="fa fa-pen"></i>
+            </button>
+            <button onclick="deleteRecurringTask('${t.id}')" style="padding:6px 12px;background:var(--red-light);border:1px solid rgba(224,112,112,0.3);border-radius:8px;color:var(--red);font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:900;cursor:pointer;">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+  }
 
   window.openItemModal = function(editId=null) {
     document.getElementById('edit-item-id').value = editId || '';
@@ -2437,8 +2784,8 @@
 
   function isEmoji(str) {
     if (!str) return false;
-    // Simple check: not a URL, length <= 4 codepoints  
     if (/^https?:\/\//i.test(str)) return false;
+    if (/^data:/i.test(str)) return false;
     return [...str].length <= 4;
   }
 
@@ -2447,7 +2794,6 @@
       `📅 ${new Date().toLocaleDateString('zh-TW',{year:'numeric',month:'long',day:'numeric',weekday:'long'})}`;
   }
 
-  // ── Avatar presets ──
   const AVATAR_PRESETS = ['👨','👩','👦','👧','👴','👵','👨‍💼','👩‍💼','🧑‍🍳','👨‍🎓','👩‍🎓','🧒','👶','🧔','🤵','👰','🧙','🦸','🧝','🧚','🐱','🐶','🦊','🐻','🐼','🐯','🦁','🐰'];
 
   window.openMemberModal = function() {
@@ -2485,43 +2831,140 @@
   window.startAvatarEdit = function(memberId) {
     document.getElementById('avatar-edit-member-id').value = memberId;
     const cur = getMemberAvatar(memberId) || '';
-    document.getElementById('avatar-url-input').value = isEmoji(cur) ? '' : cur;
+    document.getElementById('avatar-selected-emoji').value = isEmoji(cur) ? cur : '';
     // Render emoji preset grid
     const grid = document.getElementById('avatar-preset-grid');
     grid.innerHTML = AVATAR_PRESETS.map(emoji => 
       `<button class="avatar-preset-btn${cur===emoji?' selected':''}" onclick="selectAvatarPreset('${emoji}',this)">${emoji}</button>`
     ).join('');
+    // Reset upload progress
+    const progressEl = document.getElementById('avatar-upload-progress');
+    if (progressEl) progressEl.style.display = 'none';
+    // Show / hide save emoji button based on storage availability
+    const hasEmoji = isEmoji(cur);
+    document.getElementById('save-emoji-btn').textContent = hasEmoji ? '✅ 儲存 Emoji' : '✅ 儲存選擇';
     document.getElementById('avatar-edit-section').style.display = 'block';
   };
 
   window.selectAvatarPreset = function(emoji, btn) {
     document.querySelectorAll('.avatar-preset-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
-    document.getElementById('avatar-url-input').value = emoji;
+    document.getElementById('avatar-selected-emoji').value = emoji;
+    document.getElementById('save-emoji-btn').textContent = '✅ 儲存 Emoji';
   };
 
   window.cancelAvatarEdit = function() {
     document.getElementById('avatar-edit-section').style.display = 'none';
   };
-  window.saveAvatarUrl = async function() {
+
+  window.saveSelectedEmoji = async function() {
     const memberId = document.getElementById('avatar-edit-member-id').value;
-    const url = document.getElementById('avatar-url-input').value.trim();
-    if (url && !isEmoji(url) && !/^https?:\/\//i.test(url)) { showToast('⚠️ 請輸入有效的圖片連結或選擇 Emoji','error'); return; }
-    await setMemberAvatar(memberId, url);
+    const emoji = document.getElementById('avatar-selected-emoji').value.trim();
+    if (!emoji) { showToast('⚠️ 請先選擇一個 Emoji','error'); return; }
+    await setMemberAvatar(memberId, emoji);
     document.getElementById('avatar-edit-section').style.display = 'none';
     updateMemberChip();
     openMemberModal();
-    showToast(url ? '✅ 頭像已設定（同步到所有裝置）' : '🗑️ 頭像已清除');
+    showToast('✅ 頭像已設定（同步到所有裝置）');
   };
+
   window.clearAvatarUrl = async function() {
     const memberId = document.getElementById('avatar-edit-member-id').value;
-    document.getElementById('avatar-url-input').value = '';
     await setMemberAvatar(memberId, '');
     document.getElementById('avatar-edit-section').style.display = 'none';
     updateMemberChip();
     openMemberModal();
     showToast('🗑️ 頭像已清除');
   };
+
+  // NEW: Image resize helper
+  async function resizeImage(file, maxSize = 400) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let w = img.width, h = img.height;
+          if (w > h) { if (w > maxSize) { h = h * (maxSize / w); w = maxSize; } }
+          else { if (h > maxSize) { w = w * (maxSize / h); h = maxSize; } }
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          canvas.toBlob(blob => {
+            if (blob) resolve(blob);
+            else reject(new Error('圖片處理失敗'));
+          }, 'image/jpeg', 0.88);
+        };
+        img.onerror = () => reject(new Error('圖片載入失敗'));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error('檔案讀取失敗'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // NEW: Upload avatar to Firebase Storage
+  window.uploadAvatarFile = async function(event) {
+    const file = event.target.files[0];
+    event.target.value = ''; // reset input
+    if (!file) return;
+    if (!storage || !isFirebaseOk) {
+      showToast('❌ Firebase Storage 未連線,無法上傳','error');
+      return;
+    }
+    if (!file.type.startsWith('image/')) {
+      showToast('⚠️ 請選擇圖片檔案','error');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('⚠️ 圖片不得超過 5MB','error');
+      return;
+    }
+    const memberId = document.getElementById('avatar-edit-member-id').value;
+    if (!memberId) { showToast('⚠️ 錯誤:缺少成員 ID','error'); return; }
+
+    const progressEl = document.getElementById('avatar-upload-progress');
+    const uploadBtn = document.getElementById('avatar-upload-btn');
+    progressEl.style.display = 'block';
+    progressEl.style.color = 'var(--yellow)';
+    progressEl.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 壓縮圖片中...';
+    uploadBtn.disabled = true;
+
+    try {
+      // Resize image
+      const resizedBlob = await resizeImage(file, 400);
+      progressEl.innerHTML = '<i class="fa fa-cloud-arrow-up"></i> 上傳至雲端中...';
+
+      // Upload to Firebase Storage
+      const path = `avatars/${memberId}_${Date.now()}.jpg`;
+      const ref = storageRef(storage, path);
+      await uploadBytes(ref, resizedBlob, { contentType: 'image/jpeg' });
+      const url = await getDownloadURL(ref);
+
+      progressEl.style.color = 'var(--green)';
+      progressEl.innerHTML = '<i class="fa fa-check-circle"></i> 上傳成功!';
+
+      // Save URL to member
+      await setMemberAvatar(memberId, url);
+
+      setTimeout(() => {
+        progressEl.style.display = 'none';
+        document.getElementById('avatar-edit-section').style.display = 'none';
+        updateMemberChip();
+        openMemberModal();
+      }, 800);
+      showToast('✅ 頭像已上傳並同步所有裝置');
+    } catch(err) {
+      console.error('avatar upload error:', err);
+      progressEl.style.color = 'var(--red)';
+      progressEl.innerHTML = `<i class="fa fa-triangle-exclamation"></i> 上傳失敗: ${err.message || '未知錯誤'}`;
+      showToast('❌ 上傳失敗,請確認 Firebase Storage 權限規則','error');
+    } finally {
+      uploadBtn.disabled = false;
+    }
+  };
+
   window.switchMember = function(id, name) {
     currentMemberId = id; currentMemberName = name;
     localStorage.setItem('hsa_member_name', name);
@@ -2537,7 +2980,6 @@
     const newMember = { id:'u_'+Date.now(), name, avatarUrl: '' };
     members.push(newMember);
     LS.set('members_cache', members);
-    // Sync to Firebase for cross-device visibility
     if (isFirebaseOk) {
       try { await setDoc(doc(db, 'members', newMember.id), { ...newMember, createdAt: new Date().toISOString() }); }
       catch(e) { console.warn('add member failed', e); }
@@ -2568,7 +3010,7 @@
     set: (k, v) => localStorage.setItem('hsa_budget_' + k, JSON.stringify(v)),
   };
 
-  const EXPENSE_CATEGORIES = [
+  const BASE_EXPENSE_CATEGORIES = [
     { icon:'🍳', label:'早餐',   bg:'rgba(240,168,73,0.15)',  color:'var(--yellow)' },
     { icon:'🍱', label:'午餐',   bg:'rgba(116,198,157,0.15)', color:'var(--green)' },
     { icon:'🍽️', label:'晚餐',   bg:'rgba(100,181,246,0.15)', color:'var(--blue)' },
@@ -2584,8 +3026,34 @@
     { icon:'🛒', label:'購物', bg:'rgba(100,181,246,0.12)', color:'var(--blue)' },
     { icon:'💳', label:'其他', bg:'rgba(236,236,236,0.08)', color:'var(--text-muted)' },
   ];
+
+  const CUSTOM_CAT_COLORS = [
+    { color:'#74C69D', bg:'rgba(116,198,157,0.15)' },
+    { color:'#F0A849', bg:'rgba(240,168,73,0.15)' },
+    { color:'#64B5F6', bg:'rgba(100,181,246,0.15)' },
+    { color:'#E07070', bg:'rgba(224,112,112,0.15)' },
+    { color:'#BA68C8', bg:'rgba(186,104,200,0.15)' },
+    { color:'#FF8A80', bg:'rgba(255,138,128,0.15)' },
+    { color:'#80DEEA', bg:'rgba(128,222,234,0.15)' },
+    { color:'#FFCC80', bg:'rgba(255,204,128,0.15)' },
+  ];
+
+  function getCustomCategories() {
+    return (LS.get('custom_categories') || []).map((c, i) => {
+      if (!c.color || !c.bg) {
+        const palette = CUSTOM_CAT_COLORS[i % CUSTOM_CAT_COLORS.length];
+        return { ...c, color: c.color || palette.color, bg: c.bg || palette.bg };
+      }
+      return c;
+    });
+  }
+
+  function EXPENSE_CATEGORIES() {
+    return [...BASE_EXPENSE_CATEGORIES, ...getCustomCategories()];
+  }
+
   let selectedCatOverride = null;
-  let _editingEntry = null; // 儲存開啟編輯時的完整原始物件，供 saveLedgerEdit 使用
+  let _editingEntry = null;
 
   function getLedgerTombstones() { return new Set(LS.get('ledger_tombstones') || []); }
   function addLedgerTombstone(id) {
@@ -2598,22 +3066,17 @@
     LS.set('income_tombstones', [...t]);
   }
 
-  // ── Avatar helpers (now Firebase-backed) ──
   function getMemberAvatar(memberId) {
-    // First check synced members array
     const m = members.find(x => x.id === memberId);
     if (m && m.avatarUrl) return m.avatarUrl;
-    // Fallback to localStorage cache
     return localStorage.getItem('hsa_avatar_' + memberId) || '';
   }
   async function setMemberAvatar(memberId, url) {
     if (url) localStorage.setItem('hsa_avatar_' + memberId, url);
     else localStorage.removeItem('hsa_avatar_' + memberId);
-    // Update in-memory members
     const m = members.find(x => x.id === memberId);
     if (m) m.avatarUrl = url || '';
     LS.set('members_cache', members);
-    // Sync to Firebase for cross-device
     if (isFirebaseOk) {
       try {
         await setDoc(doc(db, 'members', memberId), 
@@ -2641,26 +3104,35 @@
   function getLedger() { return LS.get('ledger') || []; }
   function saveLedger(ledger) { LS.set('ledger', ledger); }
 
+  function findCategoryByLabel(label) {
+    return EXPENSE_CATEGORIES().find(c => c.label === label);
+  }
+
   function guessCategory(hour, note) {
+    const cats = EXPENSE_CATEGORIES();
     if (note) {
       const n = note;
-      if (/早餐|豆漿|饅頭|吐司|蛋餅|燒餅/.test(n)) return EXPENSE_CATEGORIES.find(c=>c.label==='早餐');
-      if (/午餐|便當|麵|飯|拉麵|滷肉/.test(n)) return EXPENSE_CATEGORIES.find(c=>c.label==='午餐');
-      if (/晚餐|火鍋|燒烤|海鮮/.test(n)) return EXPENSE_CATEGORIES.find(c=>c.label==='晚餐');
-      if (/宵夜|鹽酥雞|炸雞|滷味/.test(n)) return EXPENSE_CATEGORIES.find(c=>c.label==='宵夜');
-      if (/咖啡|珍奶|飲料|手搖|茶|拿鐵/.test(n)) return EXPENSE_CATEGORIES.find(c=>c.label==='飲料');
-      if (/計程車|Uber|捷運|公車|停車|油錢/.test(n)) return EXPENSE_CATEGORIES.find(c=>c.label==='行');
-      if (/超市|全聯|好市多|購物|量販|便利/.test(n)) return EXPENSE_CATEGORIES.find(c=>c.label==='購物');
-      if (/醫|藥|診所|看診/.test(n)) return EXPENSE_CATEGORIES.find(c=>c.label==='醫');
-      if (/書|課程|學費|補習/.test(n)) return EXPENSE_CATEGORIES.find(c=>c.label==='育');
-      if (/電影|遊戲|KTV|娛樂/.test(n)) return EXPENSE_CATEGORIES.find(c=>c.label==='樂');
+      if (/早餐|豆漿|饅頭|吐司|蛋餅|燒餅/.test(n)) return cats.find(c=>c.label==='早餐');
+      if (/午餐|便當|麵|飯|拉麵|滷肉/.test(n)) return cats.find(c=>c.label==='午餐');
+      if (/晚餐|火鍋|燒烤|海鮮/.test(n)) return cats.find(c=>c.label==='晚餐');
+      if (/宵夜|鹽酥雞|炸雞|滷味/.test(n)) return cats.find(c=>c.label==='宵夜');
+      if (/咖啡|珍奶|飲料|手搖|茶|拿鐵/.test(n)) return cats.find(c=>c.label==='飲料');
+      if (/計程車|Uber|捷運|公車|停車|油錢/.test(n)) return cats.find(c=>c.label==='行');
+      if (/超市|全聯|好市多|購物|量販|便利/.test(n)) return cats.find(c=>c.label==='購物');
+      if (/醫|藥|診所|看診/.test(n)) return cats.find(c=>c.label==='醫');
+      if (/書|課程|學費|補習/.test(n)) return cats.find(c=>c.label==='育');
+      if (/電影|遊戲|KTV|娛樂/.test(n)) return cats.find(c=>c.label==='樂');
+      // Try to match any custom category
+      for (const c of getCustomCategories()) {
+        if (n.includes(c.label)) return c;
+      }
     }
-    if (hour >= 6  && hour < 10) return EXPENSE_CATEGORIES.find(c=>c.label==='早餐');
-    if (hour >= 11 && hour < 14) return EXPENSE_CATEGORIES.find(c=>c.label==='午餐');
-    if (hour >= 17 && hour < 21) return EXPENSE_CATEGORIES.find(c=>c.label==='晚餐');
-    if (hour >= 21 || hour < 3)  return EXPENSE_CATEGORIES.find(c=>c.label==='宵夜');
-    if (hour >= 14 && hour < 17) return EXPENSE_CATEGORIES.find(c=>c.label==='飲料');
-    return EXPENSE_CATEGORIES.find(c=>c.label==='其他');
+    if (hour >= 6  && hour < 10) return cats.find(c=>c.label==='早餐');
+    if (hour >= 11 && hour < 14) return cats.find(c=>c.label==='午餐');
+    if (hour >= 17 && hour < 21) return cats.find(c=>c.label==='晚餐');
+    if (hour >= 21 || hour < 3)  return cats.find(c=>c.label==='宵夜');
+    if (hour >= 14 && hour < 17) return cats.find(c=>c.label==='飲料');
+    return cats.find(c=>c.label==='其他');
   }
 
   function parseBudgetInput(raw) {
@@ -2697,24 +3169,20 @@
       wrap.style.display = 'none';
       selectedCatOverride = null;
     } else {
-      // Reset override so auto-guess reflects fresh input; user can still click a chip to override
       if (!selectedCatOverride) {
         selectedCatOverride = null;
       } else {
-        // Keep the override only if it was set during THIS input session (chip click updates preview),
-        // but re-run auto-guess to detect note changes
         const freshGuess = parseBudgetInput(val);
         if (freshGuess && freshGuess.cat.label !== selectedCatOverride.label) {
-          // Note changed significantly — reset to fresh guess
           selectedCatOverride = null;
         }
       }
       const activeCat = selectedCatOverride || parsed.cat;
       preview.innerHTML = `<span style="color:var(--green);">✓</span> ${activeCat.icon} <strong>${parsed.note}</strong>　$${parsed.amount} → 將記為「${activeCat.label}」`;
       preview.className = 'budget-parsed-preview ready';
-      // Show prominent category picker
       wrap.style.display = 'block';
-      picker.innerHTML = EXPENSE_CATEGORIES.map((cat, i) => {
+      const allCats = EXPENSE_CATEGORIES();
+      picker.innerHTML = allCats.map((cat, i) => {
         const isActive = activeCat.label === cat.label;
         return `<button class="budget-cat-chip${isActive?' active':''}" onclick="selectBudgetCat(${i},this)">${cat.icon} ${cat.label}</button>`;
       }).join('');
@@ -2722,7 +3190,8 @@
   };
 
   window.selectBudgetCat = function(idx, btn) {
-    selectedCatOverride = EXPENSE_CATEGORIES[idx];
+    const allCats = EXPENSE_CATEGORIES();
+    selectedCatOverride = allCats[idx];
     document.querySelectorAll('.budget-cat-chip').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     const val = document.getElementById('budget-input').value;
@@ -2793,20 +3262,15 @@
     const ledger = getLedger();
     const fbCache = LS.get('fb_ledger_cache') || [];
     
-    // 找出該筆紀錄的日期，以便定位 archive
     const entry = ledger.find(e => e.id === id) || fbCache.find(e => e.id === id || e.fbDocId === id);
     const entryCopy = entry ? { ...entry } : null;
 
-    // 1. 從當月 ledger 移除
     saveLedger(ledger.filter(e => e.id !== id));
-    
-    // 2. 從 Firebase 快取移除 (同時檢查 id 與 fbDocId)
     const updatedCache = fbCache.filter(e => e.id !== id && e.fbDocId !== id);
     LS.set('fb_ledger_cache', updatedCache);
 
-    // 3. ✨ 新增：從本地封存檔 (Archive) 中徹底移除
     if (entryCopy && entryCopy.date) {
-      const prefix = entryCopy.date.slice(0, 7); // 取得 YYYY-MM
+      const prefix = entryCopy.date.slice(0, 7);
       const archiveKey = 'archive_' + prefix;
       const archive = LS.get(archiveKey);
       if (archive) {
@@ -2814,7 +3278,6 @@
       }
     }
 
-    // 4. 從 Firebase 移除
     if (isFirebaseOk) {
       deleteDoc(doc(db, 'ledger', id)).catch(() => {});
     }
@@ -2829,7 +3292,6 @@
         const l = getLedger(); l.push(entryCopy); saveLedger(l);
         const c = LS.get('fb_ledger_cache') || []; c.push(entryCopy); LS.set('fb_ledger_cache', c);
         
-        // 撤銷時也要補回 archive
         const prefix = entryCopy.date.slice(0, 7);
         const archiveKey = 'archive_' + prefix;
         const archive = LS.get(archiveKey) || [];
@@ -2855,7 +3317,7 @@
       }
     }
     if (!entry) { showToast('⚠️ 找不到此紀錄','error'); return; }
-    _editingEntry = { ...entry }; // 儲存完整原始物件
+    _editingEntry = { ...entry };
     document.getElementById('edit-ledger-id').value   = id;
     document.getElementById('edit-ledger-type').value = type;
     document.getElementById('edit-ledger-amount').value = entry.amount;
@@ -2866,7 +3328,8 @@
     const catRow = document.getElementById('edit-cat-row');
     if (type === 'expense') {
       catSection.style.display = 'block';
-      catRow.innerHTML = EXPENSE_CATEGORIES.map((cat, i) => {
+      const allCats = EXPENSE_CATEGORIES();
+      catRow.innerHTML = allCats.map((cat, i) => {
         const isActive = entry.catLabel === cat.label;
         return `<button class="edit-cat-chip${isActive?' active':''}" onclick="selectEditCat(${i},this)">${cat.icon} ${cat.label}</button>`;
       }).join('');
@@ -2907,9 +3370,10 @@
     const activeCatBtn = document.querySelector('.edit-cat-chip.active');
     if (activeCatBtn) {
       const catIdx = [...document.querySelectorAll('.edit-cat-chip')].indexOf(activeCatBtn);
-      if (type === 'expense' && catIdx >= 0 && EXPENSE_CATEGORIES[catIdx]) {
-        const cat = EXPENSE_CATEGORIES[catIdx];
-        catUpdates = { catIcon: cat.icon, catLabel: cat.label, catBg: cat.bg, catColor: cat.color };
+      if (type === 'expense' && catIdx >= 0) {
+        const allCats = EXPENSE_CATEGORIES();
+        const cat = allCats[catIdx];
+        if (cat) catUpdates = { catIcon: cat.icon, catLabel: cat.label, catBg: cat.bg, catColor: cat.color };
       } else if (type === 'income' && catIdx >= 0 && INCOME_CATEGORIES[catIdx]) {
         const cat = INCOME_CATEGORIES[catIdx];
         catUpdates = { catIcon: cat.icon, catLabel: cat.label };
@@ -2933,7 +3397,6 @@
         Object.assign(fbInc[fbIdx], catUpdates);
         LS.set('fb_income_cache', fbInc); 
       }
-      // 以原始完整物件為 base，再 merge 修改後的欄位，確保不遺漏任何欄位
       if (isFirebaseOk) {
         const base = _editingEntry || income[idx] || fbInc[fbIdx] || {};
         const toSave = { ...base, amount, note, ...(date ? { date } : {}), ...catUpdates };
@@ -2956,7 +3419,6 @@
         Object.assign(fbCache[fbIdx], catUpdates);
         LS.set('fb_ledger_cache', fbCache);
       }
-      // 以原始完整物件為 base，再 merge 修改後的欄位，確保不遺漏任何欄位
       if (isFirebaseOk) {
         const base = _editingEntry || ledger[idx] || fbCache[fbIdx] || {};
         const toSave = { ...base, amount, note, ...(date ? { date } : {}), ...catUpdates };
@@ -2968,6 +3430,83 @@
     if (currentTab === 'monthly') renderMonthlyReport();
     showToast('✅ 紀錄已更新');
   };
+
+  // ════════════════════════════════════════
+  // ══      CUSTOM CATEGORIES (NEW)       ══
+  // ════════════════════════════════════════
+
+  window.addCustomCategory = async function() {
+    const icon = document.getElementById('cc-icon').value.trim();
+    const label = document.getElementById('cc-label').value.trim();
+    if (!icon) { showToast('⚠️ 請輸入 Emoji 圖示','error'); return; }
+    if (!label) { showToast('⚠️ 請輸入分類名稱','error'); return; }
+    const allLabels = EXPENSE_CATEGORIES().map(c => c.label);
+    if (allLabels.includes(label)) { showToast('⚠️ 此分類已存在','error'); return; }
+
+    const current = getCustomCategories();
+    const palette = CUSTOM_CAT_COLORS[current.length % CUSTOM_CAT_COLORS.length];
+    const newCat = {
+      id: 'cc_' + Date.now(),
+      icon, label,
+      color: palette.color,
+      bg: palette.bg,
+      createdAt: new Date().toISOString(),
+    };
+
+    // Save to Firebase
+    if (isFirebaseOk) {
+      try {
+        await setDoc(doc(db, 'custom_categories', newCat.id), newCat);
+      } catch(e) {
+        console.warn('save custom category failed', e);
+        current.push(newCat);
+        LS.set('custom_categories', current);
+      }
+    } else {
+      current.push(newCat);
+      LS.set('custom_categories', current);
+    }
+
+    document.getElementById('cc-icon').value = '';
+    document.getElementById('cc-label').value = '';
+    renderCustomCatList();
+    showToast(`✅ 已新增分類「${icon} ${label}」`);
+  };
+
+  window.deleteCustomCategory = async function(id) {
+    const cat = getCustomCategories().find(c => c.id === id);
+    if (!cat) return;
+    if (!confirm(`確定刪除自訂分類「${cat.icon} ${cat.label}」？\n已有此分類的記帳紀錄不會受影響。`)) return;
+
+    if (isFirebaseOk) {
+      try { await deleteDoc(doc(db, 'custom_categories', id)); } catch(e) {}
+    }
+    const current = getCustomCategories().filter(c => c.id !== id);
+    LS.set('custom_categories', current);
+    renderCustomCatList();
+    showToast(`🗑️ 已刪除分類「${cat.label}」`);
+  };
+
+  function renderCustomCatList() {
+    const el = document.getElementById('custom-cat-list');
+    if (!el) return;
+    const list = getCustomCategories();
+    if (!list.length) {
+      el.innerHTML = '<div style="color:var(--text-dim);font-size:0.78rem;padding:4px 0;">尚無自訂分類</div>';
+      return;
+    }
+    el.innerHTML = list.map(c => `
+      <div class="custom-cat-item">
+        <span style="font-size:1.15rem;">${c.icon}</span>
+        <span style="flex:1;font-weight:800;font-size:0.88rem;color:${c.color};">${c.label}</span>
+        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${c.color};"></span>
+        <button onclick="deleteCustomCategory('${c.id}')" style="width:26px;height:26px;border-radius:6px;border:none;cursor:pointer;background:var(--red-light);color:var(--red);font-size:0.72rem;display:flex;align-items:center;justify-content:center;">
+          <i class="fa fa-trash"></i>
+        </button>
+      </div>
+    `).join('');
+  }
+
   function checkFixedExpenses() {
     const settings = getBudgetSettings();
     if (!settings.fixedExpenses || !settings.fixedExpenses.length) return;
@@ -3027,7 +3566,7 @@
     const prevKey = prevMonth.getFullYear() + '-' + String(prevMonth.getMonth()+1).padStart(2,'0');
     const archive = LS.get('archive_' + prevKey) || [];
     const thisMonthPrefix = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0');
-    const toArchive = ledger.filter(e => e.date.startsWith(prevKey));
+    const toArchive = ledger.filter(e => !e.date.startsWith(thisMonthPrefix));
     LS.set('archive_' + prevKey, [...archive, ...toArchive]);
     const remaining = ledger.filter(e => e.date.startsWith(thisMonthPrefix));
     saveLedger(remaining);
@@ -3044,7 +3583,6 @@
     const ledger   = getLedger();
     const today    = getLocalDateString();
     
-    // ── Use combined data (local + firebase cache) for accurate display ──
     const tombstones = getLedgerTombstones();
     const fbCache = (LS.get('fb_ledger_cache') || []).filter(e => !tombstones.has(e.id));
     const localFiltered = ledger.filter(e => !tombstones.has(e.id));
@@ -3188,6 +3726,7 @@
       row.querySelector('.sc-amount-input').value = shortcuts[i]?.amount || '';
       row.querySelector('.sc-label-input').value  = shortcuts[i]?.label  || '';
     });
+    renderCustomCatList();
     renderFixedExpList(s.fixedExpenses || []);
     document.getElementById('fe-cycle').onchange = function() {
       document.getElementById('fe-month').style.display = this.value === 'yearly' ? 'block' : 'none';
@@ -3457,7 +3996,6 @@
       ? memberArr.map(([name, amt], idx) => {
           const color = memberColors[idx % memberColors.length];
           const barPct  = Math.round((amt/maxMemberAmt)*100);
-          // Try to find avatar
           const m = members.find(mm => mm.name === name);
           const avatarUrl = m ? getMemberAvatar(m.id) : '';
           let avatarBlock;
