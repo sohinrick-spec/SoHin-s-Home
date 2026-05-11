@@ -13,7 +13,7 @@
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js" />
   <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js" />
 
-  <script src="https://cdn.tailwindcss.com" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     :root {
@@ -708,7 +708,7 @@
     <div class="container">
       <div style="margin-bottom:18px;">
         <div class="section-title"><i class="fa fa-cart-shopping" style="color:var(--primary); font-size:0.85rem;"></i> 待購清單
-          <button onclick="openModal('modal-custom-shop')" style="margin-left:auto;background:rgba(240,168,73,0.12);border:1px solid rgba(240,168,73,0.3);border-radius:8px;padding:4px 10px;color:var(--yellow);font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:800;cursor:pointer;"><i class="fa fa-plus"></i> 臨時代購</button>
+          <button onclick="openModal('modal-custom-shop')" style="margin-left:auto;background:rgba(240,168,73,0.12);border:1px solid rgba(240,168,73,0.3);border-radius:8px;padding:4px 10px;color:var(--yellow);font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:800;cursor:pointer;"><i class="fa fa-plus"></i> 臨時待購</button>
         </div>
         <div id="shopping-list"></div>
       </div>
@@ -1020,7 +1020,7 @@
 <div class="modal-overlay" id="modal-restock-amount">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-title">💰 記錄代購費用</div>
+    <div class="modal-title">💰 記錄購買費用</div>
     <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:14px;line-height:1.6;">已補入庫存 <strong id="restock-items-label" style="color:var(--text);"></strong>,是否同步記錄購物費用到記帳本?</p>
     <div class="field-label" style="margin-top:0;">總金額(元)</div>
     <input id="restock-amount-input" class="field-input" type="number" placeholder="例如:520" min="0"
@@ -1143,7 +1143,7 @@
 <div class="modal-overlay" id="modal-custom-shop">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-title">🛍️ 新增臨時代購物品</div>
+    <div class="modal-title">🛍️ 新增臨時待購物品</div>
     <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:14px;line-height:1.6;">此物品不計入家庭庫存,僅加入待購清單</p>
     <div class="field-label" style="margin-top:0;">物品名稱 *</div>
     <input id="custom-shop-name" class="field-input" type="text" placeholder="例如:生日蛋糕、禮物" maxlength="20"
@@ -1528,9 +1528,6 @@
       query(collection(db, 'ledger'), where('date', '>=', _prevMonthFirst)),
       (snap) => {
         const tombstones = getLedgerTombstones();
-        const fbIds = new Set(snap.docs.map(d => d.id));
-        const remaining = [...tombstones].filter(id => fbIds.has(id));
-        if (remaining.length !== tombstones.size) LS.set('ledger_tombstones', remaining);
         const allEntries = snap.docs
           .filter(d => !tombstones.has(d.id) && !tombstones.has((d.data()||{}).id))
           .map(d => ({ fbDocId: d.id, ...d.data() }));
@@ -1546,9 +1543,12 @@
       query(collection(db, 'income'), where('date', '>=', _prevMonthFirst)),
       (snap) => {
         const tombstones = getIncomeTombstones();
-        const fbIds = new Set(snap.docs.map(d => d.id));
-        const remaining = [...tombstones].filter(id => fbIds.has(id));
-        if (remaining.length !== tombstones.size) LS.set('income_tombstones', remaining);
+        
+        // ⚠️ 已經把這三行導致 Bug 的邏輯刪除了：
+        // const fbIds = new Set(snap.docs.map(d => d.id));
+        // const remaining = [...tombstones].filter(id => fbIds.has(id));
+        // if (remaining.length !== tombstones.size) LS.set('income_tombstones', remaining);
+
         const allIncome = snap.docs
           .filter(d => !tombstones.has(d.id) && !tombstones.has((d.data()||{}).id))
           .map(d => ({ fbDocId: d.id, ...d.data() }));
@@ -1935,7 +1935,7 @@
 
     const customHtml = customShoppingItems.length > 0 ? `
       <div class="card" style="padding:8px 14px; margin-bottom:8px; border-color:rgba(240,168,73,0.3);">
-        <div style="font-size:0.68rem;font-weight:900;color:var(--yellow);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;"><i class="fa fa-tag"></i> 臨時代購清單</div>
+        <div style="font-size:0.68rem;font-weight:900;color:var(--yellow);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;"><i class="fa fa-tag"></i> 臨時待購清單</div>
         ${customShoppingItems.map(i => `
           <div class="custom-shop-row">
             <div class="shop-dot" style="background:var(--yellow);"></div>
@@ -1965,7 +1965,7 @@
         const statusText = i.isCountable
           ? `剩 ${i.quantity??0}(需 >${i.alertQty??1})`
           : i.status;
-        const restockLabel = i.isCountable ? `補入 ${(i.alertQty??1) + 1} 個` : `補足`;
+        const restockLabel = i.isCountable ? `補入 ${(i.alertQty??1) + 3} 個` : `補足`;
         return `
         <div class="shop-row ${isBought ? 'bought' : ''}" id="shop-row-${i.id}">
           <div class="buy-check ${isBought ? 'checked' : ''}" onclick="toggleBought('${i.id}')">
@@ -2161,7 +2161,7 @@
   window.confirmCustomShopBuy = async function() {
     const id  = document.getElementById('custom-shop-buy-id').value;
     const amt = parseFloat(document.getElementById('custom-shop-buy-amount').value);
-    const note = document.getElementById('custom-shop-buy-note').value.trim() || '臨時代購';
+    const note = document.getElementById('custom-shop-buy-note').value.trim() || '臨時待購';
     if (!amt || amt <= 0) { showToast('⚠️ 請輸入有效金額','error'); return; }
     const cat = { icon:'🛍️', label:'購物', bg:'rgba(240,168,73,0.12)', color:'var(--yellow)' };
     await submitBudgetEntry(amt, note, cat);
@@ -2232,17 +2232,25 @@
   window.deleteIncomeEntry = function(id) {
     addIncomeTombstone(id);
     const allIncome = getIncomeLedger();
-    const entry = allIncome.find(e => e.id === id);
+    const fbIncCache = LS.get('fb_income_cache') || []; // 統一變數名稱
+    
+    const entry = allIncome.find(e => e.id === id) || fbIncCache.find(e => e.id === id || e.fbDocId === id);
     const entryCopy = entry ? { ...entry } : null;
+
+    // 1. 從本地 ledger 移除
     saveIncomeLedger(allIncome.filter(e => e.id !== id));
-    const fbIncCache = LS.get('fb_income_cache') || [];
-    LS.set('fb_income_cache', fbIncCache.filter(e => e.id !== id));
+    
+    // 2. 從 Firebase 快取移除 (修正變數名稱錯誤)
+    LS.set('fb_income_cache', fbIncCache.filter(e => e.id !== id && e.fbDocId !== id));
+
+    // 3. 從 Firebase 移除
     if (isFirebaseOk) {
       deleteDoc(doc(db, 'income', id)).catch(() => {});
     }
     renderBudget();
     if (currentTab === 'monthly') renderMonthlyReport();
     showToast('🗑️ 已刪除收入紀錄');
+    
     if (entryCopy) {
       showUndoToast(`撤銷刪除收入「${entryCopy.note}」`, async () => {
         const t = getIncomeTombstones(); t.delete(id); LS.set('income_tombstones', [...t]);
@@ -2576,6 +2584,7 @@
     { icon:'💳', label:'其他', bg:'rgba(236,236,236,0.08)', color:'var(--text-muted)' },
   ];
   let selectedCatOverride = null;
+  let _editingEntry = null; // 儲存開啟編輯時的完整原始物件，供 saveLedgerEdit 使用
 
   function getLedgerTombstones() { return new Set(LS.get('ledger_tombstones') || []); }
   function addLedgerTombstone(id) {
@@ -2781,23 +2790,51 @@
   window.deleteLedgerEntry = function(id) {
     addLedgerTombstone(id);
     const ledger = getLedger();
-    const entry = ledger.find(e => e.id === id);
     const fbCache = LS.get('fb_ledger_cache') || [];
-    const entryCopy = entry ? { ...entry } : (fbCache.find(e => e.id === id) ? { ...fbCache.find(e => e.id === id) } : null);
+    
+    // 找出該筆紀錄的日期，以便定位 archive
+    const entry = ledger.find(e => e.id === id) || fbCache.find(e => e.id === id || e.fbDocId === id);
+    const entryCopy = entry ? { ...entry } : null;
+
+    // 1. 從當月 ledger 移除
     saveLedger(ledger.filter(e => e.id !== id));
-    const updatedCache = fbCache.filter(e => e.id !== id);
+    
+    // 2. 從 Firebase 快取移除 (同時檢查 id 與 fbDocId)
+    const updatedCache = fbCache.filter(e => e.id !== id && e.fbDocId !== id);
     LS.set('fb_ledger_cache', updatedCache);
+
+    // 3. ✨ 新增：從本地封存檔 (Archive) 中徹底移除
+    if (entryCopy && entryCopy.date) {
+      const prefix = entryCopy.date.slice(0, 7); // 取得 YYYY-MM
+      const archiveKey = 'archive_' + prefix;
+      const archive = LS.get(archiveKey);
+      if (archive) {
+        LS.set(archiveKey, archive.filter(e => e.id !== id && e.fbDocId !== id));
+      }
+    }
+
+    // 4. 從 Firebase 移除
     if (isFirebaseOk) {
       deleteDoc(doc(db, 'ledger', id)).catch(() => {});
     }
+
     renderBudget();
     if (currentTab === 'monthly') renderMonthlyReport();
     showToast('🗑️ 已刪除紀錄');
+
     if (entryCopy) {
       showUndoToast(`撤銷刪除「${entryCopy.note}」`, async () => {
         const t = getLedgerTombstones(); t.delete(id); LS.set('ledger_tombstones', [...t]);
         const l = getLedger(); l.push(entryCopy); saveLedger(l);
         const c = LS.get('fb_ledger_cache') || []; c.push(entryCopy); LS.set('fb_ledger_cache', c);
+        
+        // 撤銷時也要補回 archive
+        const prefix = entryCopy.date.slice(0, 7);
+        const archiveKey = 'archive_' + prefix;
+        const archive = LS.get(archiveKey) || [];
+        archive.push(entryCopy);
+        LS.set(archiveKey, archive);
+
         if (isFirebaseOk) { try { await setDoc(doc(db,'ledger', entryCopy.id), entryCopy); } catch(e){} }
         renderBudget();
         if (currentTab === 'monthly') renderMonthlyReport();
@@ -2817,6 +2854,7 @@
       }
     }
     if (!entry) { showToast('⚠️ 找不到此紀錄','error'); return; }
+    _editingEntry = { ...entry }; // 儲存完整原始物件
     document.getElementById('edit-ledger-id').value   = id;
     document.getElementById('edit-ledger-type').value = type;
     document.getElementById('edit-ledger-amount').value = entry.amount;
@@ -2894,7 +2932,12 @@
         Object.assign(fbInc[fbIdx], catUpdates);
         LS.set('fb_income_cache', fbInc); 
       }
-      if (isFirebaseOk && idx > -1) { try { await setDoc(doc(db,'income',id), income[idx]); } catch(e){} }
+      // 以原始完整物件為 base，再 merge 修改後的欄位，確保不遺漏任何欄位
+      if (isFirebaseOk) {
+        const base = _editingEntry || income[idx] || fbInc[fbIdx] || {};
+        const toSave = { ...base, amount, note, ...(date ? { date } : {}), ...catUpdates };
+        try { await setDoc(doc(db,'income',id), toSave); } catch(e){}
+      }
     } else {
       const ledger = getLedger();
       const idx = ledger.findIndex(e => e.id === id);
@@ -2912,8 +2955,11 @@
         Object.assign(fbCache[fbIdx], catUpdates);
         LS.set('fb_ledger_cache', fbCache);
       }
+      // 以原始完整物件為 base，再 merge 修改後的欄位，確保不遺漏任何欄位
       if (isFirebaseOk) {
-        try { await setDoc(doc(db,'ledger',id), ledger[idx] || fbCache[fbIdx] || { id, amount, note, date, ...catUpdates }); } catch(e){}
+        const base = _editingEntry || ledger[idx] || fbCache[fbIdx] || {};
+        const toSave = { ...base, amount, note, ...(date ? { date } : {}), ...catUpdates };
+        try { await setDoc(doc(db,'ledger',id), toSave); } catch(e){}
       }
     }
     closeModal('modal-edit-ledger');
