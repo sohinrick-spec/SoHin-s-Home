@@ -637,6 +637,7 @@
 <script>
   if (!CanvasRenderingContext2D.prototype.roundRect) {
     CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r) {
+      if (Array.isArray(r)) r = r[0];
       this.beginPath();
       this.moveTo(x+r,y);
       this.lineTo(x+w-r,y);
@@ -1197,7 +1198,7 @@
   import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
   import { getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
            collection, doc, onSnapshot,
-           addDoc, setDoc, updateDoc, deleteDoc, query, orderBy }
+           addDoc, setDoc, updateDoc, deleteDoc, query, orderBy, where }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
   const firebaseConfig = {
@@ -1221,6 +1222,15 @@
 
   let customShoppingItems = [];
   let customShoppingUnsubscribe = null;
+
+  // ── Helper: 取得本地日期字串 (YYYY-MM-DD)，避免 UTC 偏移造成跨日錯誤 ──
+  function getLocalDateString(date) {
+    const d = date || new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
 
   const CHORE_PRESETS = [
     { e:'🧹', n:'掃地拖地' }, { e:'🍽️', n:'洗碗' }, { e:'🧺', n:'洗衣服' },
@@ -1364,7 +1374,7 @@
     renderRoomMgmtList();
     showToast(`🗑️ 已刪除分類「${label}」`);
   };
-  function daysFromNow(n) { const d = new Date(); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; }
+  function daysFromNow(n) { const d = new Date(); d.setDate(d.getDate()+n); return getLocalDateString(d); }
   const MOCK_INVENTORY = [
     { id:'m1', order:0, name:'洗碗精', isCountable:false, status:'充足', colorTag:'#64B5F6', memo:'好市多買的' },
     { id:'m2', order:1, name:'衛生紙', isCountable:true,  quantity:3, alertQty:2, colorTag:'#E0E0E0' },
@@ -1510,8 +1520,12 @@
     );
 
     if (ledgerUnsubscribe) ledgerUnsubscribe();
+    const _prevMonthFirst = (() => {
+      const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - 1);
+      return getLocalDateString(d);
+    })();
     ledgerUnsubscribe = onSnapshot(
-      collection(db, 'ledger'),
+      query(collection(db, 'ledger'), where('date', '>=', _prevMonthFirst)),
       (snap) => {
         const tombstones = getLedgerTombstones();
         const fbIds = new Set(snap.docs.map(d => d.id));
@@ -1529,7 +1543,7 @@
 
     if (incomeUnsubscribe) incomeUnsubscribe();
     incomeUnsubscribe = onSnapshot(
-      collection(db, 'income'),
+      query(collection(db, 'income'), where('date', '>=', _prevMonthFirst)),
       (snap) => {
         const tombstones = getIncomeTombstones();
         const fbIds = new Set(snap.docs.map(d => d.id));
@@ -1573,9 +1587,12 @@
       }
     );
 
-    const today = new Date().toISOString().split('T')[0];
+    const _threeDaysAgo = (() => {
+      const d = new Date(); d.setDate(d.getDate() - 3);
+      return getLocalDateString(d);
+    })();
     choresUnsubscribe = onSnapshot(
-      collection(db, 'chores'),
+      query(collection(db, 'chores'), where('date', '>=', _threeDaysAgo)),
       (snap) => {
         choresItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         LS.set('chores_cache', choresItems);
@@ -1979,7 +1996,7 @@
   window.restockItem = async function(id) {
     const item = inventoryItems.find(i => i.id === id);
     if (!item) return;
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString();
     const prevQty = item.quantity;
     const prevStatus = item.status;
     const prevPurchaseDate = item.purchaseDate;
@@ -2048,7 +2065,7 @@
       btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 補入中…';
     }
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString();
     for (const item of toRestock) {
       let updates;
       if (item.isCountable) {
@@ -2071,7 +2088,7 @@
   };
 
   async function autoCompleteRestockChore() {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString();
     const restockChore = choresItems.find(c =>
       c.date === today && !c.completed && c.title.includes('補充物資')
     );
@@ -2186,7 +2203,7 @@
     const amt = parseFloat(document.getElementById('income-amount-input').value);
     if (!amt || amt <= 0) { showToast('⚠️ 請輸入有效金額','error'); return; }
     const note = document.getElementById('income-note-input').value.trim() || selectedIncomeCat.label;
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString();
     const now = new Date();
     const entry = {
       id: 'inc_' + Date.now(),
@@ -2243,7 +2260,7 @@
     const el    = document.getElementById('chores-list');
     const logEl = document.getElementById('recent-log');
     if (!el) return;
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString();
     const todayC = choresItems.filter(c => c.date === today);
 
     if (!todayC.length) {
@@ -2310,7 +2327,7 @@
     const custom   = document.getElementById('custom-chore').value.trim();
     const toAdd    = [...selected, ...(custom?[custom]:[])];
     if (!toAdd.length) { showToast('⚠️ 請選擇或輸入家務','error'); return; }
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString();
     for (const title of toAdd) {
       const nc = { title, completed:false, completedBy:'', completedAt:'', date:today };
       if (isFirebaseOk) await addDoc(collection(db,'chores'), nc);
@@ -2719,7 +2736,7 @@
       if (selectedCatOverride) parsed.cat = selectedCatOverride;
     }
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString();
     const now   = new Date();
     const activeMemberChip = document.querySelector('.ledger-member-chip.active');
     const entryMember = activeMemberChip ? activeMemberChip.dataset.name : currentMemberName;
@@ -2910,7 +2927,7 @@
     const today    = new Date();
     const todayD   = today.getDate();
     const todayM   = today.getMonth() + 1;
-    const todayStr = today.toISOString().split('T')[0];
+    const todayStr = getLocalDateString(today);
     const checkedKey = 'fixed_checked_' + todayStr;
     if (LS.get(checkedKey)) return;
 
@@ -2978,7 +2995,7 @@
   function renderBudget() {
     const settings = getBudgetSettings();
     const ledger   = getLedger();
-    const today    = new Date().toISOString().split('T')[0];
+    const today    = getLocalDateString();
     
     // ── Use combined data (local + firebase cache) for accurate display ──
     const tombstones = getLedgerTombstones();
@@ -3102,12 +3119,15 @@
   function renderShortcuts(shortcuts) {
     const el = document.getElementById('budget-shortcuts');
     if (!shortcuts || !shortcuts.length) { el.innerHTML=''; return; }
-    el.innerHTML = shortcuts.filter(s => s.amount > 0).map(s => `
-      <button class="shortcut-btn" onclick="submitBudgetEntry(${s.amount}, '${s.label}')">
+    el.innerHTML = shortcuts.filter(s => s.amount > 0).map(s => {
+      const safeLabel = (s.label || '').replace(/'/g, "\\'");
+      return `
+      <button class="shortcut-btn" onclick="submitBudgetEntry(${s.amount}, '${safeLabel}')">
         <div class="sc-amount">$${s.amount}</div>
         <div class="sc-label">${s.label || '快捷'}</div>
       </button>
-    `).join('');
+    `;
+    }).join('');
   }
 
   window.openBudgetSettings = function() {
