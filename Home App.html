@@ -185,7 +185,8 @@
       justify-content: center; font-size: 0.8rem; font-weight: 900;
       color: var(--bg); transition: all 0.2s;
     }
-    .buy-check.checked { background: var(--green); border-color: var(--green); animation: checkBounce 0.35s ease; }
+    .buy-check.checked { background: var(--green); border-color: var(--green); }
+    .buy-check.checked.animate { animation: checkBounce 0.35s ease; }
     .restock-all-btn {
       width: 100%; margin-top: 10px; padding: 11px;
       background: var(--green-light); border: 1px solid rgba(116,198,157,0.35);
@@ -214,7 +215,8 @@
       cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
       transition: all 0.2s; margin-top: 1px; font-size: 0.78rem; font-weight: 900; color: var(--bg); background: var(--bg2);
     }
-    .chore-check.done { background: var(--green); border-color: var(--green); animation: checkBounce 0.35s ease; }
+    .chore-check.done { background: var(--green); border-color: var(--green); }
+    .chore-check.done.animate { animation: checkBounce 0.35s ease; }
     @keyframes checkBounce {
       0%   { transform: scale(1); }
       40%  { transform: scale(1.3); }
@@ -259,6 +261,7 @@
       background: var(--bg2); outline: none; transition: border-color 0.2s, background 0.2s;
     }
     .field-input:focus { border-color: var(--primary-dim); background: var(--bg); box-shadow: 0 0 0 3px rgba(232,232,232,0.07); }
+    select.field-input { appearance: none; -webkit-appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%), linear-gradient(135deg, var(--text-muted) 50%, transparent 50%); background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 28px; }
 
     .color-picker { display: flex; gap: 10px; padding: 8px 4px 12px; overflow-x: auto; scrollbar-width: none; }
     .color-picker::-webkit-scrollbar { display: none; }
@@ -533,7 +536,6 @@
     .avatar-preset-btn:hover { transform: scale(1.1); border-color: var(--primary-dim); }
     .avatar-preset-btn.selected { border-color: var(--green); background: var(--green-light); transform: scale(1.1); }
 
-    /* ══ NEW: Search bar ══ */
     .search-wrap { position: relative; margin-bottom: 10px; }
     .search-input {
       width: 100%; padding: 10px 40px 10px 38px;
@@ -558,7 +560,6 @@
     .search-clear.visible { display: flex; }
     .search-clear:hover { background: var(--red-light); color: var(--red); }
 
-    /* ══ NEW: Recurring task ══ */
     .recurring-card { padding: 10px 14px; }
     .rt-status-badge {
       font-size: 0.68rem; font-weight: 900; padding: 2px 9px; border-radius: 50px;
@@ -568,7 +569,6 @@
     .rt-today { background: var(--yellow-light); color: var(--yellow); border-color: rgba(240,168,73,0.25); }
     .rt-upcoming { background: var(--green-light); color: var(--green); border-color: rgba(116,198,157,0.25); }
 
-    /* ══ NEW: Avatar upload ══ */
     .avatar-upload-btn {
       width: 100%; padding: 10px;
       background: var(--blue-light); border: 1px solid rgba(100,181,246,0.35);
@@ -580,7 +580,6 @@
     .avatar-upload-btn:hover { background: var(--blue); color: var(--bg); }
     .avatar-upload-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* ══ NEW: Custom category list ══ */
     .custom-cat-item {
       display: flex; align-items: center; gap: 8px; padding: 8px 10px;
       background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-md);
@@ -674,7 +673,6 @@
       <div>
         <div class="section-title"><i class="fa fa-box-open" style="color:var(--primary); font-size:0.85rem;"></i> 家庭庫存</div>
         
-        <!-- NEW: Search bar -->
         <div class="search-wrap">
           <i class="fa fa-search search-icon"></i>
           <input id="inventory-search" class="search-input" type="text"
@@ -703,7 +701,6 @@
       <div class="section-title"><i class="fa fa-broom" style="color:var(--primary); font-size:0.85rem;"></i> 今日家務</div>
       <div id="chores-list"></div>
 
-      <!-- NEW: Recurring tasks section -->
       <div style="margin-top:22px;">
         <div class="section-title">
           <i class="fa fa-arrows-rotate" style="color:var(--primary); font-size:0.85rem;"></i> 週期性任務
@@ -865,7 +862,6 @@
 
 <button class="fab" id="fab-btn" style="display:none;" onclick="handleFab()"><i class="fa fa-plus"></i></button>
 
-<!-- Modal: Add/Edit Item -->
 <div class="modal-overlay" id="modal-add-item">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -938,7 +934,6 @@
   </div>
 </div>
 
-<!-- Modal: Chore -->
 <div class="modal-overlay" id="modal-add-chore">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -953,7 +948,6 @@
   </div>
 </div>
 
-<!-- Modal: Recurring Task -->
 <div class="modal-overlay" id="modal-recurring-task">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -993,7 +987,6 @@
   </div>
 </div>
 
-<!-- Modal: Members -->
 <div class="modal-overlay" id="modal-member">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1006,7 +999,6 @@
       <button onclick="addMember()" style="padding:11px 15px; background:var(--primary); color:var(--bg); border:none; border-radius:var(--radius-md); font-family:'Nunito',sans-serif; font-weight:900; cursor:pointer; white-space:nowrap; font-size:0.88rem;">新增</button>
     </div>
 
-    <!-- UPDATED Avatar Edit Section -->
     <div id="avatar-edit-section" style="display:none;margin-top:12px;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-md);">
       <div class="field-label" style="margin-top:0;">設定頭像</div>
       <div style="font-size:0.72rem;color:var(--text-dim);margin-bottom:8px;">選擇 Emoji 圖示或直接上傳圖片（自動同步所有裝置）</div>
@@ -1034,7 +1026,6 @@
   </div>
 </div>
 
-<!-- Firework Overlay -->
 <div id="firework-overlay">
   <canvas class="firework-canvas" id="firework-canvas"></canvas>
   <div style="z-index:1;">
@@ -1045,7 +1036,6 @@
   <button class="firework-close-btn" onclick="closeFireworks()">出發吧!🚀</button>
 </div>
 
-<!-- Modal: Restock Amount -->
 <div class="modal-overlay" id="modal-restock-amount">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1061,7 +1051,6 @@
   </div>
 </div>
 
-<!-- Modal: Income -->
 <div class="modal-overlay" id="modal-income">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1115,7 +1104,6 @@
       </div>
     </div>
 
-    <!-- NEW: Custom categories section -->
     <div class="field-label">自訂消費分類
       <span style="text-transform:none;font-size:0.68rem;font-weight:600;opacity:0.6;">(除了預設的13種分類外)</span>
     </div>
@@ -1154,7 +1142,6 @@
   </div>
 </div>
 
-<!-- Modal: Room Management -->
 <div class="modal-overlay" id="modal-room-mgmt">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1165,7 +1152,6 @@
   </div>
 </div>
 
-<!-- Modal: Edit Room Name -->
 <div class="modal-overlay" id="modal-edit-room">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1179,7 +1165,6 @@
   </div>
 </div>
 
-<!-- Modal: Custom Shopping Item -->
 <div class="modal-overlay" id="modal-custom-shop">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1195,7 +1180,6 @@
   </div>
 </div>
 
-<!-- Modal: Custom Shop Purchase Price -->
 <div class="modal-overlay" id="modal-custom-shop-buy">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1212,7 +1196,6 @@
   </div>
 </div>
 
-<!-- Modal: Edit Ledger Entry -->
 <div class="modal-overlay" id="modal-edit-ledger">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -1243,6 +1226,37 @@
   import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 
+  /* ════════════════════════════════════════════
+   *   SECURITY HELPERS  ── 修正 XSS / 字串注入
+   * ════════════════════════════════════════════ */
+  // HTML escape:用在 innerHTML 中插入文字
+  const _esc = (s) => {
+    if (s === null || s === undefined) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  };
+  // JS string literal escape:用在 onclick="fn(${_jsStr(x)})"
+  // 回傳已包好引號的 JS 字串字面量,並對 HTML 特殊字元 escape 一次
+  const _jsStr = (s) => {
+    const str = String(s ?? '');
+    const jsEscaped = str
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'")
+      .replace(/\r?\n/g, '\\n')
+      .replace(/\r/g, '');
+    // 包進 attribute 時 < > & " 仍要 HTML escape,引號之外的單引號用 &#39; 不行(會破壞 JS),所以 jsEscaped 已轉成 \',再對 < > & 處理
+    const htmlSafe = jsEscaped
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+    return "'" + htmlSafe + "'";
+  };
+
   const firebaseConfig = {
     apiKey:            "AIzaSyDQ6lycJWKBnINu1Qbu8kTT_PGYP2rPzrs",
     authDomain:        "home-app-data.firebaseapp.com",
@@ -1265,15 +1279,16 @@
   let customShoppingItems = [];
   let customShoppingUnsubscribe = null;
 
-  // NEW: inventory search
   let inventorySearchQuery = '';
 
-  // NEW: recurring tasks
   let recurringTasks = [];
   let recurringTasksUnsubscribe = null;
+  let _rtChecking = false;          // ← reentrant lock for recurring tasks
 
-  // NEW: custom categories
   let customCategoriesUnsubscribe = null;
+
+  // 用來抑制 toggle 動畫:除了首次 / 點擊以外不重播動畫
+  let _justChecked = new Set();
 
   function getLocalDateString(date) {
     const d = date || new Date();
@@ -1288,6 +1303,8 @@
     { e:'🗑️', n:'倒垃圾' }, { e:'🚿', n:'清潔浴室' }, { e:'🪟', n:'擦窗戶' },
     { e:'🛏️', n:'整理床鋪' }, { e:'🧽', n:'清潔廚房' }, { e:'🛒', n:'補充物資' }
   ];
+
+  const RESTOCK_CHORE_TITLE = '🛒 補充物資';   // 嚴格比對用
 
   const DEFAULT_ROOMS = [
     { id:'room_living',   label:'客廳', icon:'🛋️', color:'#64B5F6' },
@@ -1331,14 +1348,14 @@
     if (!el) return;
     const rooms = getRooms();
     el.innerHTML = rooms.map(r => `
-      <button onclick="selectRoomTag('${r.id}')"
+      <button onclick="selectRoomTag(${_jsStr(r.id)})"
         style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:50px;
                border:2px solid ${r.id===selectedRoomId ? r.color : 'var(--border)'};
                background:${r.id===selectedRoomId ? r.color+'22' : 'var(--bg2)'};
                color:${r.id===selectedRoomId ? r.color : 'var(--text-muted)'};
                font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:800;cursor:pointer;
                transition:all 0.18s;white-space:nowrap;">
-        <span>${r.icon || ''}</span>${r.label}
+        <span>${_esc(r.icon || '')}</span>${_esc(r.label)}
       </button>`).join('');
   }
 
@@ -1363,14 +1380,15 @@
     el.innerHTML = rooms.map(r => {
       const isDefault = defaultIds.includes(r.id);
       const usedCount = inventoryItems.filter(i => (i.roomId||'room_other') === r.id).length;
+      const labelHtml = `${r.icon ? _esc(r.icon)+' ' : ''}${_esc(r.label)}`;
       return `
       <div style="display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--border);">
         <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${r.color};flex-shrink:0;"></span>
-        <span id="room-name-display-${r.id}" style="font-weight:800;flex:1;font-size:0.9rem;">${r.icon ? r.icon+' ' : ''}${r.label}</span>
+        <span id="room-name-display-${_esc(r.id)}" style="font-weight:800;flex:1;font-size:0.9rem;">${labelHtml}</span>
         <span style="font-size:0.7rem;color:var(--text-dim);">${usedCount} 項</span>
         ${isDefault ? `<span style="font-size:0.68rem;color:var(--text-dim);padding:2px 8px;border:1px solid var(--border);border-radius:50px;">預設</span>` :
-          `<button onclick="openRoomEdit('${r.id}','${r.label}')" style="background:var(--blue-light);border:none;border-radius:6px;color:var(--blue);width:28px;height:28px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;"><i class="fa fa-pen"></i></button>
-           <button onclick="confirmDeleteRoom('${r.id}','${r.label}')" style="background:var(--red-light);border:none;border-radius:6px;color:var(--red);width:28px;height:28px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;"><i class="fa fa-trash"></i></button>`
+          `<button onclick="openRoomEdit(${_jsStr(r.id)},${_jsStr(r.label)})" style="background:var(--blue-light);border:none;border-radius:6px;color:var(--blue);width:28px;height:28px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;"><i class="fa fa-pen"></i></button>
+           <button onclick="confirmDeleteRoom(${_jsStr(r.id)},${_jsStr(r.label)})" style="background:var(--red-light);border:none;border-radius:6px;color:var(--red);width:28px;height:28px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;"><i class="fa fa-trash"></i></button>`
         }
       </div>`;
     }).join('');
@@ -1613,7 +1631,6 @@
       (err) => { console.warn('custom_shopping snapshot error:', err); }
     );
 
-    // NEW: recurring tasks listener
     if (recurringTasksUnsubscribe) recurringTasksUnsubscribe();
     recurringTasksUnsubscribe = onSnapshot(
       collection(db, 'recurring_tasks'),
@@ -1621,13 +1638,11 @@
         recurringTasks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         LS.set('recurring_tasks_cache', recurringTasks);
         renderRecurringTasks();
-        // Check whether any task is due today
         checkAndTriggerRecurringTasks();
       },
       (err) => { console.warn('recurring_tasks snapshot error:', err); }
     );
 
-    // NEW: custom categories listener
     if (customCategoriesUnsubscribe) customCategoriesUnsubscribe();
     customCategoriesUnsubscribe = onSnapshot(
       collection(db, 'custom_categories'),
@@ -1674,16 +1689,22 @@
     if (!_savedName) showAppFrame();
   }
 
+  // 修補:不覆寫 createdAt
   async function registerCurrentMember() {
     if (!isFirebaseOk || !currentMemberId) return;
     try {
       const localAvatar = localStorage.getItem('hsa_avatar_' + currentMemberId) || '';
-      await setDoc(doc(db, 'members', currentMemberId), {
+      const existing = members.find(m => m.id === currentMemberId);
+      const payload = {
         id: currentMemberId,
         name: currentMemberName,
         avatarUrl: localAvatar,
-        createdAt: new Date().toISOString(),
-      }, { merge: true });
+      };
+      // 只有第一次寫入才設 createdAt
+      if (!existing || !existing.createdAt) {
+        payload.createdAt = new Date().toISOString();
+      }
+      await setDoc(doc(db, 'members', currentMemberId), payload, { merge: true });
     } catch(e) { console.warn('register member failed', e); }
   }
 
@@ -1692,7 +1713,13 @@
     if (!lo) return;
     lo.style.opacity = '0';
     lo.style.transition = 'opacity 0.25s';
-    setTimeout(() => lo.remove(), 260);
+    setTimeout(() => { try { lo.remove(); } catch(e){} }, 260);
+    // 同時隱藏 initial-loader 防止重疊
+    const il = document.getElementById('initial-loader');
+    if (il) {
+      il.style.opacity = '0';
+      setTimeout(() => { try { il.remove(); } catch(e){} }, 260);
+    }
   }
 
   function showAppFrame() {
@@ -1760,9 +1787,13 @@
     else openItemModal();
   };
 
+  // 修補:按鈕文字依模式
   window.saveItem = async function() {
     const btn    = document.getElementById('save-item-btn');
     const editId = document.getElementById('edit-item-id').value;
+    const isEdit = !!editId;
+    const originalText = isEdit ? '✏️ 更新物品' : '💾 儲存物品';
+
     const name   = document.getElementById('item-name').value.trim();
     if (!name) { showToast('⚠️ 請輸入物品名稱', 'error'); document.getElementById('item-name').focus(); return; }
 
@@ -1797,7 +1828,7 @@
     btn.disabled = true; btn.classList.add('loading'); btn.textContent = '儲存中…';
 
     try {
-      if (editId) {
+      if (isEdit) {
         if (isFirebaseOk) {
           await updateDoc(doc(db, 'inventory', editId), data);
         } else {
@@ -1832,7 +1863,7 @@
       console.error('saveItem error:', err);
       showToast('❌ 儲存失敗:' + err.message, 'error');
     } finally {
-      btn.disabled = false; btn.classList.remove('loading'); btn.textContent = '💾 儲存物品';
+      btn.disabled = false; btn.classList.remove('loading'); btn.textContent = originalText;
     }
   };
 
@@ -1915,15 +1946,14 @@
     rooms.forEach(r => {
       if (!usedRoomIds.includes(r.id)) return;
       const count = inventoryItems.filter(i=>(i.roomId||'room_other')===r.id).length;
-      html += `<button class="cf-btn ${activeColorFilter===r.id?'active':''}" data-color="${r.id}" onclick="setColorFilter('${r.id}',this)"
+      html += `<button class="cf-btn ${activeColorFilter===r.id?'active':''}" data-color="${_esc(r.id)}" onclick="setColorFilter(${_jsStr(r.id)},this)"
         style="${activeColorFilter===r.id ? `border-color:${r.color};color:${r.color};background:${r.color}22;` : ''}">
-        <span class="cf-dot" style="background:${r.color};"></span>${r.icon ? r.icon+' ' : ''}${r.label} (${count})
+        <span class="cf-dot" style="background:${r.color};"></span>${r.icon ? _esc(r.icon)+' ' : ''}${_esc(r.label)} (${count})
       </button>`;
     });
     bar.innerHTML = html;
   }
 
-  // NEW: inventory search functions
   window.onInventorySearch = function() {
     const input = document.getElementById('inventory-search');
     inventorySearchQuery = input.value.trim().toLowerCase();
@@ -1940,15 +1970,17 @@
     input.focus();
   };
 
-  // Highlight helper
+  // 修補:先 escape 文字、再插入 mark 標籤
   function highlightMatch(text, query) {
-    if (!query || !text) return text;
-    const idx = text.toLowerCase().indexOf(query);
-    if (idx === -1) return text;
-    return text.substring(0, idx) +
+    const safeText = _esc(text || '');
+    if (!query || !safeText) return safeText;
+    const safeQuery = _esc(query);
+    const idx = safeText.toLowerCase().indexOf(safeQuery.toLowerCase());
+    if (idx === -1) return safeText;
+    return safeText.substring(0, idx) +
            `<mark style="background:rgba(240,168,73,0.35);color:var(--yellow);padding:0 2px;border-radius:3px;">` +
-           text.substring(idx, idx + query.length) +
-           `</mark>` + text.substring(idx + query.length);
+           safeText.substring(idx, idx + safeQuery.length) +
+           `</mark>` + safeText.substring(idx + safeQuery.length);
   }
 
   function renderInventory() {
@@ -1961,7 +1993,6 @@
     const sorted   = [...inventoryItems].sort((a,b) => (a.order??0) - (b.order??0));
     let filtered = activeColorFilter === 'all' ? sorted : sorted.filter(i => (i.roomId||'room_other') === activeColorFilter);
 
-    // NEW: apply search filter
     if (inventorySearchQuery) {
       const q = inventorySearchQuery;
       filtered = filtered.filter(i =>
@@ -1973,12 +2004,11 @@
 
     if (!filtered.length) {
       el.innerHTML = inventorySearchQuery
-        ? `<div class="empty"><i class="fa fa-magnifying-glass"></i>找不到符合「${inventorySearchQuery}」的物品<br/><small style="display:block;margin-top:4px;">試試其他關鍵字</small></div>`
+        ? `<div class="empty"><i class="fa fa-magnifying-glass"></i>找不到符合「${_esc(inventorySearchQuery)}」的物品<br/><small style="display:block;margin-top:4px;">試試其他關鍵字</small></div>`
         : `<div class="empty"><i class="fa fa-filter"></i>此分類下沒有物品</div>`;
       return;
     }
 
-    // Show result count when searching
     let headerHtml = '';
     if (inventorySearchQuery) {
       headerHtml = `<div style="font-size:0.75rem;color:var(--text-muted);padding:2px 4px 10px;">
@@ -1994,40 +2024,39 @@
           ? `<span style="color:var(--red);font-weight:800;">⚠️ 已過期 ${Math.abs(diff)} 天</span>`
           : diff <= 7
           ? `<span style="color:var(--yellow);font-weight:800;">🟡 ${diff} 天後到期</span>`
-          : `<span>📅 效期 ${item.expiryDate}</span>`;
+          : `<span>📅 效期 ${_esc(item.expiryDate)}</span>`;
       }
-      const purText  = item.purchaseDate ? `<span>🛒 ${item.purchaseDate}</span>` : '';
+      const purText  = item.purchaseDate ? `<span>🛒 ${_esc(item.purchaseDate)}</span>` : '';
       const memoText = item.memo ? highlightMatch(item.memo, inventorySearchQuery) : '';
       const memoHtml = item.memo ? `<div class="inv-memo"><i class="fa fa-thumbtack" style="font-size:0.68rem;"></i>${memoText}</div>` : '';
 
       const needsAlert = item.isCountable && (item.quantity??0) <= (item.alertQty??1);
       const alertBadge = needsAlert ? `<span class="alert-badge"><i class="fa fa-bell" style="font-size:0.6rem;"></i>待購</span>` : '';
       const room = getRoomById(item.roomId || 'room_other');
-      const roomBadge = `<span style="display:inline-flex;align-items:center;gap:3px;font-size:0.65rem;font-weight:900;padding:2px 8px;background:${room.color}18;border:1px solid ${room.color}44;border-radius:50px;color:${room.color};flex-shrink:0;">${room.icon} ${room.label}</span>`;
+      const roomBadge = `<span style="display:inline-flex;align-items:center;gap:3px;font-size:0.65rem;font-weight:900;padding:2px 8px;background:${room.color}18;border:1px solid ${room.color}44;border-radius:50px;color:${room.color};flex-shrink:0;">${_esc(room.icon)} ${_esc(room.label)}</span>`;
 
       const control = item.isCountable
         ? `<div class="qty-box">
-            <button class="qty-btn minus" onclick="decreaseQty('${item.id}',${item.quantity??0})">−</button>
+            <button class="qty-btn minus" onclick="decreaseQty(${_jsStr(item.id)},${item.quantity??0})">−</button>
             <div class="qty-val">${item.quantity??0}</div>
-            <button class="qty-btn plus"  onclick="increaseQty('${item.id}',${item.quantity??0})">＋</button>
+            <button class="qty-btn plus"  onclick="increaseQty(${_jsStr(item.id)},${item.quantity??0})">＋</button>
            </div>`
-        : `<button class="status-btn ${item.status==='充足'?'ok':item.status==='夠用'?'warn':'bad'}" onclick="cycleStatus('${item.id}','${item.status}')">
+        : `<button class="status-btn ${item.status==='充足'?'ok':item.status==='夠用'?'warn':'bad'}" onclick="cycleStatus(${_jsStr(item.id)},${_jsStr(item.status||'')})">
             ${item.status==='充足'?'✅ 充足':item.status==='夠用'?'🟡 夠用':'🔴 快用完了'}
            </button>`;
 
       const nameHtml = highlightMatch(item.name, inventorySearchQuery);
 
-      // When searching, disable sort buttons (they reflect filtered order, not real order)
       const sortDisabled = inventorySearchQuery ? 'disabled' : '';
       
       return `
-        <div class="card" id="card-${item.id}">
+        <div class="card" id="card-${_esc(item.id)}">
           <div class="inv-row">
             <div class="sort-controls">
-              <button class="sort-btn" ${sortDisabled || (index===0?'disabled':'')} onclick="moveItemOrder('${item.id}',-1)" title="上移一格">
+              <button class="sort-btn" ${sortDisabled || (index===0?'disabled':'')} onclick="moveItemOrder(${_jsStr(item.id)},-1)" title="上移一格">
                 <i class="fa fa-chevron-up"></i>
               </button>
-              <button class="sort-btn" ${sortDisabled || (index===filtered.length-1?'disabled':'')} onclick="moveItemOrder('${item.id}',1)" title="下移一格">
+              <button class="sort-btn" ${sortDisabled || (index===filtered.length-1?'disabled':'')} onclick="moveItemOrder(${_jsStr(item.id)},1)" title="下移一格">
                 <i class="fa fa-chevron-down"></i>
               </button>
             </div>
@@ -2038,8 +2067,8 @@
             </div>
             ${control}
             <div class="action-btn-group">
-              <button class="icon-btn edit-btn" onclick="openItemModal('${item.id}')" title="編輯"><i class="fa fa-pen"></i></button>
-              <button class="icon-btn del-btn"  onclick="deleteItem('${item.id}')"   title="刪除"><i class="fa fa-trash"></i></button>
+              <button class="icon-btn edit-btn" onclick="openItemModal(${_jsStr(item.id)})" title="編輯"><i class="fa fa-pen"></i></button>
+              <button class="icon-btn del-btn"  onclick="deleteItem(${_jsStr(item.id)})"   title="刪除"><i class="fa fa-trash"></i></button>
             </div>
           </div>
         </div>`;
@@ -2061,11 +2090,11 @@
           <div class="custom-shop-row">
             <div class="shop-dot" style="background:var(--yellow);"></div>
             <div style="flex:1;min-width:0;">
-              <span style="font-weight:800;font-size:0.9rem;">${i.name}</span>
-              ${i.note ? `<span style="font-size:0.72rem;color:var(--text-muted);margin-left:6px;">${i.note}</span>` : ''}
+              <span style="font-weight:800;font-size:0.9rem;">${_esc(i.name)}</span>
+              ${i.note ? `<span style="font-size:0.72rem;color:var(--text-muted);margin-left:6px;">${_esc(i.note)}</span>` : ''}
             </div>
-            <button onclick="openCustomShopBuy('${i.id}')" style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:var(--green-light);color:var(--green);font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:900;white-space:nowrap;flex-shrink:0;">購入</button>
-            <button onclick="deleteCustomShopItem('${i.id}')" style="width:26px;height:26px;border-radius:6px;border:none;cursor:pointer;background:var(--red-light);color:var(--red);font-size:0.72rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fa fa-trash"></i></button>
+            <button onclick="openCustomShopBuy(${_jsStr(i.id)})" style="padding:4px 10px;border-radius:6px;border:none;cursor:pointer;background:var(--green-light);color:var(--green);font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:900;white-space:nowrap;flex-shrink:0;">購入</button>
+            <button onclick="deleteCustomShopItem(${_jsStr(i.id)})" style="width:26px;height:26px;border-radius:6px;border:none;cursor:pointer;background:var(--red-light);color:var(--red);font-size:0.72rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fa fa-trash"></i></button>
           </div>`).join('')}
       </div>` : '';
 
@@ -2083,20 +2112,21 @@
     el.innerHTML = customHtml + `<div class="card" style="padding:8px 14px;">
       ${needed.map(i => {
         const isBought = boughtIds.has(i.id);
+        const animateClass = isBought && _justChecked.has(i.id) ? ' animate' : '';
         const statusText = i.isCountable
           ? `剩 ${i.quantity??0}(需 >${i.alertQty??1})`
-          : i.status;
+          : _esc(i.status);
         const restockLabel = i.isCountable ? `補入 ${(i.alertQty??1) + 3} 個` : `補足`;
         return `
-        <div class="shop-row ${isBought ? 'bought' : ''}" id="shop-row-${i.id}">
-          <div class="buy-check ${isBought ? 'checked' : ''}" onclick="toggleBought('${i.id}')">
+        <div class="shop-row ${isBought ? 'bought' : ''}" id="shop-row-${_esc(i.id)}">
+          <div class="buy-check ${isBought ? 'checked' : ''}${animateClass}" onclick="toggleBought(${_jsStr(i.id)})">
             ${isBought ? '<i class="fa fa-check"></i>' : ''}
           </div>
           <div class="shop-dot" style="background:${i.colorTag||'var(--primary)'}; flex-shrink:0;"></div>
-          <span class="shop-name" style="font-weight:800;flex:1;font-size:0.9rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${i.name}</span>
+          <span class="shop-name" style="font-weight:800;flex:1;font-size:0.9rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${_esc(i.name)}</span>
           <span style="font-size:0.72rem;color:var(--red);font-weight:800;flex-shrink:0;">${statusText}</span>
           ${isBought
-            ? `<button class="restock-single-btn" onclick="restockItem('${i.id}')">${restockLabel}</button>`
+            ? `<button class="restock-single-btn" onclick="restockItem(${_jsStr(i.id)})">${restockLabel}</button>`
             : `<button class="restock-single-btn done-btn" disabled>待補入</button>`
           }
         </div>`;
@@ -2106,11 +2136,18 @@
         ${allBought ? '✅ 一鍵補入全部 ' + needed.length + ' 項' : `補入已購 ${boughtCount}/${needed.length} 項`}
       </button>
     </div>`;
+
+    // 動畫只播一次
+    _justChecked.clear();
   }
 
   window.toggleBought = function(id) {
-    if (boughtIds.has(id)) boughtIds.delete(id);
-    else boughtIds.add(id);
+    if (boughtIds.has(id)) {
+      boughtIds.delete(id);
+    } else {
+      boughtIds.add(id);
+      _justChecked.add(id);
+    }
     renderShoppingList();
   };
 
@@ -2208,24 +2245,28 @@
     openRestockAmountModal(toRestock.map(i=>i.name));
   };
 
+  // 修補:嚴格比對家務標題
   async function autoCompleteRestockChore() {
     const today = getLocalDateString();
     const restockChore = choresItems.find(c =>
-      c.date === today && !c.completed && c.title.includes('補充物資')
+      c.date === today && !c.completed && c.title === RESTOCK_CHORE_TITLE
     );
     if (!restockChore) return;
     restockChore.completed   = true;
     restockChore.completedBy = currentMemberName;
     restockChore.completedAt = new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
     if (isFirebaseOk) {
-      await updateDoc(doc(db,'chores',restockChore.id), {
-        completed: true, completedBy: restockChore.completedBy, completedAt: restockChore.completedAt
-      });
+      try {
+        await updateDoc(doc(db,'chores',restockChore.id), {
+          completed: true, completedBy: restockChore.completedBy, completedAt: restockChore.completedAt
+        });
+      } catch(e) {}
     }
     renderChores();
     showToast('✅ 家務「補充物資」已自動完成!');
   }
 
+  // 修補:加入線上模式 fallback,失敗不靜默
   window.saveCustomShopItem = async function() {
     const name = document.getElementById('custom-shop-name').value.trim();
     const note = document.getElementById('custom-shop-note').value.trim();
@@ -2235,15 +2276,18 @@
       createdAt: new Date().toISOString(),
       createdBy: currentMemberName,
     };
+    let succeeded = false;
     if (isFirebaseOk) {
       try {
         await addDoc(collection(db, 'custom_shopping'), item);
+        succeeded = true;
       } catch(e) {
-        customShoppingItems.push({ id: 'cs_'+Date.now(), ...item });
-        renderShoppingList();
+        console.warn('add custom shop failed', e);
       }
-    } else {
+    }
+    if (!succeeded) {
       customShoppingItems.push({ id: 'cs_'+Date.now(), ...item });
+      LS.set('custom_shopping_cache', customShoppingItems);
       renderShoppingList();
     }
     document.getElementById('custom-shop-name').value = '';
@@ -2310,7 +2354,7 @@
     const el = document.getElementById('income-cat-row');
     if (!el) return;
     el.innerHTML = INCOME_CATEGORIES.map((c, i) => 
-      `<button class="edit-cat-chip${selectedIncomeCat.label===c.label?' active':''}" onclick="selectIncomeCat(${i},this)">${c.icon} ${c.label}</button>`
+      `<button class="edit-cat-chip${selectedIncomeCat.label===c.label?' active':''}" onclick="selectIncomeCat(${i},this)">${_esc(c.icon)} ${_esc(c.label)}</button>`
     ).join('');
   }
   window.selectIncomeCat = function(idx, btn) {
@@ -2393,14 +2437,14 @@
       el.innerHTML = todayC.map(c=>`
         <div class="card">
           <div class="chore-row">
-            <div class="chore-check ${c.completed?'done':''}" onclick="toggleChore('${c.id}')">
+            <div class="chore-check ${c.completed?'done':''}" onclick="toggleChore(${_jsStr(c.id)})">
               ${c.completed?'<i class="fa fa-check"></i>':''}
             </div>
             <div style="flex:1;">
-              <div class="chore-title ${c.completed?'done':''}">${c.title}${c.recurringId?' <span style="font-size:0.6rem;padding:1px 6px;border-radius:50px;background:var(--blue-light);color:var(--blue);border:1px solid rgba(100,181,246,0.3);">週期</span>':''}</div>
-              ${c.completedBy?`<div class="chore-sub">✅ ${c.completedBy}${c.completedAt?' · '+c.completedAt:''}</div>`:''}
+              <div class="chore-title ${c.completed?'done':''}">${_esc(c.title)}${c.recurringId?' <span style="font-size:0.6rem;padding:1px 6px;border-radius:50px;background:var(--blue-light);color:var(--blue);border:1px solid rgba(100,181,246,0.3);">週期</span>':''}</div>
+              ${c.completedBy?`<div class="chore-sub">✅ ${_esc(c.completedBy)}${c.completedAt?' · '+_esc(c.completedAt):''}</div>`:''}
             </div>
-            <button class="icon-btn del-btn" onclick="deleteChore('${c.id}')"><i class="fa fa-trash"></i></button>
+            <button class="icon-btn del-btn" onclick="deleteChore(${_jsStr(c.id)})"><i class="fa fa-trash"></i></button>
           </div>
         </div>`).join('');
     }
@@ -2410,8 +2454,8 @@
       ? `<div class="card" style="padding:8px 14px;">${done.map(c=>`
           <div class="shop-row">
             <div class="shop-dot" style="background:var(--green)"></div>
-            <span style="flex:1;font-weight:800;font-size:0.88rem;">${c.title}</span>
-            <span style="font-size:0.74rem;color:var(--green);font-weight:800;">${c.completedBy||''}</span>
+            <span style="flex:1;font-weight:800;font-size:0.88rem;">${_esc(c.title)}</span>
+            <span style="font-size:0.74rem;color:var(--green);font-weight:800;">${_esc(c.completedBy||'')}</span>
           </div>`).join('')}</div>`
       : `<div style="color:var(--text-dim);font-size:0.83rem;padding:8px 0;">尚無完成紀錄</div>`;
   }
@@ -2424,6 +2468,11 @@
     chore.completedAt = chore.completed ? new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'}) : '';
     if (isFirebaseOk) await updateDoc(doc(db,'chores',id), { completed:chore.completed, completedBy:chore.completedBy, completedAt:chore.completedAt });
     renderChores();
+    // 加上 toggle 動畫
+    setTimeout(() => {
+      const el = document.querySelector(`[onclick*="toggleChore(${JSON.stringify(id)})"]`);
+      if (el) { el.classList.add('animate'); setTimeout(()=>el.classList.remove('animate'), 360); }
+    }, 0);
     showToast(chore.completed ? '✅ 家務完成!' : '↩️ 已取消完成');
   };
   window.deleteChore = async function(id) {
@@ -2443,7 +2492,7 @@
 
   function renderChoreChips() {
     document.getElementById('chore-chips').innerHTML = CHORE_PRESETS.map(c=>
-      `<div class="chore-chip" data-name="${c.e} ${c.n}" onclick="toggleChip(this)">${c.e} ${c.n}</div>`
+      `<div class="chore-chip" data-name="${_esc(c.e + ' ' + c.n)}" onclick="toggleChip(this)">${_esc(c.e)} ${_esc(c.n)}</div>`
     ).join('');
   }
   window.saveChore = async function() {
@@ -2465,7 +2514,7 @@
   };
 
   // ════════════════════════════════════════
-  // ══      RECURRING TASKS (NEW)         ══
+  // ══      RECURRING TASKS              ══
   // ════════════════════════════════════════
 
   function calculateNextDate(fromDateStr, interval, unit) {
@@ -2496,7 +2545,6 @@
       document.getElementById('rt-name').value = '';
       document.getElementById('rt-interval').value = 6;
       document.getElementById('rt-unit').value = 'month';
-      // default next date = today + 6 months
       const next = new Date(); next.setMonth(next.getMonth() + 6);
       document.getElementById('rt-next-date').value = getLocalDateString(next);
     }
@@ -2507,7 +2555,6 @@
   window.setRtQuick = function(interval, unit) {
     document.getElementById('rt-interval').value = interval;
     document.getElementById('rt-unit').value = unit;
-    // auto-update next date based on today + interval
     const next = new Date();
     if (unit === 'day') next.setDate(next.getDate() + interval);
     else if (unit === 'week') next.setDate(next.getDate() + interval * 7);
@@ -2582,7 +2629,6 @@
     const task = recurringTasks.find(t => t.id === id);
     if (!task) return;
     const today = getLocalDateString();
-    // Check if already added for this task today
     const existing = choresItems.find(c => c.date === today && c.recurringId === task.id);
     if (existing) { showToast('⚠️ 今日已加入此任務','warn'); return; }
     const chore = {
@@ -2599,7 +2645,6 @@
       choresItems.push({ id: 'c_' + Date.now(), ...chore });
       renderChores();
     }
-    // Update next date
     const newNext = calculateNextDate(today, task.interval, task.unit);
     if (isFirebaseOk) {
       try { await updateDoc(doc(db, 'recurring_tasks', task.id), { nextDate: newNext }); } catch(e) {}
@@ -2610,45 +2655,54 @@
     showToast(`✅ 已加入家務「${task.name}」,下次:${newNext}`);
   };
 
+  // 修補:加入 reentrant lock + 立即標記
   async function checkAndTriggerRecurringTasks() {
+    if (_rtChecking) return;
     if (!recurringTasks || !recurringTasks.length) return;
     const today = getLocalDateString();
     const checkedKey = 'hsa_rt_checked_' + today;
     if (localStorage.getItem(checkedKey)) return;
-    for (const task of recurringTasks) {
-      if (!task.nextDate) continue;
-      if (task.nextDate <= today) {
-        const existing = choresItems.find(c => c.date === today && c.recurringId === task.id);
-        if (existing) continue;
-        const chore = {
-          title: `🔁 ${task.name}`,
-          completed: false,
-          completedBy: '',
-          completedAt: '',
-          date: today,
-          recurringId: task.id,
-        };
-        try {
-          if (isFirebaseOk) {
-            await addDoc(collection(db, 'chores'), chore);
-          } else {
-            choresItems.push({ id: 'c_' + Date.now() + '_' + Math.random(), ...chore });
-          }
-          // Advance nextDate: keep advancing until future
-          let newNext = calculateNextDate(task.nextDate, task.interval, task.unit);
-          while (newNext <= today) {
-            newNext = calculateNextDate(newNext, task.interval, task.unit);
-          }
-          if (isFirebaseOk) {
-            try { await updateDoc(doc(db, 'recurring_tasks', task.id), { nextDate: newNext }); } catch(e) {}
-          } else {
-            task.nextDate = newNext;
-          }
-        } catch(e) { console.warn('trigger recurring task failed', e); }
-      }
-    }
+
+    _rtChecking = true;
+    // 立刻標記避免並行重複
     localStorage.setItem(checkedKey, '1');
-    if (!isFirebaseOk) { renderChores(); renderRecurringTasks(); }
+
+    try {
+      for (const task of recurringTasks) {
+        if (!task.nextDate) continue;
+        if (task.nextDate <= today) {
+          const existing = choresItems.find(c => c.date === today && c.recurringId === task.id);
+          if (existing) continue;
+          const chore = {
+            title: `🔁 ${task.name}`,
+            completed: false,
+            completedBy: '',
+            completedAt: '',
+            date: today,
+            recurringId: task.id,
+          };
+          try {
+            if (isFirebaseOk) {
+              await addDoc(collection(db, 'chores'), chore);
+            } else {
+              choresItems.push({ id: 'c_' + Date.now() + '_' + Math.random(), ...chore });
+            }
+            let newNext = calculateNextDate(task.nextDate, task.interval, task.unit);
+            while (newNext <= today) {
+              newNext = calculateNextDate(newNext, task.interval, task.unit);
+            }
+            if (isFirebaseOk) {
+              try { await updateDoc(doc(db, 'recurring_tasks', task.id), { nextDate: newNext }); } catch(e) {}
+            } else {
+              task.nextDate = newNext;
+            }
+          } catch(e) { console.warn('trigger recurring task failed', e); }
+        }
+      }
+      if (!isFirebaseOk) { renderChores(); renderRecurringTasks(); }
+    } finally {
+      _rtChecking = false;
+    }
   }
 
   function renderRecurringTasks() {
@@ -2674,21 +2728,21 @@
               <i class="fa fa-arrows-rotate"></i>
             </div>
             <div style="flex:1;min-width:0;">
-              <div style="font-weight:800;font-size:0.92rem;">${t.name}</div>
+              <div style="font-weight:800;font-size:0.92rem;">${_esc(t.name)}</div>
               <div style="font-size:0.71rem;color:var(--text-muted);margin-top:3px;">
-                每 ${t.interval} ${unitLabel(t.unit)} · 下次 ${t.nextDate}
+                每 ${t.interval} ${unitLabel(t.unit)} · 下次 ${_esc(t.nextDate)}
               </div>
             </div>
             <span class="rt-status-badge ${badgeClass}">${badgeText}</span>
           </div>
           <div style="display:flex;gap:6px;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);">
-            <button onclick="triggerRecurringNow('${t.id}')" style="flex:1;padding:6px 10px;background:var(--green-light);border:1px solid rgba(116,198,157,0.3);border-radius:8px;color:var(--green);font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:900;cursor:pointer;">
+            <button onclick="triggerRecurringNow(${_jsStr(t.id)})" style="flex:1;padding:6px 10px;background:var(--green-light);border:1px solid rgba(116,198,157,0.3);border-radius:8px;color:var(--green);font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:900;cursor:pointer;">
               <i class="fa fa-plus"></i> 加入今日家務
             </button>
-            <button onclick="openRecurringTaskModal('${t.id}')" style="padding:6px 12px;background:var(--blue-light);border:1px solid rgba(100,181,246,0.3);border-radius:8px;color:var(--blue);font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:900;cursor:pointer;">
+            <button onclick="openRecurringTaskModal(${_jsStr(t.id)})" style="padding:6px 12px;background:var(--blue-light);border:1px solid rgba(100,181,246,0.3);border-radius:8px;color:var(--blue);font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:900;cursor:pointer;">
               <i class="fa fa-pen"></i>
             </button>
-            <button onclick="deleteRecurringTask('${t.id}')" style="padding:6px 12px;background:var(--red-light);border:1px solid rgba(224,112,112,0.3);border-radius:8px;color:var(--red);font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:900;cursor:pointer;">
+            <button onclick="deleteRecurringTask(${_jsStr(t.id)})" style="padding:6px 12px;background:var(--red-light);border:1px solid rgba(224,112,112,0.3);border-radius:8px;color:var(--red);font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:900;cursor:pointer;">
               <i class="fa fa-trash"></i>
             </button>
           </div>
@@ -2698,8 +2752,10 @@
 
   window.openItemModal = function(editId=null) {
     document.getElementById('edit-item-id').value = editId || '';
+    const saveBtn = document.getElementById('save-item-btn');
     if (editId) {
       document.getElementById('item-modal-title').innerHTML = '✏️ 編輯庫存物品';
+      if (saveBtn) saveBtn.textContent = '✏️ 更新物品';
       const item = inventoryItems.find(i=>i.id===editId);
       if (item) {
         document.getElementById('item-name').value      = item.name;
@@ -2718,6 +2774,7 @@
       }
     } else {
       document.getElementById('item-modal-title').innerHTML = '➕ 新增庫存物品';
+      if (saveBtn) saveBtn.textContent = '💾 儲存物品';
       resetItemForm();
       if (activeColorFilter !== 'all') selectedRoomId = activeColorFilter;
     }
@@ -2770,10 +2827,14 @@
     const avatarUrl = getMemberAvatar(currentMemberId);
     if (avatarUrl) {
       if (isEmoji(avatarUrl)) {
-        avatarEl.innerHTML = `<span style="font-size:1rem;">${avatarUrl}</span>`;
+        avatarEl.innerHTML = `<span style="font-size:1rem;">${_esc(avatarUrl)}</span>`;
         avatarEl.style.background = 'transparent';
       } else {
-        avatarEl.innerHTML = `<img src="${avatarUrl}" alt="${currentMemberName}" onerror="this.parentElement.textContent='${(currentMemberName||'?')[0]}'" />`;
+        const safeUrl = _esc(avatarUrl);
+        const safeName = _esc(currentMemberName);
+        avatarEl.innerHTML = `<img src="${safeUrl}" alt="${safeName}" />`;
+        const img = avatarEl.querySelector('img');
+        if (img) img.onerror = function() { avatarEl.textContent = (currentMemberName||'?')[0]; avatarEl.style.background = ''; };
         avatarEl.style.background = 'transparent';
       }
     } else {
@@ -2782,11 +2843,21 @@
     }
   }
 
+  // 修補:用 unicode 屬性偵測 emoji
   function isEmoji(str) {
     if (!str) return false;
     if (/^https?:\/\//i.test(str)) return false;
     if (/^data:/i.test(str)) return false;
-    return [...str].length <= 4;
+    try {
+      // 一個 emoji 字元(可能多 code unit)且不含 ASCII 文字
+      if (/^[\p{Extended_Pictographic}\p{Emoji_Component}\u200d\ufe0f]+$/u.test(str) && [...str].length <= 6) {
+        return true;
+      }
+    } catch(e) {
+      // fallback for old browsers
+      return /^[^\x00-\x7F]+$/.test(str) && [...str].length <= 4;
+    }
+    return false;
   }
 
   function updateTodayBadge() {
@@ -2806,22 +2877,22 @@
           let avatarHtml;
           if (avatarUrl) {
             if (isEmoji(avatarUrl)) {
-              avatarHtml = `<span style="font-size:1.4rem;">${avatarUrl}</span>`;
+              avatarHtml = `<span style="font-size:1.4rem;">${_esc(avatarUrl)}</span>`;
             } else {
-              avatarHtml = `<img src="${avatarUrl}" alt="${m.name}" onerror="this.parentElement.innerHTML='${(m.name||'?')[0]}'" />`;
+              avatarHtml = `<img src="${_esc(avatarUrl)}" alt="${_esc(m.name)}" />`;
             }
           } else {
-            avatarHtml = (m.name||'?')[0];
+            avatarHtml = _esc((m.name||'?')[0]);
           }
           return `
           <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);">
-            <div class="m-avatar-lg" style="${avatarUrl ? 'background:transparent;' : ''}" id="modal-avatar-${m.id}">${avatarHtml}</div>
-            <span style="font-weight:800;flex:1;">${m.name}</span>
-            <button class="avatar-set-btn" onclick="startAvatarEdit('${m.id}')"><i class="fa fa-image"></i> 頭像</button>
-            <button onclick="switchMember('${m.id}','${m.name}')" style="padding:5px 12px;background:${currentMemberId===m.id?'var(--primary-light)':'var(--bg2)'};border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:0.79rem;font-weight:800;cursor:pointer;">
+            <div class="m-avatar-lg" style="${avatarUrl ? 'background:transparent;' : ''}" id="modal-avatar-${_esc(m.id)}">${avatarHtml}</div>
+            <span style="font-weight:800;flex:1;">${_esc(m.name)}</span>
+            <button class="avatar-set-btn" onclick="startAvatarEdit(${_jsStr(m.id)})"><i class="fa fa-image"></i> 頭像</button>
+            <button onclick="switchMember(${_jsStr(m.id)},${_jsStr(m.name)})" style="padding:5px 12px;background:${currentMemberId===m.id?'var(--primary-light)':'var(--bg2)'};border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:0.79rem;font-weight:800;cursor:pointer;">
               ${currentMemberId===m.id?'✅ 使用中':'切換'}
             </button>
-            ${currentMemberId===m.id ? '' : `<button onclick="deleteMember('${m.id}','${m.name}')" style="width:28px;height:28px;background:var(--red-light);border:none;border-radius:7px;color:var(--red);cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;" onmouseover="this.style.background='var(--red)';this.style.color='#fff'" onmouseout="this.style.background='var(--red-light)';this.style.color='var(--red)'"><i class="fa fa-trash"></i></button>`}
+            ${currentMemberId===m.id ? '' : `<button onclick="deleteMember(${_jsStr(m.id)},${_jsStr(m.name)})" style="width:28px;height:28px;background:var(--red-light);border:none;border-radius:7px;color:var(--red);cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;" onmouseover="this.style.background='var(--red)';this.style.color='#fff'" onmouseout="this.style.background='var(--red-light)';this.style.color='var(--red)'"><i class="fa fa-trash"></i></button>`}
           </div>`;
         }).join('')
       : '<div style="color:var(--text-dim);padding:8px 0;font-size:0.85rem;">暫無成員</div>';
@@ -2832,15 +2903,12 @@
     document.getElementById('avatar-edit-member-id').value = memberId;
     const cur = getMemberAvatar(memberId) || '';
     document.getElementById('avatar-selected-emoji').value = isEmoji(cur) ? cur : '';
-    // Render emoji preset grid
     const grid = document.getElementById('avatar-preset-grid');
     grid.innerHTML = AVATAR_PRESETS.map(emoji => 
-      `<button class="avatar-preset-btn${cur===emoji?' selected':''}" onclick="selectAvatarPreset('${emoji}',this)">${emoji}</button>`
+      `<button class="avatar-preset-btn${cur===emoji?' selected':''}" onclick="selectAvatarPreset(${_jsStr(emoji)},this)">${emoji}</button>`
     ).join('');
-    // Reset upload progress
     const progressEl = document.getElementById('avatar-upload-progress');
     if (progressEl) progressEl.style.display = 'none';
-    // Show / hide save emoji button based on storage availability
     const hasEmoji = isEmoji(cur);
     document.getElementById('save-emoji-btn').textContent = hasEmoji ? '✅ 儲存 Emoji' : '✅ 儲存選擇';
     document.getElementById('avatar-edit-section').style.display = 'block';
@@ -2877,7 +2945,6 @@
     showToast('🗑️ 頭像已清除');
   };
 
-  // NEW: Image resize helper
   async function resizeImage(file, maxSize = 400) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -2904,10 +2971,9 @@
     });
   }
 
-  // NEW: Upload avatar to Firebase Storage
   window.uploadAvatarFile = async function(event) {
     const file = event.target.files[0];
-    event.target.value = ''; // reset input
+    event.target.value = '';
     if (!file) return;
     if (!storage || !isFirebaseOk) {
       showToast('❌ Firebase Storage 未連線,無法上傳','error');
@@ -2932,11 +2998,9 @@
     uploadBtn.disabled = true;
 
     try {
-      // Resize image
       const resizedBlob = await resizeImage(file, 400);
       progressEl.innerHTML = '<i class="fa fa-cloud-arrow-up"></i> 上傳至雲端中...';
 
-      // Upload to Firebase Storage
       const path = `avatars/${memberId}_${Date.now()}.jpg`;
       const ref = storageRef(storage, path);
       await uploadBytes(ref, resizedBlob, { contentType: 'image/jpeg' });
@@ -2945,7 +3009,6 @@
       progressEl.style.color = 'var(--green)';
       progressEl.innerHTML = '<i class="fa fa-check-circle"></i> 上傳成功!';
 
-      // Save URL to member
       await setMemberAvatar(memberId, url);
 
       setTimeout(() => {
@@ -2958,7 +3021,7 @@
     } catch(err) {
       console.error('avatar upload error:', err);
       progressEl.style.color = 'var(--red)';
-      progressEl.innerHTML = `<i class="fa fa-triangle-exclamation"></i> 上傳失敗: ${err.message || '未知錯誤'}`;
+      progressEl.innerHTML = `<i class="fa fa-triangle-exclamation"></i> 上傳失敗: ${_esc(err.message || '未知錯誤')}`;
       showToast('❌ 上傳失敗,請確認 Firebase Storage 權限規則','error');
     } finally {
       uploadBtn.disabled = false;
@@ -3122,7 +3185,6 @@
       if (/醫|藥|診所|看診/.test(n)) return cats.find(c=>c.label==='醫');
       if (/書|課程|學費|補習/.test(n)) return cats.find(c=>c.label==='育');
       if (/電影|遊戲|KTV|娛樂/.test(n)) return cats.find(c=>c.label==='樂');
-      // Try to match any custom category
       for (const c of getCustomCategories()) {
         if (n.includes(c.label)) return c;
       }
@@ -3178,13 +3240,13 @@
         }
       }
       const activeCat = selectedCatOverride || parsed.cat;
-      preview.innerHTML = `<span style="color:var(--green);">✓</span> ${activeCat.icon} <strong>${parsed.note}</strong>　$${parsed.amount} → 將記為「${activeCat.label}」`;
+      preview.innerHTML = `<span style="color:var(--green);">✓</span> ${_esc(activeCat.icon)} <strong>${_esc(parsed.note)}</strong>　$${parsed.amount} → 將記為「${_esc(activeCat.label)}」`;
       preview.className = 'budget-parsed-preview ready';
       wrap.style.display = 'block';
       const allCats = EXPENSE_CATEGORIES();
       picker.innerHTML = allCats.map((cat, i) => {
         const isActive = activeCat.label === cat.label;
-        return `<button class="budget-cat-chip${isActive?' active':''}" onclick="selectBudgetCat(${i},this)">${cat.icon} ${cat.label}</button>`;
+        return `<button class="budget-cat-chip${isActive?' active':''}" onclick="selectBudgetCat(${i},this)">${_esc(cat.icon)} ${_esc(cat.label)}</button>`;
       }).join('');
     }
   };
@@ -3198,7 +3260,7 @@
     const parsed = parseBudgetInput(val);
     if (parsed) {
       const preview = document.getElementById('budget-parsed-preview');
-      preview.innerHTML = `<span style="color:var(--green);">✓</span> ${selectedCatOverride.icon} <strong>${parsed.note}</strong>　$${parsed.amount} → 將記為「${selectedCatOverride.label}」`;
+      preview.innerHTML = `<span style="color:var(--green);">✓</span> ${_esc(selectedCatOverride.icon)} <strong>${_esc(parsed.note)}</strong>　$${parsed.amount} → 將記為「${_esc(selectedCatOverride.label)}」`;
     }
   };
 
@@ -3257,24 +3319,25 @@
     showToast(`${parsed.cat.icon} ${parsed.note} $${parsed.amount} 已記帳`);
   };
 
+  // 修補:統一用 id || fbDocId 去重
   window.deleteLedgerEntry = function(id) {
     addLedgerTombstone(id);
     const ledger = getLedger();
     const fbCache = LS.get('fb_ledger_cache') || [];
+    const matchKey = e => (e.id === id) || (e.fbDocId === id);
     
-    const entry = ledger.find(e => e.id === id) || fbCache.find(e => e.id === id || e.fbDocId === id);
+    const entry = ledger.find(matchKey) || fbCache.find(matchKey);
     const entryCopy = entry ? { ...entry } : null;
 
-    saveLedger(ledger.filter(e => e.id !== id));
-    const updatedCache = fbCache.filter(e => e.id !== id && e.fbDocId !== id);
-    LS.set('fb_ledger_cache', updatedCache);
+    saveLedger(ledger.filter(e => !matchKey(e)));
+    LS.set('fb_ledger_cache', fbCache.filter(e => !matchKey(e)));
 
     if (entryCopy && entryCopy.date) {
       const prefix = entryCopy.date.slice(0, 7);
       const archiveKey = 'archive_' + prefix;
       const archive = LS.get(archiveKey);
       if (archive) {
-        LS.set(archiveKey, archive.filter(e => e.id !== id && e.fbDocId !== id));
+        LS.set(archiveKey, archive.filter(e => !matchKey(e)));
       }
     }
 
@@ -3313,7 +3376,7 @@
     } else {
       entry = getLedger().find(e => e.id === id);
       if (!entry) {
-        entry = (LS.get('fb_ledger_cache') || []).find(e => e.id === id);
+        entry = (LS.get('fb_ledger_cache') || []).find(e => e.id === id || e.fbDocId === id);
       }
     }
     if (!entry) { showToast('⚠️ 找不到此紀錄','error'); return; }
@@ -3331,13 +3394,13 @@
       const allCats = EXPENSE_CATEGORIES();
       catRow.innerHTML = allCats.map((cat, i) => {
         const isActive = entry.catLabel === cat.label;
-        return `<button class="edit-cat-chip${isActive?' active':''}" onclick="selectEditCat(${i},this)">${cat.icon} ${cat.label}</button>`;
+        return `<button class="edit-cat-chip${isActive?' active':''}" onclick="selectEditCat(${i},this)">${_esc(cat.icon)} ${_esc(cat.label)}</button>`;
       }).join('');
     } else {
       catSection.style.display = 'block';
       catRow.innerHTML = INCOME_CATEGORIES.map((cat, i) => {
         const isActive = entry.catLabel === cat.label;
-        return `<button class="edit-cat-chip${isActive?' active':''}" onclick="selectEditIncomeCat(${i},this)">${cat.icon} ${cat.label}</button>`;
+        return `<button class="edit-cat-chip${isActive?' active':''}" onclick="selectEditIncomeCat(${i},this)">${_esc(cat.icon)} ${_esc(cat.label)}</button>`;
       }).join('');
     }
     openModal('modal-edit-ledger');
@@ -3390,7 +3453,7 @@
       }
       saveIncomeLedger(income);
       const fbInc = LS.get('fb_income_cache') || [];
-      const fbIdx = fbInc.findIndex(e => e.id === id);
+      const fbIdx = fbInc.findIndex(e => e.id === id || e.fbDocId === id);
       if (fbIdx > -1) { 
         fbInc[fbIdx].amount = amount; fbInc[fbIdx].note = note; 
         if (date) fbInc[fbIdx].date = date;
@@ -3412,7 +3475,7 @@
       }
       saveLedger(ledger);
       const fbCache = LS.get('fb_ledger_cache') || [];
-      const fbIdx = fbCache.findIndex(e => e.id === id);
+      const fbIdx = fbCache.findIndex(e => e.id === id || e.fbDocId === id);
       if (fbIdx > -1) {
         fbCache[fbIdx].amount = amount; fbCache[fbIdx].note = note;
         if (date) fbCache[fbIdx].date = date;
@@ -3431,10 +3494,7 @@
     showToast('✅ 紀錄已更新');
   };
 
-  // ════════════════════════════════════════
-  // ══      CUSTOM CATEGORIES (NEW)       ══
-  // ════════════════════════════════════════
-
+  // 修補:線上模式 UI 即時更新
   window.addCustomCategory = async function() {
     const icon = document.getElementById('cc-icon').value.trim();
     const label = document.getElementById('cc-label').value.trim();
@@ -3453,18 +3513,16 @@
       createdAt: new Date().toISOString(),
     };
 
-    // Save to Firebase
+    // 立刻更新本地 cache 以便 UI 即時反映
+    const updatedList = [...current, newCat];
+    LS.set('custom_categories', updatedList);
+
     if (isFirebaseOk) {
       try {
         await setDoc(doc(db, 'custom_categories', newCat.id), newCat);
       } catch(e) {
         console.warn('save custom category failed', e);
-        current.push(newCat);
-        LS.set('custom_categories', current);
       }
-    } else {
-      current.push(newCat);
-      LS.set('custom_categories', current);
     }
 
     document.getElementById('cc-icon').value = '';
@@ -3497,10 +3555,10 @@
     }
     el.innerHTML = list.map(c => `
       <div class="custom-cat-item">
-        <span style="font-size:1.15rem;">${c.icon}</span>
-        <span style="flex:1;font-weight:800;font-size:0.88rem;color:${c.color};">${c.label}</span>
+        <span style="font-size:1.15rem;">${_esc(c.icon)}</span>
+        <span style="flex:1;font-weight:800;font-size:0.88rem;color:${c.color};">${_esc(c.label)}</span>
         <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${c.color};"></span>
-        <button onclick="deleteCustomCategory('${c.id}')" style="width:26px;height:26px;border-radius:6px;border:none;cursor:pointer;background:var(--red-light);color:var(--red);font-size:0.72rem;display:flex;align-items:center;justify-content:center;">
+        <button onclick="deleteCustomCategory(${_jsStr(c.id)})" style="width:26px;height:26px;border-radius:6px;border:none;cursor:pointer;background:var(--red-light);color:var(--red);font-size:0.72rem;display:flex;align-items:center;justify-content:center;">
           <i class="fa fa-trash"></i>
         </button>
       </div>
@@ -3553,6 +3611,7 @@
     LS.set(checkedKey, true);
   }
 
+  // 修補:依紀錄日期分配到正確的月份 archive
   function checkSalaryReset() {
     const settings = getBudgetSettings();
     const today = new Date();
@@ -3562,13 +3621,26 @@
     if (lastReset === thisMonth) return;
 
     const ledger = getLedger();
-    const prevMonth = new Date(today); prevMonth.setMonth(prevMonth.getMonth()-1);
-    const prevKey = prevMonth.getFullYear() + '-' + String(prevMonth.getMonth()+1).padStart(2,'0');
-    const archive = LS.get('archive_' + prevKey) || [];
     const thisMonthPrefix = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0');
-    const toArchive = ledger.filter(e => !e.date.startsWith(thisMonthPrefix));
-    LS.set('archive_' + prevKey, [...archive, ...toArchive]);
-    const remaining = ledger.filter(e => e.date.startsWith(thisMonthPrefix));
+
+    // 把不屬於本月的紀錄分類到對應月份 archive(而不是全部塞給上月)
+    const groups = {};
+    const remaining = [];
+    ledger.forEach(e => {
+      if (e.date && e.date.startsWith(thisMonthPrefix)) {
+        remaining.push(e);
+      } else if (e.date && /^\d{4}-\d{2}/.test(e.date)) {
+        const prefix = e.date.slice(0, 7);
+        (groups[prefix] = groups[prefix] || []).push(e);
+      }
+    });
+    Object.entries(groups).forEach(([prefix, entries]) => {
+      const key = 'archive_' + prefix;
+      const existing = LS.get(key) || [];
+      const seen = new Set(existing.map(x => x.id || x.fbDocId));
+      const toAdd = entries.filter(x => !seen.has(x.id) && !seen.has(x.fbDocId));
+      LS.set(key, [...existing, ...toAdd]);
+    });
     saveLedger(remaining);
     LS.set('last_salary_reset', thisMonth);
 
@@ -3584,9 +3656,9 @@
     const today    = getLocalDateString();
     
     const tombstones = getLedgerTombstones();
-    const fbCache = (LS.get('fb_ledger_cache') || []).filter(e => !tombstones.has(e.id));
+    const fbCache = (LS.get('fb_ledger_cache') || []).filter(e => !tombstones.has(e.id) && !tombstones.has(e.fbDocId));
     const localFiltered = ledger.filter(e => !tombstones.has(e.id));
-    const fbIds = new Set(fbCache.map(e => e.id));
+    const fbIds = new Set(fbCache.map(e => e.id || e.fbDocId));
     const localOnly = localFiltered.filter(e => !fbIds.has(e.id));
     const allLedger = isFirebaseOk ? [...fbCache, ...localOnly] : localFiltered;
     
@@ -3650,10 +3722,10 @@
           const icon  = entry ? entry.catIcon  : '💳';
           const pctW  = Math.round((amt / total) * 100);
           return `<div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
-            <span style="font-size:0.85rem; width:22px; text-align:center; flex-shrink:0;">${icon}</span>
+            <span style="font-size:0.85rem; width:22px; text-align:center; flex-shrink:0;">${_esc(icon)}</span>
             <div style="flex:1;">
               <div style="display:flex; justify-content:space-between; font-size:0.72rem; font-weight:800; margin-bottom:2px;">
-                <span style="color:${color};">${label}</span>
+                <span style="color:${color};">${_esc(label)}</span>
                 <span style="color:var(--text-muted);">$${amt.toLocaleString()}</span>
               </div>
               <div style="height:4px; background:var(--primary-light); border-radius:99px; overflow:hidden;">
@@ -3674,25 +3746,25 @@
       listEl.innerHTML = `<div class="card" style="padding:6px 14px;">
         ${incSorted.map(e => `
           <div class="ledger-row">
-            <div class="ledger-cat-icon" style="background:rgba(116,198,157,0.15);">${e.catIcon||'💵'}</div>
+            <div class="ledger-cat-icon" style="background:rgba(116,198,157,0.15);">${_esc(e.catIcon||'💵')}</div>
             <div class="ledger-info">
-              <div class="ledger-name">${e.note}</div>
-              <div class="ledger-time">${e.time||''} · ${e.catLabel||'收入'}${e.member ? ' · <span style="color:var(--blue);">'+e.member+'</span>' : ''}</div>
+              <div class="ledger-name">${_esc(e.note)}</div>
+              <div class="ledger-time">${_esc(e.time||'')} · ${_esc(e.catLabel||'收入')}${e.member ? ' · <span style="color:var(--blue);">'+_esc(e.member)+'</span>' : ''}</div>
             </div>
             <div class="ledger-amount" style="color:var(--green);">+$${e.amount.toLocaleString()}</div>
-            <button class="ledger-edit-btn" onclick="openLedgerEdit('${e.id}','income')"><i class="fa fa-pen"></i></button>
-            <button class="ledger-del-btn" onclick="deleteIncomeEntry('${e.id}')"><i class="fa fa-trash"></i></button>
+            <button class="ledger-edit-btn" onclick="openLedgerEdit(${_jsStr(e.id)},'income')"><i class="fa fa-pen"></i></button>
+            <button class="ledger-del-btn" onclick="deleteIncomeEntry(${_jsStr(e.id)})"><i class="fa fa-trash"></i></button>
           </div>`).join('')}
         ${sorted.map(e => `
           <div class="ledger-row">
-            <div class="ledger-cat-icon" style="background:${e.catBg};">${e.catIcon}</div>
+            <div class="ledger-cat-icon" style="background:${e.catBg};">${_esc(e.catIcon)}</div>
             <div class="ledger-info">
-              <div class="ledger-name">${e.note}${e.fixed?'&nbsp;<span class="fixed-badge"><i class="fa fa-lock" style="font-size:0.55rem;"></i>固定</span>':''}</div>
-              <div class="ledger-time">${e.time||''} · ${e.catLabel}${e.member ? ' · <span style="color:var(--blue);">'+e.member+'</span>' : ''}</div>
+              <div class="ledger-name">${_esc(e.note)}${e.fixed?'&nbsp;<span class="fixed-badge"><i class="fa fa-lock" style="font-size:0.55rem;"></i>固定</span>':''}</div>
+              <div class="ledger-time">${_esc(e.time||'')} · ${_esc(e.catLabel)}${e.member ? ' · <span style="color:var(--blue);">'+_esc(e.member)+'</span>' : ''}</div>
             </div>
             <div class="ledger-amount">−$${e.amount.toLocaleString()}</div>
-            <button class="ledger-edit-btn" onclick="openLedgerEdit('${e.id}','expense')"><i class="fa fa-pen"></i></button>
-            <button class="ledger-del-btn" onclick="deleteLedgerEntry('${e.id}')"><i class="fa fa-trash"></i></button>
+            <button class="ledger-edit-btn" onclick="openLedgerEdit(${_jsStr(e.id||e.fbDocId)},'expense')"><i class="fa fa-pen"></i></button>
+            <button class="ledger-del-btn" onclick="deleteLedgerEntry(${_jsStr(e.id||e.fbDocId)})"><i class="fa fa-trash"></i></button>
           </div>`).join('')}
       </div>`;
     }
@@ -3705,11 +3777,10 @@
     const el = document.getElementById('budget-shortcuts');
     if (!shortcuts || !shortcuts.length) { el.innerHTML=''; return; }
     el.innerHTML = shortcuts.filter(s => s.amount > 0).map(s => {
-      const safeLabel = (s.label || '').replace(/'/g, "\\'");
       return `
-      <button class="shortcut-btn" onclick="submitBudgetEntry(${s.amount}, '${safeLabel}')">
+      <button class="shortcut-btn" onclick="submitBudgetEntry(${s.amount}, ${_jsStr(s.label || '')})">
         <div class="sc-amount">$${s.amount}</div>
-        <div class="sc-label">${s.label || '快捷'}</div>
+        <div class="sc-label">${_esc(s.label || '快捷')}</div>
       </button>
     `;
     }).join('');
@@ -3744,10 +3815,10 @@
       return `
       <div class="fixed-exp-item">
         <span style="font-size:1rem;">${fe.cycle === 'yearly' ? '📅' : '🔒'}</span>
-        <span style="flex:1;font-weight:800;font-size:0.88rem;">${fe.name}</span>
+        <span style="flex:1;font-weight:800;font-size:0.88rem;">${_esc(fe.name)}</span>
         <span style="color:var(--red);font-weight:800;font-size:0.88rem;">$${fe.amount}</span>
-        <span style="color:var(--text-dim);font-size:0.76rem;margin-left:6px;">${cycleLabel}</span>
-        <button onclick="removeFixedExpense('${fe.id}')" style="margin-left:8px;background:var(--red-light);border:none;border-radius:6px;color:var(--red);width:26px;height:26px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;">
+        <span style="color:var(--text-dim);font-size:0.76rem;margin-left:6px;">${_esc(cycleLabel)}</span>
+        <button onclick="removeFixedExpense(${_jsStr(fe.id)})" style="margin-left:8px;background:var(--red-light);border:none;border-radius:6px;color:var(--red);width:26px;height:26px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;">
           <i class="fa fa-trash"></i>
         </button>
       </div>`;
@@ -3804,21 +3875,21 @@
       let avatarHtml;
       if (avatarUrl) {
         if (isEmoji(avatarUrl)) {
-          avatarHtml = `<span style="font-size:1rem;">${avatarUrl}</span>`;
+          avatarHtml = `<span style="font-size:1rem;">${_esc(avatarUrl)}</span>`;
         } else {
-          avatarHtml = `<img src="${avatarUrl}" style="width:18px;height:18px;border-radius:50%;object-fit:cover;vertical-align:middle;" />`;
+          avatarHtml = `<img src="${_esc(avatarUrl)}" style="width:18px;height:18px;border-radius:50%;object-fit:cover;vertical-align:middle;" />`;
         }
       } else {
-        avatarHtml = `<span style="display:inline-flex;width:18px;height:18px;border-radius:50%;background:var(--primary);color:var(--bg);font-size:0.62rem;font-weight:900;align-items:center;justify-content:center;">${(m.name||'?')[0]}</span>`;
+        avatarHtml = `<span style="display:inline-flex;width:18px;height:18px;border-radius:50%;background:var(--primary);color:var(--bg);font-size:0.62rem;font-weight:900;align-items:center;justify-content:center;">${_esc((m.name||'?')[0])}</span>`;
       }
       const isActive = m.name === currentMemberName;
       return `
       <button class="ledger-member-chip ${isActive ? 'active' : ''}"
-        data-name="${m.name}"
-        data-id="${m.id}"
+        data-name="${_esc(m.name)}"
+        data-id="${_esc(m.id)}"
         onclick="selectLedgerMember(this)"
         style="display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:50px;border:1px solid var(--border);background:${isActive?'var(--primary-light)':'var(--bg2)'};color:${isActive?'var(--primary)':'var(--text-muted)'};font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:800;cursor:pointer;white-space:nowrap;transition:all 0.15s;">
-        ${avatarHtml} ${m.name}
+        ${avatarHtml} ${_esc(m.name)}
       </button>`;
     }).join('');
   }
@@ -3852,7 +3923,7 @@
     if (isFirebaseOk && fbEntries.length > 0) {
       const localEntries = getLedger().filter(e => e.date.startsWith(prefix)).filter(filterTomb);
       const fbIds = new Set(fbEntries.map(e => e.id || e.fbDocId));
-      const localOnly = localEntries.filter(e => !fbIds.has(e.id));
+      const localOnly = localEntries.filter(e => !fbIds.has(e.id) && !fbIds.has(e.fbDocId));
       const combined = [...fbEntries, ...localOnly];
       const seen = new Set();
       return combined.filter(e => { const k = e.id || e.fbDocId; if (seen.has(k)) return false; seen.add(k); return true; });
@@ -3882,11 +3953,12 @@
   function getMemberAvatarHtml(memberName, size = 16) {
     const m = members.find(mm => mm.name === memberName);
     const avatarUrl = m ? getMemberAvatar(m.id) : '';
+    const safeName = _esc(memberName);
     if (avatarUrl) {
-      if (isEmoji(avatarUrl)) return `<span style="font-size:${size*0.75}px;line-height:1;vertical-align:middle;">${avatarUrl}</span>`;
-      return `<img src="${avatarUrl}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;vertical-align:middle;display:inline-block;" />`;
+      if (isEmoji(avatarUrl)) return `<span style="font-size:${size*0.75}px;line-height:1;vertical-align:middle;">${_esc(avatarUrl)}</span>`;
+      return `<img src="${_esc(avatarUrl)}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;vertical-align:middle;display:inline-block;" />`;
     }
-    return `<span style="display:inline-flex;width:${size}px;height:${size}px;border-radius:50%;background:var(--blue);color:var(--bg);font-size:${Math.round(size*0.55)}px;font-weight:900;align-items:center;justify-content:center;vertical-align:middle;">${(memberName||'?')[0]}</span>`;
+    return `<span style="display:inline-flex;width:${size}px;height:${size}px;border-radius:50%;background:var(--blue);color:var(--bg);font-size:${Math.round(size*0.55)}px;font-weight:900;align-items:center;justify-content:center;vertical-align:middle;">${_esc((memberName||'?')[0])}</span>`;
   }
 
   function renderMonthlyReport() {
@@ -3943,7 +4015,7 @@
               const pct = Math.round((amt/catTotal)*100);
               return `<div class="pie-legend-row">
                 <div class="pie-legend-dot" style="background:${catColors[i]};"></div>
-                <span style="flex:1;color:var(--text);">${icon} ${label}</span>
+                <span style="flex:1;color:var(--text);">${_esc(icon)} ${_esc(label)}</span>
                 <span style="color:var(--text-muted);font-size:0.72rem;">${pct}%&nbsp;$${amt.toLocaleString()}</span>
               </div>`;
             }).join('')}
@@ -4001,18 +4073,18 @@
           let avatarBlock;
           if (avatarUrl) {
             if (isEmoji(avatarUrl)) {
-              avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;background:${color}22;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:1rem;line-height:1;">${avatarUrl}</span></div>`;
+              avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;background:${color}22;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:1rem;line-height:1;">${_esc(avatarUrl)}</span></div>`;
             } else {
-              avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;flex-shrink:0;overflow:hidden;"><img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.style.background='${color}22';this.parentElement.innerHTML='<span style=&quot;font-size:0.78rem;font-weight:900;color:${color};display:flex;align-items:center;justify-content:center;height:100%;&quot;>${name[0]}</span>'" /></div>`;
+              avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;flex-shrink:0;overflow:hidden;background:${color}22;"><img src="${_esc(avatarUrl)}" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>`;
             }
           } else {
-            avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;background:${color}22;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:0.78rem;font-weight:900;color:${color};">${name[0]}</span></div>`;
+            avatarBlock = `<div style="width:28px;height:28px;border-radius:50%;background:${color}22;flex-shrink:0;display:flex;align-items:center;justify-content:center;"><span style="font-size:0.78rem;font-weight:900;color:${color};">${_esc(name[0])}</span></div>`;
           }
           return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
             ${avatarBlock}
             <div style="flex:1;">
               <div style="display:flex;justify-content:space-between;font-size:0.75rem;font-weight:800;margin-bottom:4px;">
-                <span style="color:${color};">${name}</span>
+                <span style="color:${color};">${_esc(name)}</span>
                 <span style="color:var(--text);font-family:'Playfair Display',serif;font-size:0.88rem;">$${amt.toLocaleString()}</span>
               </div>
               <div style="height:5px;background:var(--primary-light);border-radius:99px;overflow:hidden;">
@@ -4026,7 +4098,7 @@
             <div style="font-size:0.7rem;font-weight:900;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px;">家庭結算</div>
             ${memberArr.map(([name, amt]) => `
               <div style="display:flex;justify-content:space-between;font-size:0.8rem;font-weight:800;padding:3px 0;">
-                <span style="color:var(--text);">${getMemberAvatarHtml(name,14)} ${name}</span>
+                <span style="color:var(--text);">${getMemberAvatarHtml(name,14)} ${_esc(name)}</span>
                 <span style="color:var(--red);">$${amt.toLocaleString()}</span>
               </div>`).join('')}
             <div style="display:flex;justify-content:space-between;font-size:0.82rem;font-weight:900;padding:5px 0 0;border-top:1px solid var(--border);margin-top:4px;">
@@ -4052,7 +4124,7 @@
       return `
         <div style="margin-bottom:8px;">
           <div style="display:flex;justify-content:space-between;font-size:0.72rem;font-weight:900;color:var(--text-muted);letter-spacing:0.04em;padding:2px 4px 6px;">
-            <span>${date}</span>
+            <span>${_esc(date)}</span>
             <span style="display:flex;gap:10px;">
               ${dayIncome > 0 ? `<span style="color:var(--green);">+$${dayIncome.toLocaleString()}</span>` : ''}
               <span>−$${daySpent.toLocaleString()}</span>
@@ -4061,24 +4133,24 @@
           <div class="card" style="padding:4px 14px;">
             ${dayEntries.sort((a,b)=>(b.time||'').localeCompare(a.time||'')).map(e => e.isIncome ? `
               <div class="ledger-row">
-                <div class="ledger-cat-icon" style="background:rgba(116,198,157,0.15);width:30px;height:30px;font-size:0.9rem;">${e.catIcon||'💵'}</div>
+                <div class="ledger-cat-icon" style="background:rgba(116,198,157,0.15);width:30px;height:30px;font-size:0.9rem;">${_esc(e.catIcon||'💵')}</div>
                 <div class="ledger-info">
-                  <div class="ledger-name" style="font-size:0.85rem;">${e.note}</div>
-                  <div class="ledger-time">${e.time||''}${e.member?' · '+getMemberAvatarHtml(e.member)+' <span style="color:var(--blue);">'+e.member+'</span>':''} · ${e.catLabel||'收入'}</div>
+                  <div class="ledger-name" style="font-size:0.85rem;">${_esc(e.note)}</div>
+                  <div class="ledger-time">${_esc(e.time||'')}${e.member?' · '+getMemberAvatarHtml(e.member)+' <span style="color:var(--blue);">'+_esc(e.member)+'</span>':''} · ${_esc(e.catLabel||'收入')}</div>
                 </div>
                 <div class="ledger-amount" style="font-size:0.95rem;color:var(--green);">+$${e.amount.toLocaleString()}</div>
-                <button class="ledger-edit-btn" onclick="openLedgerEdit('${e.id}','income')" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-pen"></i></button>
-                <button class="ledger-del-btn" onclick="deleteIncomeEntry('${e.id}')" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-trash"></i></button>
+                <button class="ledger-edit-btn" onclick="openLedgerEdit(${_jsStr(e.id)},'income')" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-pen"></i></button>
+                <button class="ledger-del-btn" onclick="deleteIncomeEntry(${_jsStr(e.id)})" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-trash"></i></button>
               </div>` : `
               <div class="ledger-row">
-                <div class="ledger-cat-icon" style="background:${e.catBg};width:30px;height:30px;font-size:0.9rem;">${e.catIcon}</div>
+                <div class="ledger-cat-icon" style="background:${e.catBg};width:30px;height:30px;font-size:0.9rem;">${_esc(e.catIcon)}</div>
                 <div class="ledger-info">
-                  <div class="ledger-name" style="font-size:0.85rem;">${e.note}${e.fixed?'&nbsp;<span class="fixed-badge">固定</span>':''}</div>
-                  <div class="ledger-time">${e.time||''}${e.member?' · '+getMemberAvatarHtml(e.member)+' <span style="color:var(--blue);">'+e.member+'</span>':''}</div>
+                  <div class="ledger-name" style="font-size:0.85rem;">${_esc(e.note)}${e.fixed?'&nbsp;<span class="fixed-badge">固定</span>':''}</div>
+                  <div class="ledger-time">${_esc(e.time||'')}${e.member?' · '+getMemberAvatarHtml(e.member)+' <span style="color:var(--blue);">'+_esc(e.member)+'</span>':''}</div>
                 </div>
                 <div class="ledger-amount" style="font-size:0.95rem;">−$${e.amount.toLocaleString()}</div>
-                <button class="ledger-edit-btn" onclick="openLedgerEdit('${e.id}','expense')" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-pen"></i></button>
-                <button class="ledger-del-btn" onclick="deleteLedgerEntry('${e.id}')" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-trash"></i></button>
+                <button class="ledger-edit-btn" onclick="openLedgerEdit(${_jsStr(e.id||e.fbDocId)},'expense')" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-pen"></i></button>
+                <button class="ledger-del-btn" onclick="deleteLedgerEntry(${_jsStr(e.id||e.fbDocId)})" style="width:24px;height:24px;font-size:0.68rem;"><i class="fa fa-trash"></i></button>
               </div>`).join('')}
           </div>
         </div>`;
@@ -4215,8 +4287,7 @@
       if (loader) {
         loader.style.opacity = '0';
         setTimeout(() => {
-          loader.style.display = 'none';
-          loader.remove();
+          try { loader.style.display = 'none'; loader.remove(); } catch(e){}
         }, 500);
       }
     });
