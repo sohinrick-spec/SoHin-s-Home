@@ -2392,6 +2392,9 @@
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-'+tab).classList.add('active');
     document.getElementById('nav-'+tab).classList.add('active');
+    // FAB 只在 dashboard（庫存）顯示
+    const fabBtn = document.getElementById('fab-btn');
+    if (fabBtn) fabBtn.style.display = (tab === 'dashboard') ? 'flex' : 'none';
     if (tab === 'chores') { renderChores(); renderRecurringTasks(); checkAndTriggerRecurringTasks(); }
     if (tab === 'budget') { checkFixedExpenses(); renderBudget(); }
     if (tab === 'monthly') {
@@ -5357,6 +5360,7 @@ prevInfo = `上次: ${setLines}${best1RM>0?' | 1RM≈'+best1RM.toFixed(1)+'kg':'
 
   html += `<div style="margin-top:14px;">
   <textarea id="gworkoutNote" class="gform-input" placeholder="✍️ 訓練備忘（可選）：今日感受、需要調整的地方…" rows="2" style="resize:none;font-size:0.83rem;margin-bottom:8px;">${gymEsc(w.note||'')}</textarea>
+  <button class="gbtn gbtn-sec gbtn-block" style="margin-bottom:8px;" onclick="gymOpenAddExToWorkout()">➕ 新增動作</button>
   <div style="display:flex;gap:8px;flex-wrap:wrap;">
     <button class="gbtn gbtn-block" onclick="gymFinishWorkout()">🏁 完成訓練</button>
     <button class="gbtn gbtn-danger" style="flex:0 0 auto;padding:11px 14px;" onclick="gymAbortWorkout()">✕ 放棄</button>
@@ -5670,15 +5674,45 @@ function gymOpenExerciseModal(ex) {
   gymOpenModal('gexerciseModal');
 }
 
+let _gymAddExToWorkoutMode = false;
+
+window.gymOpenAddExToWorkout = function() {
+  _gymAddExToWorkoutMode = true;
+  document.getElementById('gexerciseModalTitle').textContent = '訓練中新增動作';
+  document.getElementById('gexNameInput').value = '';
+  document.getElementById('gexSetsInput').value = 3;
+  document.getElementById('gexRepsInput').value = '';
+  document.getElementById('gexNotesInput').value = '';
+  gymRenderMuscleGrid('gmuscleSelectGrid', 'chest', true);
+  gymRenderExSuggestions('gexSuggestions','gexNameInput');
+  gymOpenModal('gexerciseModal');
+};
+
 document.getElementById('gsaveExerciseBtn').onclick = ()=>{
   const name = document.getElementById('gexNameInput').value.trim();
   if(!name){alert('請輸入動作名稱');return;}
   const muscle = document.querySelector('#gmuscleSelectGrid .gmuscle-sel-btn.selected')?.dataset.id || gymGuessMuscle(name);
+  const sets = parseInt(document.getElementById('gexSetsInput').value)||3;
+  const reps = document.getElementById('gexRepsInput').value.trim();
+  const notes = document.getElementById('gexNotesInput').value.trim();
+
+  if(_gymAddExToWorkoutMode && gymState.activeWorkout) {
+    _gymAddExToWorkoutMode = false;
+    gymState.activeWorkout.exercises.push({
+      id: gymUid(), name, muscle, targetSets: sets, targetReps: reps, notes, supersetWith: null,
+      sets: Array.from({length: sets}, ()=>({weight:'', reps:'', rpe:'', done:false, isDropset:false}))
+    });
+    gymPersist();
+    gymCloseModal('gexerciseModal');
+    gymRenderToday();
+    showToast('✅ 已新增 '+name);
+    return;
+  }
+
+  _gymAddExToWorkoutMode = false;
   const exData = {
     id: gymCurrentExEditIdx!==null ? (gymEditingPlanExercises[gymCurrentExEditIdx]?.id||gymUid()) : gymUid(),
-    name, muscle, sets: parseInt(document.getElementById('gexSetsInput').value)||3,
-    reps: document.getElementById('gexRepsInput').value.trim(),
-    notes: document.getElementById('gexNotesInput').value.trim(), supersetWith:null
+    name, muscle, sets, reps, notes, supersetWith:null
   };
   if(gymCurrentExEditIdx!==null) { gymEditingPlanExercises[gymCurrentExEditIdx]=exData; gymCurrentExEditIdx=null; }
   else { gymEditingPlanExercises.push(exData); }
