@@ -585,8 +585,305 @@
       background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-md);
       margin-bottom: 6px;
     }
+    
+    /* ══════════════════════════════
+       GYM TAB STYLES
+    ══════════════════════════════ */
+    /* Muscle color vars (gym-scoped) */
+    .gym-wrap { --gym-chest:#ff6b9d; --gym-back:#4dabf7; --gym-shoulders:#ffd43b; --gym-legs:#51cf66; --gym-arms:#ff922b; --gym-core:#cc5de8; --gym-cardio:#22b8cf; }
+
+    .gym-wrap { font-size: 15px; }
+    .gym-wrap .gym-sub-nav {
+      display: flex; background: var(--card2); border-radius: var(--radius-md);
+      padding: 3px; margin-bottom: 12px; gap: 2px;
+    }
+    .gym-wrap .gym-nav-btn {
+      flex: 1; background: transparent; border: none; color: var(--text-muted);
+      padding: 8px 4px; border-radius: var(--radius-sm); font-size: 0.78rem;
+      cursor: pointer; font-weight: 800; font-family: 'Nunito', sans-serif;
+      transition: all 0.18s; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    }
+    .gym-wrap .gym-nav-btn .gi { font-size: 1.1rem; }
+    .gym-wrap .gym-nav-btn.active { background: var(--primary); color: var(--bg); }
+
+    .gym-wrap .gview { display: none; }
+    .gym-wrap .gview.active { display: block; }
+
+    .gym-wrap .gcard {
+      background: var(--card); border-radius: var(--radius-md);
+      border: 1px solid var(--border); padding: 12px 14px; margin-bottom: 10px;
+    }
+    .gym-wrap .gcard-row { display: flex; justify-content: space-between; align-items: center; }
+
+    .gym-wrap .gbtn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: var(--primary); color: var(--bg); border: none;
+      padding: 11px 14px; border-radius: var(--radius-md); font-weight: 900;
+      cursor: pointer; font-size: 0.88rem; font-family: 'Nunito', sans-serif;
+      transition: all 0.2s; letter-spacing: 0.01em;
+    }
+    .gym-wrap .gbtn:active { transform: scale(0.96) !important; }
+    .gym-wrap .gbtn-block { width: 100%; }
+    .gym-wrap .gbtn-sec { background: var(--card2); color: var(--text); border: 1px solid var(--border2); }
+    .gym-wrap .gbtn-danger { background: var(--red-light); color: var(--red); border: 1px solid rgba(224,112,112,0.3); }
+    .gym-wrap .gbtn-sm { padding: 6px 10px; font-size: 0.78rem; }
+    .gym-wrap .gbtn-outline { background: transparent; border: 1px solid var(--primary-dim); color: var(--text); }
+
+    .gym-wrap .gplan-grid { display: grid; gap: 8px; margin-bottom: 14px; }
+    .gym-wrap .gplan-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 13px; cursor: pointer; transition: all 0.2s;
+    }
+    .gym-wrap .gplan-card:hover { border-color: var(--border2); }
+    .gym-wrap .gplan-card:active { transform: scale(0.98) !important; }
+    .gym-wrap .gplan-card .gplan-name { font-weight: 900; font-size: 0.98rem; margin-bottom: 3px; }
+    .gym-wrap .gplan-card .gplan-meta { color: var(--text-muted); font-size: 0.78rem; }
+
+    .gym-wrap .gworkout-header {
+      background: linear-gradient(135deg, var(--primary-light), var(--card));
+      border-radius: var(--radius-md); padding: 13px; margin-bottom: 12px;
+      border: 1px solid var(--border2);
+    }
+    .gym-wrap .gworkout-header h2 { margin: 0 0 8px; font-size: 1.05rem; font-family: 'Playfair Display', serif; }
+    .gym-wrap .gwstats { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; color: var(--text-muted); font-size: 0.68rem; text-align: center; }
+    .gym-wrap .gwstats strong { color: var(--text); font-size: 0.9rem; display: block; }
+
+    .gym-wrap .gex-block {
+      background: var(--card); border-radius: var(--radius-md); padding: 11px 12px;
+      margin-bottom: 9px; border: 1px solid var(--border); position: relative;
+    }
+    .gym-wrap .gex-block.in-superset { border-left: 4px solid var(--yellow); }
+    .gym-wrap .gex-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 9px; gap: 7px; }
+    .gym-wrap .gex-name { font-weight: 900; font-size: 0.93rem; margin-bottom: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .gym-wrap .gex-target { color: var(--text-muted); font-size: 0.72rem; margin-top: 2px; }
+    .gym-wrap .gmbadge { display: inline-block; padding: 2px 7px; border-radius: 8px; font-size: 0.62rem; font-weight: 900; color: #000; }
+    .gym-wrap .gmbadge.muscle-chest { background: var(--gym-chest); }
+    .gym-wrap .gmbadge.muscle-back { background: var(--gym-back); }
+    .gym-wrap .gmbadge.muscle-shoulders { background: var(--gym-shoulders); }
+    .gym-wrap .gmbadge.muscle-legs { background: var(--gym-legs); }
+    .gym-wrap .gmbadge.muscle-arms { background: var(--gym-arms); }
+    .gym-wrap .gmbadge.muscle-core { background: var(--gym-core); }
+    .gym-wrap .gmbadge.muscle-cardio { background: var(--gym-cardio); }
+    .gym-wrap .gprev-info { font-size: 0.68rem; color: var(--green); margin-top: 2px; opacity: 0.9; }
+    .gym-wrap .gonerm-info { font-size: 0.68rem; color: var(--blue); margin-top: 2px; }
+
+    .gym-wrap .gex-actions { display: flex; gap: 4px; }
+    .gym-wrap .gex-actions button {
+      width: 28px; height: 28px; padding: 0;
+      background: var(--bg2); border: 1px solid var(--border); color: var(--text-muted);
+      border-radius: var(--radius-sm); font-size: 0.82rem; cursor: pointer;
+    }
+
+    .gym-wrap .gset-row {
+      display: grid; grid-template-columns: 28px 1fr 1fr 52px 32px;
+      gap: 5px; align-items: center; padding: 6px 0; border-top: 1px solid var(--border);
+    }
+    .gym-wrap .gset-row:first-of-type { border-top: none; }
+    .gym-wrap .gset-row.dropset { background: rgba(224,112,112,0.06); border-left: 3px solid var(--red); padding-left: 4px; }
+    .gym-wrap .gset-num {
+      width: 26px; height: 26px; border-radius: 50%; background: var(--bg2); color: var(--text-muted);
+      display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.75rem;
+    }
+    .gym-wrap .gset-num.drop { background: var(--red); color: #fff; font-size: 0.6rem; }
+    .gym-wrap .gset-row.completed .gset-num { background: var(--green); color: var(--bg); }
+    .gym-wrap .gset-input {
+      background: var(--bg2); border: 1px solid var(--border); color: var(--text);
+      padding: 6px 3px; border-radius: var(--radius-sm); font-size: 0.88rem;
+      width: 100%; text-align: center; font-family: 'Nunito', sans-serif; font-weight: 700;
+    }
+    .gym-wrap .gset-input:focus { outline: none; border-color: var(--primary-dim); }
+    .gym-wrap .gset-row.completed .gset-input { background: rgba(116,198,157,0.1); border-color: var(--green); }
+    .gym-wrap .grpe-input { font-size: 0.82rem; padding: 6px 2px; }
+    .gym-wrap .gcheck-btn {
+      width: 30px; height: 30px; border-radius: var(--radius-sm);
+      background: var(--bg2); border: 1px solid var(--border); color: var(--text-muted);
+      cursor: pointer; font-size: 0.9rem; padding: 0;
+    }
+    .gym-wrap .gset-row.completed .gcheck-btn { background: var(--green); color: var(--bg); border-color: var(--green); }
+
+    .gym-wrap .gset-label-row {
+      display: grid; grid-template-columns: 28px 1fr 1fr 52px 32px;
+      gap: 5px; padding: 0 0 4px; font-size: 0.62rem; color: var(--text-muted); text-transform: uppercase;
+    }
+    .gym-wrap .gset-label-row > div { text-align: center; }
+
+    .gym-wrap .gset-extra-btns { display: flex; gap: 4px; margin-top: 5px; }
+    .gym-wrap .gset-extra-btns button {
+      flex: 1; background: transparent; border: 1px dashed var(--border);
+      color: var(--text-muted); padding: 5px; border-radius: var(--radius-sm);
+      cursor: pointer; font-size: 0.72rem; font-family: 'Nunito', sans-serif;
+    }
+
+    .gym-wrap .gplan-editor-card {
+      background: var(--card); border-radius: var(--radius-md);
+      padding: 13px; margin-bottom: 10px; border: 1px solid var(--border);
+    }
+    .gym-wrap .gex-line {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px; background: var(--bg2); border-radius: var(--radius-sm); margin-bottom: 5px; gap: 7px;
+    }
+    .gym-wrap .gex-line-info { flex: 1; min-width: 0; }
+    .gym-wrap .gex-line-info .name { font-weight: 900; font-size: 0.86rem; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .gym-wrap .gex-line-info .meta { color: var(--text-muted); font-size: 0.7rem; margin-top: 2px; }
+    .gym-wrap .gex-line-actions { display: flex; gap: 4px; flex-shrink: 0; }
+    .gym-wrap .gex-line-actions button { width: 26px; height: 26px; padding: 0; font-size: 0.78rem; }
+
+    .gym-wrap .gmodal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.78);
+      backdrop-filter: blur(4px); z-index: 80; display: none; align-items: flex-end; justify-content: center;
+    }
+    .gym-wrap .gmodal-overlay.active { display: flex; }
+    .gym-modal-inner {
+      background: var(--card); border-radius: 16px 16px 0 0; padding: 16px;
+      width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+      animation: slideUp 0.25s ease;
+    }
+    .gym-modal-center { align-items: center; }
+    .gym-modal-center .gym-modal-inner { border-radius: 16px; max-width: 440px; margin: 14px; }
+    .gym-modal-inner h3 { margin: 0 0 13px; color: var(--primary); font-size: 1.05rem; font-family: 'Playfair Display', serif; }
+
+    .gym-wrap .gform-group { margin-bottom: 11px; }
+    .gym-wrap .gform-group label { display: block; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 5px; font-weight: 800; }
+    .gym-wrap .gform-input, .gym-wrap .gform-select {
+      width: 100%; background: var(--bg2); border: 1px solid var(--border);
+      color: var(--text); padding: 9px 11px; border-radius: var(--radius-md); font-size: 0.9rem;
+      font-family: 'Nunito', sans-serif; font-weight: 700;
+    }
+    .gym-wrap .gform-input:focus, .gym-wrap .gform-select:focus { outline: none; border-color: var(--primary-dim); }
+    .gym-wrap .gform-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+
+    .gym-wrap .gstepper { display: flex; align-items: center; gap: 7px; }
+    .gym-wrap .gstepper button {
+      width: 34px; height: 34px; background: var(--bg2); border: 1px solid var(--border);
+      color: var(--text); border-radius: var(--radius-sm); font-size: 1rem; font-weight: 900; cursor: pointer;
+    }
+    .gym-wrap .gstepper input {
+      flex: 1; text-align: center; background: var(--bg2); border: 1px solid var(--border);
+      color: var(--text); padding: 9px; border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 900;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .gym-wrap .grest-timer {
+      position: fixed; bottom: calc(var(--nav-h) + 60px); left: 0; right: 0;
+      background: var(--green); color: var(--bg); padding: 9px 13px;
+      z-index: 45; display: none; justify-content: space-between; align-items: center;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.4); animation: slideUp 0.3s;
+    }
+    .gym-wrap .grest-timer.active { display: flex; }
+    .gym-wrap .grest-time { font-size: 1.25rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+    .gym-wrap .grest-controls { display: flex; gap: 5px; }
+    .gym-wrap .grest-controls button {
+      background: rgba(0,0,0,0.15); border: none; color: var(--bg);
+      padding: 5px 8px; border-radius: var(--radius-sm); font-weight: 900; cursor: pointer; font-size: 0.78rem;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .gym-wrap .gstat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 12px; }
+    .gym-wrap .gstat-card { background: var(--card); border-radius: var(--radius-md); padding: 11px 12px; border: 1px solid var(--border); }
+    .gym-wrap .gstat-label { color: var(--text-muted); font-size: 0.7rem; margin-bottom: 4px; font-weight: 800; }
+    .gym-wrap .gstat-value { font-size: 1.25rem; font-weight: 900; color: var(--green); font-family: 'Playfair Display', serif; }
+    .gym-wrap .gstat-unit { font-size: 0.68rem; color: var(--text-muted); margin-left: 2px; }
+
+    .gym-wrap .gchart-card { background: var(--card); border-radius: var(--radius-md); padding: 13px; border: 1px solid var(--border); margin-bottom: 10px; }
+    .gym-wrap .gchart-card h4 { margin: 0 0 9px; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
+    .gym-wrap .gchart-wrap { position: relative; height: 200px; }
+
+    .gym-wrap .ghist-item {
+      background: var(--card); border-radius: var(--radius-md); padding: 11px 12px;
+      margin-bottom: 7px; border: 1px solid var(--border); cursor: pointer;
+    }
+    .gym-wrap .ghist-item:active { background: var(--card2); }
+    .gym-wrap .ghist-date { font-size: 0.78rem; color: var(--text-muted); }
+    .gym-wrap .ghist-name { font-weight: 900; margin: 2px 0; font-size: 0.92rem; }
+    .gym-wrap .ghist-stats { font-size: 0.72rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 4px; }
+
+    .gym-wrap .gempty { text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 0.84rem; }
+    .gym-wrap .gempty .emoji { font-size: 2.8rem; margin-bottom: 10px; display: block; opacity: 0.5; }
+    .gym-wrap .gtag { display: inline-block; background: var(--primary-light); color: var(--text); padding: 2px 7px; border-radius: 8px; font-size: 0.68rem; font-weight: 800; }
+    .gym-wrap .gsection-title {
+      font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;
+      margin: 12px 0 7px; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center;
+      font-weight: 800;
+    }
+    .gym-wrap .gwarning-box { background: var(--yellow-light); border-left: 3px solid var(--yellow); padding: 9px; border-radius: var(--radius-sm); font-size: 0.8rem; margin-bottom: 10px; }
+    .gym-wrap .gsuccess-box { background: var(--green-light); border-left: 3px solid var(--green); padding: 9px; border-radius: var(--radius-sm); font-size: 0.8rem; margin-bottom: 10px; }
+    .gym-wrap .gdanger-box  { background: var(--red-light);  border-left: 3px solid var(--red);   padding: 9px; border-radius: var(--radius-sm); font-size: 0.8rem; margin-bottom: 10px; }
+    .gym-wrap hr { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+
+    .gym-wrap .grating-row { display: flex; gap: 5px; justify-content: space-between; }
+    .gym-wrap .grating-btn {
+      flex: 1; padding: 9px 4px; background: var(--bg2); border: 1px solid var(--border);
+      color: var(--text-muted); border-radius: var(--radius-sm); cursor: pointer;
+      font-size: 0.82rem; font-weight: 800; text-align: center; font-family: 'Nunito', sans-serif;
+    }
+    .gym-wrap .grating-btn.selected { background: var(--primary); color: var(--bg); border-color: var(--primary-dim); }
+
+    .gym-wrap .gmuscle-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
+    .gym-wrap .gmuscle-btn {
+      padding: 9px 5px; background: var(--bg2); border: 1px solid var(--border);
+      color: var(--text); border-radius: var(--radius-sm); cursor: pointer; font-size: 0.75rem; text-align: center;
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+    }
+    .gym-wrap .gmuscle-btn.selected { background: var(--red-light); border-color: var(--red); color: var(--red); }
+
+    .gym-wrap .gvol-bar-row { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; font-size: 0.8rem; }
+    .gym-wrap .gvol-bar-name { width: 52px; flex-shrink: 0; font-weight: 900; }
+    .gym-wrap .gvol-bar-track { flex: 1; height: 20px; background: var(--bg2); border-radius: var(--radius-sm); overflow: hidden; position: relative; }
+    .gym-wrap .gvol-bar-fill { height: 100%; transition: width 0.4s; }
+    .gym-wrap .gvol-bar-count { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); font-size: 0.68rem; font-weight: 900; color: #fff; text-shadow: 0 0 4px rgba(0,0,0,0.8); }
+    .gym-wrap .gvol-bar-target { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,0.35); }
+
+    .gym-wrap .gdeload-banner { background: var(--yellow-light); border: 1px solid rgba(240,168,73,0.4); border-radius: var(--radius-md); padding: 11px; margin-bottom: 10px; }
+    .gym-wrap .gdeload-banner h4 { margin: 0 0 5px; color: var(--yellow); font-size: 0.9rem; }
+    .gym-wrap .gdeload-banner p { margin: 0; font-size: 0.8rem; color: var(--text-muted); }
+
+    .gym-wrap .gplateau-card { background: var(--card); border: 1px solid rgba(224,112,112,0.4); border-radius: var(--radius-md); padding: 9px; margin-bottom: 7px; }
+    .gym-wrap .gplateau-card .ex-nm { font-weight: 900; font-size: 0.88rem; }
+    .gym-wrap .gplateau-card .ex-info { color: var(--text-muted); font-size: 0.72rem; margin-top: 2px; }
+
+    .gym-wrap .gbio-summary { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 5px; }
+    .gym-wrap .gbio-chip { background: var(--bg2); padding: 4px 8px; border-radius: var(--radius-sm); font-size: 0.7rem; color: var(--text-muted); }
+
+    .gym-wrap .gsuggestion-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 7px; }
+    .gym-wrap .gsuggestion-row::-webkit-scrollbar { display: none; }
+    .gym-wrap .gsuggestion-chip {
+      flex-shrink: 0; padding: 5px 9px; background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 50px; font-size: 0.75rem; color: var(--text); cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 800;
+    }
+    .gym-wrap .gsuggestion-chip:active { background: var(--primary-light); }
+
+    .gym-wrap .gtabs { display: flex; gap: 3px; background: var(--card2); border-radius: var(--radius-sm); padding: 3px; margin-bottom: 10px; }
+    .gym-wrap .gtab-btn {
+      flex: 1; background: transparent; border: none; color: var(--text-muted);
+      padding: 7px; border-radius: 6px; font-size: 0.82rem; cursor: pointer; font-weight: 900;
+      font-family: 'Nunito', sans-serif; transition: all 0.18s;
+    }
+    .gym-wrap .gtab-btn.active { background: var(--primary); color: var(--bg); }
+
+    .gym-wrap .gmuscle-sel-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; margin-top: 4px; }
+    .gym-wrap .gmuscle-sel-btn {
+      padding: 7px 3px; background: var(--bg2); border: 1px solid var(--border);
+      color: var(--text); border-radius: var(--radius-sm); cursor: pointer; font-size: 0.72rem;
+      font-family: 'Nunito', sans-serif; font-weight: 800; text-align: center;
+    }
+    .gym-wrap .gmuscle-sel-btn.selected { color: var(--bg); font-weight: 900; }
+
+    .gym-member-banner {
+      background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 9px 13px; margin-bottom: 10px; display: flex; align-items: center; gap: 9px;
+      font-size: 0.82rem; color: var(--text-muted);
+    }
+    .gym-member-banner strong { color: var(--text); font-size: 0.9rem; }
+
+    .gym-cloud-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.62rem; font-weight: 900; padding: 2px 7px;
+      background: var(--blue-light); color: var(--blue); border-radius: 50px; border: 1px solid rgba(100,181,246,0.2);
+    }
+
   </style>
 </head>
+
 <body>
   <div id="initial-loader" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0D0D0D; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; color: white; font-family: 'Nunito', sans-serif; transition: opacity 0.5s ease;">
     <i class="fas fa-circle-notch fa-spin fa-3x" style="color: #E8E8E8; margin-bottom: 20px;"></i>
@@ -857,8 +1154,331 @@
     <button class="nav-btn" id="nav-monthly" onclick="switchTab('monthly')">
       <i class="fa fa-chart-pie"></i><span>月報</span>
     </button>
+    <button class="nav-btn" id="nav-gym" onclick="switchTab('gym')">
+      <i class="fa fa-dumbbell"></i><span>Gym</span>
+    </button>
   </nav>
 </div>
+
+<div id="tab-gym" class="tab-pane">
+    <div class="container gym-wrap">
+
+      <!-- 成員橫幅 -->
+      <div class="gym-member-banner">
+        <i class="fa fa-dumbbell" style="color:var(--green);"></i>
+        <div>
+          <strong id="gym-member-display">載入中…</strong> 的健身紀錄
+          <span class="gym-cloud-badge"><i class="fa fa-cloud"></i> 雲端同步</span>
+        </div>
+      </div>
+
+      <!-- Gym 子導航 -->
+      <div class="gym-sub-nav">
+        <button class="gym-nav-btn active" data-gview="gtoday" onclick="gymSwitchView('gtoday',this)">
+          <span class="gi">🏋️</span>今日
+        </button>
+        <button class="gym-nav-btn" data-gview="gplans" onclick="gymSwitchView('gplans',this)">
+          <span class="gi">📋</span>計劃
+        </button>
+        <button class="gym-nav-btn" data-gview="gstats" onclick="gymSwitchView('gstats',this)">
+          <span class="gi">📊</span>洞察
+        </button>
+        <button class="gym-nav-btn" data-gview="ghistory" onclick="gymSwitchView('ghistory',this)">
+          <span class="gi">📅</span>紀錄
+        </button>
+      </div>
+
+      <!-- Views -->
+      <section id="gtoday" class="gview active"><div id="gtodayContent"></div></section>
+      <section id="gplans" class="gview">
+        <div class="gtabs">
+          <button class="gtab-btn active" data-gplantab="plans">訓練計劃</button>
+          <button class="gtab-btn" data-gplantab="templates">模板庫</button>
+        </div>
+        <div id="gplanTabContent"></div>
+      </section>
+      <section id="gstats" class="gview"><div id="gstatsContent"></div></section>
+      <section id="ghistory" class="gview"><div id="ghistoryContent"></div></section>
+
+      <!-- Rest Timer -->
+      <div class="grest-timer" id="grestTimer">
+        <div>
+          <div style="font-size:0.72rem;opacity:0.85;">休息中</div>
+<div id="grestNextHint" style="font-size:0.78rem;font-weight:900;color:rgba(0,0,0,0.9);min-height:1em;"></div>
+          <div class="grest-time" id="grestTime">01:30</div>
+        </div>
+        <div class="grest-controls">
+          <button onclick="gymAddRestTime(-15)">-15s</button>
+          <button onclick="gymAddRestTime(15)">+15s</button>
+          <button onclick="gymSkipRest()">跳過 ✓</button>
+        </div>
+      </div>
+
+    </div><!-- /.gym-wrap -->
+  </div><!-- /#tab-gym -->
+
+  <!-- ═══ GYM MODALS ═══ -->
+  <div class="gym-wrap">
+
+  <!-- Plan editor -->
+  <div class="gmodal-overlay" id="gplanModal">
+    <div class="gym-modal-inner">
+      <h3 id="gplanModalTitle">新增計劃</h3>
+      <div class="gform-group">
+        <label>計劃名稱</label>
+        <input type="text" class="gform-input" id="gplanNameInput" placeholder="例如: 下肢 A">
+      </div>
+      <div class="gform-group">
+        <label>提示/備註 (可選)</label>
+        <input type="text" class="gform-input" id="gplanTipInput" placeholder="例如: 練前先熱身">
+      </div>
+      <div class="gform-group">
+        <label>📐 週期化設定</label>
+        <div class="gform-row">
+          <select class="gform-select" id="gplanCycleLen">
+            <option value="0">不啟用週期</option>
+            <option value="3">3 週循環</option>
+            <option value="4">4 週循環</option>
+            <option value="5">5 週循環</option>
+            <option value="6">6 週循環</option>
+          </select>
+          <select class="gform-select" id="gplanDeloadWeek">
+            <option value="0">無減量週</option>
+            <option value="3">第 3 週減量</option>
+            <option value="4">第 4 週減量</option>
+            <option value="5">第 5 週減量</option>
+            <option value="6">第 6 週減量</option>
+          </select>
+        </div>
+        <div style="font-size:0.7rem;color:var(--text-muted);margin-top:3px;">系統會提醒你在減量週降低訓練強度</div>
+      </div>
+      <div class="gsection-title" style="margin-top:0">動作清單</div>
+      <div id="gplanExercisesList"></div>
+      <button class="gbtn gbtn-sec gbtn-block gbtn-sm" id="gaddExerciseBtn" style="margin-top:7px">➕ 新增動作</button>
+      <hr>
+      <div class="gform-row">
+        <button class="gbtn gbtn-sec" onclick="gymCloseModal('gplanModal')">取消</button>
+        <button class="gbtn" id="gsavePlanBtn">儲存</button>
+      </div>
+      <button class="gbtn gbtn-danger gbtn-block gbtn-sm" id="gdeletePlanBtn" style="margin-top:7px;display:none;">刪除此計劃</button>
+    </div>
+  </div>
+
+  <!-- Exercise editor -->
+  <div class="gmodal-overlay gym-modal-center" id="gexerciseModal">
+    <div class="gym-modal-inner">
+      <h3 id="gexerciseModalTitle">新增動作</h3>
+      <div class="gform-group">
+        <label>動作名稱</label>
+        <input type="text" class="gform-input" id="gexNameInput" placeholder="例如: 槓鈴深蹲">
+        <div class="gsuggestion-row" id="gexSuggestions"></div>
+      </div>
+      <div class="gform-group">
+        <label>主要肌群</label>
+        <div class="gmuscle-sel-grid" id="gmuscleSelectGrid"></div>
+      </div>
+      <div class="gform-row">
+        <div class="gform-group">
+          <label>目標組數</label>
+          <div class="gstepper">
+            <button onclick="gymStepInput('gexSetsInput',-1)">−</button>
+            <input type="number" id="gexSetsInput" value="3" min="1">
+            <button onclick="gymStepInput('gexSetsInput',1)">+</button>
+          </div>
+        </div>
+        <div class="gform-group">
+          <label>目標次數</label>
+          <input type="text" class="gform-input" id="gexRepsInput" placeholder="例如: 8-12">
+        </div>
+      </div>
+      <div class="gform-group">
+        <label>備註 (可選)</label>
+        <input type="text" class="gform-input" id="gexNotesInput" placeholder="例如: 替代方案">
+      </div>
+      <div class="gform-row">
+        <button class="gbtn gbtn-sec" onclick="gymCloseModal('gexerciseModal')">取消</button>
+        <button class="gbtn" id="gsaveExerciseBtn">儲存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pre-workout check-in -->
+  <div class="gmodal-overlay" id="gcheckinModal">
+    <div class="gym-modal-inner">
+      <h3>📝 訓練前狀態紀錄</h3>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">這些數據可幫助你日後分析訓練表現</div>
+      <div class="gform-group">
+        <label>😴 睡眠品質</label>
+        <div class="grating-row" id="gsleepRating">
+          <button class="grating-btn" data-val="1">很差</button>
+          <button class="grating-btn" data-val="2">不足</button>
+          <button class="grating-btn" data-val="3">尚可</button>
+          <button class="grating-btn" data-val="4">良好</button>
+          <button class="grating-btn" data-val="5">充足</button>
+        </div>
+      </div>
+      <div class="gform-group">
+        <label>😰 壓力水平</label>
+        <div class="grating-row" id="gstressRating">
+          <button class="grating-btn" data-val="1">很低</button>
+          <button class="grating-btn" data-val="2">較低</button>
+          <button class="grating-btn" data-val="3">普通</button>
+          <button class="grating-btn" data-val="4">較高</button>
+          <button class="grating-btn" data-val="5">很高</button>
+        </div>
+      </div>
+      <div class="gform-group">
+        <label>⚖️ 當日體重 (kg，可選)</label>
+        <input type="number" class="gform-input" id="gcheckinWeight" step="0.1" inputmode="decimal" placeholder="例如: 70.5">
+      </div>
+      <div class="gform-group">
+        <label>🩹 酸痛部位 (可多選)</label>
+        <div class="gmuscle-grid" id="gsorenessGrid"></div>
+      </div>
+      <div class="gform-row">
+        <button class="gbtn gbtn-sec" id="gskipCheckinBtn">略過</button>
+        <button class="gbtn" id="gconfirmCheckinBtn">開始訓練 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exercise actions -->
+  <div class="gmodal-overlay gym-modal-center" id="gexActionModal">
+    <div class="gym-modal-inner">
+      <h3 id="gexActionTitle">動作選項</h3>
+      <button class="gbtn gbtn-block gbtn-sec" id="gactSupersetBtn" style="margin-bottom:7px">🔗 設為超級組</button>
+      <button class="gbtn gbtn-block gbtn-sec" id="gactMoveUpBtn" style="margin-bottom:7px">⬆️ 上移</button>
+      <button class="gbtn gbtn-block gbtn-sec" id="gactMoveDownBtn" style="margin-bottom:7px">⬇️ 下移</button>
+      <button class="gbtn gbtn-block gbtn-sec" id="gactSwapBtn" style="margin-bottom:7px">🔄 替換動作</button>
+      <button class="gbtn gbtn-block gbtn-danger" id="gactRemoveBtn" style="margin-bottom:7px">✕ 移除動作</button>
+      <button class="gbtn gbtn-block gbtn-sec" onclick="gymCloseModal('gexActionModal')">關閉</button>
+    </div>
+  </div>
+
+  <!-- Superset -->
+  <div class="gmodal-overlay gym-modal-center" id="gsupersetModal">
+    <div class="gym-modal-inner">
+      <h3>🔗 選擇超級組搭配</h3>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:9px;">與哪個動作組成超級組？</div>
+      <div id="gsupersetList"></div>
+      <hr>
+      <button class="gbtn gbtn-danger gbtn-block gbtn-sm" id="gremoveSupersetBtn" style="display:none;">解除超級組</button>
+      <button class="gbtn gbtn-block gbtn-sec" style="margin-top:7px" onclick="gymCloseModal('gsupersetModal')">取消</button>
+    </div>
+  </div>
+
+  <!-- Swap exercise -->
+  <div class="gmodal-overlay gym-modal-center" id="gswapModal">
+    <div class="gym-modal-inner">
+      <h3>🔄 替換動作</h3>
+      <div class="gform-group">
+        <label>新動作名稱</label>
+        <input type="text" class="gform-input" id="gswapNameInput" placeholder="輸入新動作">
+        <div class="gsuggestion-row" id="gswapSuggestions"></div>
+      </div>
+      <div class="gform-group">
+        <label>肌群</label>
+        <div class="gmuscle-sel-grid" id="gswapMuscleGrid"></div>
+      </div>
+      <div class="gform-row">
+        <button class="gbtn gbtn-sec" onclick="gymCloseModal('gswapModal')">取消</button>
+        <button class="gbtn" id="gconfirmSwapBtn">替換</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div class="gmodal-overlay gym-modal-center" id="gsettingsModal">
+    <div class="gym-modal-inner">
+      <h3>⚙️ 健身設定</h3>
+      <div class="gform-group">
+        <label>預設組間休息時間 (秒)</label>
+        <div class="gstepper">
+          <button onclick="gymStepInput('grestTimeInput',-15)">−</button>
+          <input type="number" id="grestTimeInput" value="90" min="0" step="15">
+          <button onclick="gymStepInput('grestTimeInput',15)">+</button>
+        </div>
+      </div>
+      <div class="gform-group">
+        <label><input type="checkbox" id="gsoundToggle"> 計時器結束時播放提示音</label>
+      </div>
+      <div class="gform-group">
+        <label><input type="checkbox" id="gautoTimerToggle"> 完成一組後自動開始休息計時</label>
+      </div>
+      <div class="gform-group">
+        <label><input type="checkbox" id="gcheckinToggle"> 訓練前顯示狀態紀錄</label>
+      </div>
+      <hr>
+      <div class="gsection-title" style="margin-top:0">每週各肌群目標組數</div>
+      <div id="gvolumeGoalGrid"></div>
+      <hr>
+      <button class="gbtn gbtn-block" onclick="gymCloseModal('gsettingsModal'); gymSaveSettings()">完成</button>
+    </div>
+  </div>
+
+  <!-- Body metrics -->
+  <div class="gmodal-overlay gym-modal-center" id="gbodyMetricsModal">
+    <div class="gym-modal-inner">
+      <h3>⚖️ 體重紀錄</h3>
+      <div class="gform-group">
+        <label>今日體重 (kg)</label>
+        <input type="number" class="gform-input" id="gnewWeightInput" step="0.1" inputmode="decimal" placeholder="輸入體重">
+      </div>
+      <button class="gbtn gbtn-block" id="gsaveWeightBtn">紀錄</button>
+      <hr>
+      <div class="gsection-title" style="margin-top:0">最近紀錄</div>
+      <div id="gweightHistory"></div>
+      <hr>
+      <button class="gbtn gbtn-block gbtn-sec" onclick="gymCloseModal('gbodyMetricsModal')">關閉</button>
+    </div>
+  </div>
+
+  <!-- Exercise detail -->
+  <div class="gmodal-overlay" id="gexDetailModal">
+    <div class="gym-modal-inner">
+      <h3 id="gexDetailTitle">動作分析</h3>
+      <div id="gexDetailBody"></div>
+      <button class="gbtn gbtn-block" onclick="gymCloseModal('gexDetailModal')" style="margin-top:9px">關閉</button>
+    </div>
+  </div>
+
+  <!-- History detail -->
+  <div class="gmodal-overlay" id="ghistoryDetailModal">
+    <div class="gym-modal-inner">
+      <h3 id="ghistoryDetailTitle">訓練詳情</h3>
+      <div id="ghistoryDetailBody"></div>
+      <hr>
+      <button class="gbtn gbtn-sec gbtn-block gbtn-sm" id="gsaveAsTemplateBtn">💾 另存為模板</button>
+      <button class="gbtn gbtn-danger gbtn-block gbtn-sm" id="gdeleteHistoryBtn" style="margin-top:5px">刪除此紀錄</button>
+      <button class="gbtn gbtn-block gbtn-sec" onclick="gymCloseModal('ghistoryDetailModal')" style="margin-top:7px">關閉</button>
+    </div>
+  </div>
+
+  <!-- Confirm -->
+  <div class="gmodal-overlay gym-modal-center" id="gconfirmModal">
+    <div class="gym-modal-inner">
+      <h3 id="gconfirmTitle">確認</h3>
+      <p id="gconfirmMessage" style="color:var(--text-muted);font-size:0.88rem;">確定執行此操作？</p>
+      <div class="gform-row">
+        <button class="gbtn gbtn-sec" onclick="gymCloseModal('gconfirmModal')">取消</button>
+        <button class="gbtn gbtn-danger" id="gconfirmOkBtn">確定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prompt -->
+  <div class="gmodal-overlay gym-modal-center" id="gpromptModal">
+    <div class="gym-modal-inner">
+      <h3 id="gpromptTitle">輸入</h3>
+      <input type="text" class="gform-input" id="gpromptInput" style="margin-bottom:11px">
+      <div class="gform-row">
+        <button class="gbtn gbtn-sec" onclick="gymCloseModal('gpromptModal')">取消</button>
+        <button class="gbtn" id="gpromptOkBtn">確定</button>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /.gym-wrap (modals) -->
 
 <button class="fab" id="fab-btn" style="display:none;" onclick="handleFab()"><i class="fa fa-plus"></i></button>
 
@@ -1778,6 +2398,10 @@
       reportYear  = new Date().getFullYear();
       reportMonth = new Date().getMonth() + 1;
       renderMonthlyReport();
+    }
+     if (tab === 'gym' && window.gymInit && !window._gymInited) {
+      window._gymInited = true;
+      gymInit(currentMemberId, currentMemberName, db);
     }
   };
 
@@ -4280,7 +4904,1089 @@
   }
 
   initApp();
+  // Pre-init gym with Firebase db
+if(window.gymInit) setTimeout(()=>gymInit(currentMemberId, currentMemberName, db), 1500);
+if(window.gymOnMemberChange) gymOnMemberChange(currentMemberId, currentMemberName);
 </script>
+
+</script>
+<!-- ═══════════════════════════════════════════
+     GYM MODULE  — Firebase-backed, member-aware
+════════════════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+/* ─────────────────────────────────────────────
+   GYM: CONSTANTS
+───────────────────────────────────────────── */
+const GYM_MUSCLES = [
+  {id:'chest',name:'胸',color:'#ff6b9d'},{id:'back',name:'背',color:'#4dabf7'},
+  {id:'shoulders',name:'肩',color:'#ffd43b'},{id:'legs',name:'腿',color:'#51cf66'},
+  {id:'arms',name:'手臂',color:'#ff922b'},{id:'core',name:'核心',color:'#cc5de8'},
+  {id:'cardio',name:'心肺',color:'#22b8cf'}
+];
+const GYM_EX_SUGGESTIONS = [
+  '槓鈴深蹲','槓鈴硬舉','槓鈴臥推','槓鈴划船','槓鈴肩推',
+  '引體向上','雙槓臂屈伸','保加利亞分腿蹲','羅馬尼亞硬舉','腿推',
+  '滑輪下拉','坐姿划船','啞鈴飛鳥','側平舉','二頭彎舉','三頭下壓',
+  '腿屈伸','腿彎舉','髖推','臀推','滑輪面拉','平板支撐'
+];
+const GYM_EX_MUSCLE_MAP = {
+  '深蹲':'legs','硬舉':'legs','腿推':'legs','分腿蹲':'legs','腿屈伸':'legs','腿彎舉':'legs','髖推':'legs','臀推':'legs','酒杯深蹲':'legs',
+  '臥推':'chest','飛鳥':'chest','胸推':'chest','夾胸':'chest','伏地挺身':'chest',
+  '划船':'back','下拉':'back','引體':'back','背闊':'back','面拉':'back',
+  '肩推':'shoulders','側平舉':'shoulders','前平舉':'shoulders',
+  '彎舉':'arms','二頭':'arms','三頭':'arms','下壓':'arms','臂屈伸':'arms','錘式':'arms',
+  '捲腹':'core','棒式':'core','支撐':'core','腹':'core',
+  '快走':'cardio','跑步':'cardio','腳踏車':'cardio','划船機':'cardio','HIIT':'cardio'
+};
+
+/* ─────────────────────────────────────────────
+   GYM: STATE
+───────────────────────────────────────────── */
+let gymState = {
+  plans: [], workouts: [], templates: [], bodyMetrics: [],
+  activeWorkout: null, pendingPlanId: null,
+  settings: { restTime:90, sound:true, autoTimer:true, showCheckin:true,
+    volumeGoals:{chest:12,back:14,shoulders:10,legs:14,arms:8,core:6,cardio:0} }
+};
+let gymFirestoreDb = null;  // will be set after Firebase init
+let gymCurrentMemberId = '';
+let gymCurrentMemberName = '';
+let gymRestInterval = null, gymRestRemaining = 0, gymRestNextHint = '';
+let gymCurrentExEditIdx = null, gymCurrentPlanEditId = null;
+let gymCurrentExActionIdx = null;
+let gymCharts = {};
+
+/* ─────────────────────────────────────────────
+   GYM: FIREBASE INTEGRATION
+   Uses Home App's existing Firestore db variable
+───────────────────────────────────────────── */
+function gymGetDb() {
+  // Access Home App's db (declared in module scope — we expose it via window)
+  return window._gymDb || null;
+}
+
+function gymGetMemberPath() {
+  return gymCurrentMemberId || 'default';
+}
+
+async function gymLoadFromFirebase() {
+  const db = gymGetDb();
+  if (!db) { gymLoadFromLocal(); return; }
+  try {
+    const mid = gymGetMemberPath();
+    const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const snap = await getDoc(doc(db, 'gym_data', mid));
+    if (snap.exists()) {
+      const d = snap.data();
+      gymState = Object.assign(gymState, d);
+      gymEnsureStateDefaults();
+    } else {
+      gymSeedDefaults();
+      await gymSaveToFirebase();
+    }
+  } catch(e) {
+    console.warn('Gym Firebase load failed, using local:', e);
+    gymLoadFromLocal();
+  }
+}
+
+async function gymSaveToFirebase() {
+  const db = gymGetDb();
+  if (!db) { gymSaveToLocal(); return; }
+  try {
+    const mid = gymGetMemberPath();
+    const { doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await setDoc(doc(db, 'gym_data', mid), gymState);
+  } catch(e) {
+    console.warn('Gym Firebase save failed:', e);
+  }
+  gymSaveToLocal(); // also save locally as backup
+}
+
+function gymLoadFromLocal() {
+  try {
+    const key = 'gym_data_' + (gymCurrentMemberId || 'default');
+    const raw = localStorage.getItem(key);
+    if (raw) { gymState = Object.assign(gymState, JSON.parse(raw)); }
+    else { gymSeedDefaults(); }
+    gymEnsureStateDefaults();
+  } catch(e) { gymSeedDefaults(); }
+}
+
+function gymSaveToLocal() {
+  try {
+    const key = 'gym_data_' + (gymCurrentMemberId || 'default');
+    localStorage.setItem(key, JSON.stringify(gymState));
+  } catch(e) {}
+}
+
+async function gymPersist() {
+  await gymSaveToFirebase();
+}
+
+function gymEnsureStateDefaults() {
+  if (!gymState.settings) gymState.settings = { restTime:90, sound:true, autoTimer:true, showCheckin:true, volumeGoals:{chest:12,back:14,shoulders:10,legs:14,arms:8,core:6,cardio:0} };
+  if (!gymState.settings.volumeGoals) gymState.settings.volumeGoals = {chest:12,back:14,shoulders:10,legs:14,arms:8,core:6,cardio:0};
+  if (!gymState.templates) gymState.templates = [];
+  if (!gymState.bodyMetrics) gymState.bodyMetrics = [];
+  if (!gymState.workouts) gymState.workouts = [];
+  if (!gymState.plans) gymState.plans = [];
+}
+
+/* ─────────────────────────────────────────────
+   GYM: UTILS
+───────────────────────────────────────────── */
+function gymUid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function gymFmtDate(ts) { const d=new Date(ts); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function gymFmtDateTime(ts) { const d=new Date(ts); return `${gymFmtDate(ts)} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
+function gymFmtDuration(ms) { const s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60; if(h>0) return `${h}h ${m}m`; return `${m}m ${sec}s`; }
+function gymEsc(s) { return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function gymStepInput(id, delta) { const el=document.getElementById(id); if(el) el.value=Math.max(0,(parseFloat(el.value)||0)+delta); }
+function gymMuscleName(id) { const m=GYM_MUSCLES.find(x=>x.id===id); return m?m.name:id; }
+function gymMuscleColor(id) { const m=GYM_MUSCLES.find(x=>x.id===id); return m?m.color:'#888'; }
+function gymGuessMuscle(name) { for(const k in GYM_EX_MUSCLE_MAP){ if(name.includes(k)) return GYM_EX_MUSCLE_MAP[k]; } return 'chest'; }
+function gymEpley1RM(w,r) { const ww=parseFloat(w)||0,rr=parseInt(r)||0; if(!ww||!rr) return 0; return ww*(1+rr/30); }
+function gymStartOfWeek(ts) { const d=new Date(ts); const day=d.getDay()||7; d.setHours(0,0,0,0); d.setDate(d.getDate()-(day-1)); return d.getTime(); }
+
+/* ─────────────────────────────────────────────
+   GYM: NAVIGATION
+───────────────────────────────────────────── */
+window.gymSwitchView = function(viewId, btn) {
+  document.querySelectorAll('#tab-gym .gym-nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#tab-gym .gview').forEach(v=>v.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const el = document.getElementById(viewId);
+  if(el) el.classList.add('active');
+  if(viewId==='gtoday') gymRenderToday();
+  if(viewId==='gplans') gymRenderPlansTab();
+  if(viewId==='gstats') gymRenderStats();
+  if(viewId==='ghistory') gymRenderHistory();
+};
+
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('[data-gplantab]');
+  if(!btn) return;
+  document.querySelectorAll('[data-gplantab]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  gymRenderPlansTab();
+});
+
+/* ─────────────────────────────────────────────
+   GYM: MODALS
+───────────────────────────────────────────── */
+function gymOpenModal(id) { const el=document.getElementById(id); if(el) el.classList.add('active'); }
+function gymCloseModal(id) { const el=document.getElementById(id); if(el) el.classList.remove('active'); }
+window.gymCloseModal = gymCloseModal;
+
+document.addEventListener('click', function(e){
+  if(e.target.classList.contains('gmodal-overlay')) e.target.classList.remove('active');
+});
+
+function gymShowConfirm(title, msg, onOk) {
+  document.getElementById('gconfirmTitle').textContent = title;
+  document.getElementById('gconfirmMessage').textContent = msg;
+  document.getElementById('gconfirmOkBtn').onclick = ()=>{ gymCloseModal('gconfirmModal'); onOk&&onOk(); };
+  gymOpenModal('gconfirmModal');
+}
+function gymShowPrompt(title, def, onOk) {
+  document.getElementById('gpromptTitle').textContent = title;
+  document.getElementById('gpromptInput').value = def||'';
+  document.getElementById('gpromptOkBtn').onclick = ()=>{
+    const v = document.getElementById('gpromptInput').value;
+    gymCloseModal('gpromptModal'); onOk&&onOk(v);
+  };
+  gymOpenModal('gpromptModal');
+}
+
+/* ─────────────────────────────────────────────
+   GYM: SEED DEFAULTS
+───────────────────────────────────────────── */
+function gymSeedDefaults() {
+  gymState.plans = [
+    { id:gymUid(), name:"Day 1: 下肢 A", tip:"建立整體下肢基礎力量", cycleLen:4, deloadWeek:4, startDate:Date.now(), exercises:[
+      { id:gymUid(), name:"器械腿推", muscle:'legs', sets:4, reps:"10-12", notes:"", supersetWith:null },
+      { id:gymUid(), name:"哈克深蹲機", muscle:'legs', sets:3, reps:"10-12", notes:"", supersetWith:null },
+      { id:gymUid(), name:"器械腿屈伸", muscle:'legs', sets:3, reps:"12-15", notes:"", supersetWith:null },
+      { id:gymUid(), name:"棒式 (Plank)", muscle:'core', sets:3, reps:"30-60秒", notes:"", supersetWith:null },
+    ]},
+    { id:gymUid(), name:"Day 2: 上肢 A", tip:"水平推拉，改善圓肩", cycleLen:4, deloadWeek:4, startDate:Date.now(), exercises:[
+      { id:gymUid(), name:"滑輪下拉", muscle:'back', sets:4, reps:"10-12", notes:"", supersetWith:null },
+      { id:gymUid(), name:"坐姿器械胸推", muscle:'chest', sets:4, reps:"10-12", notes:"", supersetWith:null },
+      { id:gymUid(), name:"三頭肌下壓", muscle:'arms', sets:3, reps:"12-15", notes:"", supersetWith:null },
+    ]},
+  ];
+}
+
+/* ─────────────────────────────────────────────
+   GYM: PLAN WEEK INFO
+───────────────────────────────────────────── */
+function gymGetPlanWeekInfo(plan) {
+  if(!plan.cycleLen||plan.cycleLen<=0) return null;
+  const start = plan.startDate||Date.now();
+  const weeksElapsed = Math.floor((Date.now()-start)/(7*86400000));
+  const currentWeek = (weeksElapsed%plan.cycleLen)+1;
+  const isDeload = plan.deloadWeek && currentWeek===plan.deloadWeek;
+  return { currentWeek, total:plan.cycleLen, isDeload };
+}
+
+/* ─────────────────────────────────────────────
+   GYM: TODAY VIEW
+───────────────────────────────────────────── */
+function gymRenderToday() {
+  const c = document.getElementById('gtodayContent');
+  if(!c) return;
+  if(gymState.activeWorkout) gymRenderActiveWorkout(c);
+  else gymRenderPlanPicker(c);
+}
+
+function gymRenderPlanPicker(c) {
+  const today = new Date();
+  const todayStr = gymFmtDate(today.getTime());
+  const todayWorkout = gymState.workouts.find(w=>w.date===todayStr);
+
+  let html = '';
+  if(todayWorkout) {
+    html += `<div class="gsuccess-box">✅ 今日訓練已完成！${gymFmtDuration(todayWorkout.duration||0)} · ${todayWorkout.exercises?.reduce((a,ex)=>a+ex.sets.filter(s=>s.done).length,0)||0} 組</div>`;
+  }
+
+  // Deload check
+  const hasDeload = gymState.plans.some(p=>{ const info=gymGetPlanWeekInfo(p); return info&&info.isDeload; });
+  if(hasDeload) html += `<div class="gdeload-banner"><h4>🌊 本週為減量週</h4><p>建議降低訓練強度 20-30%，讓身體充分恢復</p></div>`;
+
+  html += `<div class="gsection-title">選擇訓練計劃 <button class="gbtn gbtn-sec gbtn-sm" onclick="gymOpenPlanEditor(null)" style="font-size:0.72rem;padding:4px 10px;">＋ 新計劃</button></div>`;
+
+  if(!gymState.plans.length) {
+    html += `<div class="gempty"><span class="emoji">📋</span>還沒有訓練計劃<br><small>點上方「新計劃」建立</small></div>`;
+  } else {
+    html += `<div class="gplan-grid">`;
+    gymState.plans.forEach(plan => {
+      const info = gymGetPlanWeekInfo(plan);
+      const lastW = [...gymState.workouts].filter(w=>w.planId===plan.id).sort((a,b)=>b.startTime-a.startTime)[0];
+      const totalSets = plan.exercises.reduce((a,ex)=>a+ex.sets,0);
+      html += `<div class="gplan-card" onclick="gymStartWorkout('${plan.id}')">
+        <div class="gplan-name">${gymEsc(plan.name)}</div>
+        <div class="gplan-meta">${plan.exercises.length} 個動作 · ${totalSets} 組
+          ${info?`· 第${info.currentWeek}/${info.total}週`:''}
+          ${info&&info.isDeload?'🌊':''}
+        </div>
+        ${lastW?`<div style="font-size:0.7rem;color:var(--text-dim);margin-top:3px;">上次: ${gymFmtDate(lastW.startTime)}</div>`:''}
+        ${plan.tip?`<div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px;font-style:italic;">${gymEsc(plan.tip)}</div>`:''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  html += `<div class="gsection-title" style="margin-top:14px;">快速操作</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button class="gbtn gbtn-sec gbtn-sm" onclick="document.getElementById('gbodyMetricsBtn').click()">⚖️ 體重紀錄</button>
+    <button class="gbtn gbtn-sec gbtn-sm" id="gbodyMetricsBtn" style="display:none;" onclick="gymOpenBodyMetrics()"></button>
+    <button class="gbtn gbtn-sec gbtn-sm" onclick="gymOpenSettings()">⚙️ 設定</button>
+  </div>`;
+  c.innerHTML = html;
+
+  // Fix hidden button
+  document.getElementById('gbodyMetricsBtn').onclick = gymOpenBodyMetrics;
+  document.querySelectorAll('#gtodayContent .gbtn-sec')[0].onclick = gymOpenBodyMetrics;
+}
+
+function gymStartWorkout(planId) {
+  const plan = gymState.plans.find(p=>p.id===planId);
+  if(!plan) return;
+  gymState.pendingPlanId = planId;
+  if(gymState.settings.showCheckin) {
+    gymInitCheckin();
+    gymOpenModal('gcheckinModal');
+  } else {
+    gymBeginWorkout(planId, null);
+  }
+}
+
+function gymInitCheckin() {
+  ['gsleepRating','gstressRating'].forEach(id=>{
+    document.querySelectorAll(`#${id} .grating-btn`).forEach(b=>b.classList.remove('selected'));
+    document.querySelectorAll(`#${id} .grating-btn`).forEach(b=>b.onclick=()=>{
+      document.querySelectorAll(`#${id} .grating-btn`).forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected');
+    });
+  });
+  document.getElementById('gcheckinWeight').value='';
+  const grid = document.getElementById('gsorenessGrid');
+  grid.innerHTML = GYM_MUSCLES.map(m=>`<button class="gmuscle-btn" data-id="${m.id}" onclick="this.classList.toggle('selected')">${m.name}</button>`).join('');
+}
+
+document.getElementById('gskipCheckinBtn').onclick = ()=>{ gymCloseModal('gcheckinModal'); gymBeginWorkout(gymState.pendingPlanId, null); };
+document.getElementById('gconfirmCheckinBtn').onclick = ()=>{
+  const sleep = document.querySelector('#gsleepRating .grating-btn.selected')?.dataset.val;
+  const stress = document.querySelector('#gstressRating .grating-btn.selected')?.dataset.val;
+  const weight = parseFloat(document.getElementById('gcheckinWeight').value)||null;
+  const soreness = [...document.querySelectorAll('#gsorenessGrid .gmuscle-btn.selected')].map(b=>b.dataset.id);
+  const checkin = { sleep:sleep?parseInt(sleep):null, stress:stress?parseInt(stress):null, weight, soreness };
+  if(weight) { gymState.bodyMetrics.push({date:Date.now(),weight}); }
+  gymCloseModal('gcheckinModal');
+  gymBeginWorkout(gymState.pendingPlanId, checkin);
+};
+
+function gymBeginWorkout(planId, checkin) {
+  const plan = gymState.plans.find(p=>p.id===planId);
+  if(!plan) return;
+  gymState.activeWorkout = {
+    id: gymUid(),
+    planId, planName: plan.name,
+    startTime: Date.now(),
+    manualStartTime: null,
+    manualEndTime: null,
+    checkin,
+    exercises: plan.exercises.map(ex=>({
+      id: ex.id, name: ex.name, muscle: ex.muscle||gymGuessMuscle(ex.name),
+      targetSets: ex.sets, targetReps: ex.reps, notes: ex.notes||'',
+      supersetWith: ex.supersetWith||null,
+      sets: Array.from({length:ex.sets},(_, si)=>{
+  // 找上次此計劃中這個動作的對應組數
+  let prevW='', prevR='';
+  for(let i=gymState.workouts.length-1;i>=0;i--){
+    const pw=gymState.workouts[i];
+    if(pw.planId!==planId) continue;
+    const pex=pw.exercises.find(e=>e.name===ex.name);
+    if(pex&&pex.sets[si]&&pex.sets[si].done){
+      prevW=pex.sets[si].weight||'';
+      prevR=pex.sets[si].reps||'';
+      break;
+    }
+  }
+  return {weight:prevW,reps:prevR,rpe:'',done:false,isDropset:false};
+})
+    }))
+  };
+  gymPersist();
+  gymRenderToday();
+}
+
+function gymRenderActiveWorkout(c) {
+  const w = gymState.activeWorkout;
+  if(!w) return;
+  const _startMs = w.manualStartTime ? w.manualStartTime : w.startTime;
+  const _endMs   = w.manualEndTime   ? w.manualEndTime   : Date.now();
+  const elapsed  = Math.max(0, _endMs - _startMs);
+  const totalSets = w.exercises.reduce((a,ex)=>a+ex.sets.length,0);
+  const doneSets  = w.exercises.reduce((a,ex)=>a+ex.sets.filter(s=>s.done).length,0);
+  const totalVol  = w.exercises.reduce((a,ex)=>a+ex.sets.filter(s=>s.done).reduce((b,s)=>(b+(parseFloat(s.weight)||0)*(parseInt(s.reps)||0)),0),0);
+
+  let html = `<div class="gworkout-header">
+    <h2>💪 ${gymEsc(w.planName)}</h2>
+    <div class="gwstats">
+      <div style="grid-column:span 4;display:flex;gap:8px;align-items:center;margin-bottom:4px;flex-wrap:wrap;">
+        <label style="font-size:0.68rem;color:var(--text-muted);font-weight:900;letter-spacing:0.05em;">🕐 開始</label>
+        <input type="time" id="gManualStart" value="${w.manualStartTime ? new Date(w.manualStartTime).toTimeString().slice(0,5) : new Date(w.startTime).toTimeString().slice(0,5)}"
+          style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:3px 7px;font-size:0.82rem;color:var(--text);font-family:'Nunito',sans-serif;"
+          onchange="(function(v){const[h,m]=v.split(':').map(Number);const d=new Date(gymState.activeWorkout.startTime);d.setHours(h,m,0,0);gymState.activeWorkout.manualStartTime=d.getTime();gymPersist();})(this.value)">
+        <label style="font-size:0.68rem;color:var(--text-muted);font-weight:900;letter-spacing:0.05em;">🕑 結束</label>
+        <input type="time" id="gManualEnd" value="${w.manualEndTime ? new Date(w.manualEndTime).toTimeString().slice(0,5) : ''}"
+          placeholder="現在" style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:3px 7px;font-size:0.82rem;color:var(--text);font-family:'Nunito',sans-serif;"
+          onchange="(function(v){const[h,m]=v.split(':').map(Number);const d=new Date(gymState.activeWorkout.startTime);d.setHours(h,m,0,0);gymState.activeWorkout.manualEndTime=d.getTime();gymPersist();})(this.value)">
+        <strong style="font-size:0.9rem;color:var(--text);">${gymFmtDuration(elapsed)}</strong><span>時長</span>
+      </div>
+      <div><strong>${doneSets}/${totalSets}</strong>組</div>
+      <div><strong>${totalVol>0?totalVol.toFixed(0):'—'}</strong>總量kg</div>
+      <div><strong>${w.exercises.length}</strong>動作</div>
+    </div>
+  </div>`;
+
+  if(w.checkin) {
+    const parts=[];
+    if(w.checkin.sleep) parts.push(`😴${w.checkin.sleep}/5`);
+    if(w.checkin.stress) parts.push(`😰${w.checkin.stress}/5`);
+    if(w.checkin.weight) parts.push(`⚖️${w.checkin.weight}kg`);
+    if(parts.length) html += `<div class="gbio-summary">${parts.map(p=>`<span class="gbio-chip">${p}</span>`).join('')}</div>`;
+  }
+
+  w.exercises.forEach((ex, exIdx)=>{
+    const prevWorkouts = gymState.workouts.filter(pw=>pw.planId===w.planId);
+    let prevInfo = '';
+    for(let i=prevWorkouts.length-1;i>=0;i--) {
+      const pex = prevWorkouts[i].exercises.find(e=>e.name===ex.name);
+      if(pex&&pex.sets.some(s=>s.done)) {
+        const setLines = pex.sets.filter(s=>s.done).map((s,i)=>`${i+1}. ${s.weight||0}kg×${s.reps||0}`).join(' · ');
+const best1RM = Math.max(...pex.sets.filter(s=>s.done).map(s=>gymEpley1RM(s.weight,s.reps)));
+prevInfo = `上次: ${setLines}${best1RM>0?' | 1RM≈'+best1RM.toFixed(1)+'kg':''}`;
+        break;
+      }
+    }
+    const isSuperset = ex.supersetWith&&w.exercises.find(e=>e.id===ex.supersetWith);
+    html += `<div class="gex-block${isSuperset?' in-superset':''}" id="gex-${exIdx}">
+      <div class="gex-head">
+        <div>
+          <div class="gex-name">
+            <span class="gmbadge muscle-${ex.muscle}">${gymMuscleName(ex.muscle)}</span>
+            ${gymEsc(ex.name)}
+            ${isSuperset?'<span style="font-size:0.65rem;color:var(--yellow);">超級組</span>':''}
+          </div>
+          <div class="gex-target">${ex.targetSets}組 × ${gymEsc(ex.targetReps||'')}${ex.notes?` · ${gymEsc(ex.notes)}`:''}
+            ${ex.targetReps?`<span class="gtag" style="margin-left:4px;">${gymEsc(ex.targetReps)}</span>`:''}
+          </div>
+          ${prevInfo?`<div class="gprev-info">${prevInfo}</div>`:''}
+        </div>
+        <div class="gex-actions">
+          <button onclick="gymExAction(${exIdx})">⋯</button>
+          <button onclick="gymOpenExDetail('${gymEsc(ex.name)}')">📈</button>
+        </div>
+      </div>
+      <div class="gset-label-row"><div>#</div><div>公斤</div><div>次數</div><div>RPE</div><div>✓</div></div>
+      <div style="font-size:0.62rem;color:var(--blue);padding:0 0 3px;opacity:0.75;">目標次數: ${gymEsc(ex.targetReps||'—')}</div>`;
+
+    ex.sets.forEach((set, si)=>{
+      const setNum = si+1;
+      html += `<div class="gset-row${set.done?' completed':''}${set.isDropset?' dropset':''}" id="gset-${exIdx}-${si}">
+        <div class="gset-num${set.isDropset?' drop':''}">${set.isDropset?'D':setNum}</div>
+        <input class="gset-input" type="number" inputmode="decimal" step="0.5" placeholder="0"
+          value="${gymEsc(set.weight)}" onchange="gymSetVal(${exIdx},${si},'weight',this.value)" onblur="gymSetVal(${exIdx},${si},'weight',this.value)">
+        <input class="gset-input" type="number" inputmode="numeric" placeholder="0"
+          value="${gymEsc(set.reps)}" onchange="gymSetVal(${exIdx},${si},'reps',this.value)" onblur="gymSetVal(${exIdx},${si},'reps',this.value)">
+        <input class="gset-input grpe-input" type="number" inputmode="decimal" step="0.5" placeholder="—" min="1" max="10"
+          value="${gymEsc(set.rpe)}" onchange="gymSetVal(${exIdx},${si},'rpe',this.value)">
+        <button class="gcheck-btn" onclick="gymToggleSet(${exIdx},${si})">${set.done?'✓':'○'}</button>
+      </div>`;
+    });
+
+    html += `<div class="gset-extra-btns">
+      <button onclick="gymAddSet(${exIdx})">＋ 組</button>
+      <button onclick="gymAddDropset(${exIdx})">⬇ Dropset</button>
+      <button onclick="gymRemoveLastSet(${exIdx})" ${ex.sets.length<=1?'disabled':''}>− 組</button>
+    </div></div>`;
+  });
+
+  html += `<div style="margin-top:14px;">
+  <textarea id="gworkoutNote" class="gform-input" placeholder="✍️ 訓練備忘（可選）：今日感受、需要調整的地方…" rows="2" style="resize:none;font-size:0.83rem;margin-bottom:8px;">${gymEsc(w.note||'')}</textarea>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button class="gbtn gbtn-block" onclick="gymFinishWorkout()">🏁 完成訓練</button>
+    <button class="gbtn gbtn-danger" style="flex:0 0 auto;padding:11px 14px;" onclick="gymAbortWorkout()">✕ 放棄</button>
+  </div>
+</div>`;
+  c.innerHTML = html;
+}
+
+window.gymSetVal = function(exIdx, si, key, val) {
+  if(!gymState.activeWorkout) return;
+  gymState.activeWorkout.exercises[exIdx].sets[si][key] = val;
+  gymPersist();
+};
+
+window.gymToggleSet = function(exIdx, si) {
+  if(!gymState.activeWorkout) return;
+  const set = gymState.activeWorkout.exercises[exIdx].sets[si];
+  // 若要勾為完成但重量/次數為空，自動從輸入框讀值
+  if(!set.done) {
+    const row = document.getElementById(`gset-${exIdx}-${si}`);
+    if(row) {
+      const wInput = row.querySelectorAll('.gset-input')[0];
+      const rInput = row.querySelectorAll('.gset-input')[1];
+      if(wInput&&!set.weight) set.weight = wInput.value;
+      if(rInput&&!set.reps)   set.reps  = rInput.value;
+    }
+  }
+  set.done = !set.done;
+  gymPersist();
+  const row = document.getElementById(`gset-${exIdx}-${si}`);
+  if(row) { row.classList.toggle('completed', set.done); row.querySelector('.gcheck-btn').textContent = set.done?'✓':'○'; }
+  // Auto rest timer
+  if(set.done && gymState.settings.autoTimer) {
+    const ex = gymState.activeWorkout.exercises[exIdx];
+    const nextEx = ex.supersetWith ? gymState.activeWorkout.exercises.find(e=>e.id===ex.supersetWith) : null;
+    gymStartRest(gymState.settings.restTime, nextEx?.name||'');
+  }
+};
+
+window.gymAddSet = function(exIdx) {
+  if(!gymState.activeWorkout) return;
+  const ex = gymState.activeWorkout.exercises[exIdx];
+  const last = ex.sets[ex.sets.length-1];
+  ex.sets.push({weight:last?.weight||'', reps:last?.reps||'', rpe:'', done:false, isDropset:false});
+  gymPersist(); gymRenderToday();
+};
+window.gymAddDropset = function(exIdx) {
+  if(!gymState.activeWorkout) return;
+  const ex = gymState.activeWorkout.exercises[exIdx];
+  const last = ex.sets[ex.sets.length-1];
+  ex.sets.push({weight:last?.weight||'', reps:last?.reps||'', rpe:'', done:false, isDropset:true});
+  gymPersist(); gymRenderToday();
+};
+window.gymRemoveLastSet = function(exIdx) {
+  if(!gymState.activeWorkout) return;
+  const ex = gymState.activeWorkout.exercises[exIdx];
+  if(ex.sets.length>1) { ex.sets.pop(); gymPersist(); gymRenderToday(); }
+};
+
+window.gymExAction = function(exIdx) {
+  gymCurrentExActionIdx = exIdx;
+  const ex = gymState.activeWorkout.exercises[exIdx];
+  document.getElementById('gexActionTitle').textContent = ex.name;
+  // superset
+  document.getElementById('gactSupersetBtn').onclick = ()=>{ gymCloseModal('gexActionModal'); gymOpenSupersetModal(exIdx); };
+  // move up/down
+  document.getElementById('gactMoveUpBtn').onclick = ()=>{ gymCloseModal('gexActionModal'); if(exIdx>0){ const arr=gymState.activeWorkout.exercises; [arr[exIdx-1],arr[exIdx]]=[arr[exIdx],arr[exIdx-1]]; gymPersist(); gymRenderToday(); }};
+  document.getElementById('gactMoveDownBtn').onclick = ()=>{ gymCloseModal('gexActionModal'); const arr=gymState.activeWorkout.exercises; if(exIdx<arr.length-1){ [arr[exIdx],arr[exIdx+1]]=[arr[exIdx+1],arr[exIdx]]; gymPersist(); gymRenderToday(); }};
+  // swap
+  document.getElementById('gactSwapBtn').onclick = ()=>{ gymCloseModal('gexActionModal'); gymOpenSwapModal(exIdx); };
+  // remove
+  document.getElementById('gactRemoveBtn').onclick = ()=>{ gymCloseModal('gexActionModal'); gymShowConfirm('移除動作',`確定移除「${ex.name}」？`,()=>{ gymState.activeWorkout.exercises.splice(exIdx,1); gymPersist(); gymRenderToday(); }); };
+  gymOpenModal('gexActionModal');
+};
+
+function gymOpenSupersetModal(exIdx) {
+  const ex = gymState.activeWorkout.exercises[exIdx];
+  const others = gymState.activeWorkout.exercises.filter((_,i)=>i!==exIdx);
+  document.getElementById('gsupersetList').innerHTML = others.map(o=>`
+    <button class="gbtn gbtn-sec gbtn-block" style="margin-bottom:6px;text-align:left;" onclick="gymSetSuperset('${ex.id}','${o.id}')">
+      <span class="gmbadge muscle-${o.muscle}">${gymMuscleName(o.muscle)}</span> ${gymEsc(o.name)}
+    </button>`).join('');
+  const removeBtn = document.getElementById('gremoveSupersetBtn');
+  removeBtn.style.display = ex.supersetWith?'block':'none';
+  removeBtn.onclick = ()=>{ ex.supersetWith=null; gymPersist(); gymCloseModal('gsupersetModal'); gymRenderToday(); };
+  gymOpenModal('gsupersetModal');
+}
+window.gymSetSuperset = function(exId, partnerId) {
+  const ex = gymState.activeWorkout.exercises.find(e=>e.id===exId);
+  const partner = gymState.activeWorkout.exercises.find(e=>e.id===partnerId);
+  if(ex) ex.supersetWith = partnerId;
+  if(partner) partner.supersetWith = exId;
+  gymPersist(); gymCloseModal('gsupersetModal'); gymRenderToday();
+};
+
+let gymSwapExIdx = null;
+function gymOpenSwapModal(exIdx) {
+  gymSwapExIdx = exIdx;
+  document.getElementById('gswapNameInput').value='';
+  gymRenderMuscleGrid('gswapMuscleGrid', 'chest', false);
+  gymRenderExSuggestions('gswapSuggestions','gswapNameInput');
+  document.getElementById('gconfirmSwapBtn').onclick = ()=>{
+    const name = document.getElementById('gswapNameInput').value.trim();
+    const muscle = document.querySelector('#gswapMuscleGrid .gmuscle-sel-btn.selected')?.dataset.id||'chest';
+    if(!name){alert('請輸入動作名稱');return;}
+    gymState.activeWorkout.exercises[gymSwapExIdx].name = name;
+    gymState.activeWorkout.exercises[gymSwapExIdx].muscle = muscle;
+    gymPersist(); gymCloseModal('gswapModal'); gymRenderToday();
+  };
+  gymOpenModal('gswapModal');
+}
+
+function gymFinishWorkout() {
+  const w = gymState.activeWorkout;
+  const _fs = w.manualStartTime ? w.manualStartTime : w.startTime;
+  const _fe = w.manualEndTime   ? w.manualEndTime   : Date.now();
+  w.duration = Math.max(0, _fe - _fs);
+  w.date = gymFmtDate(w.startTime);
+  const doneSets = w.exercises.reduce((a,ex)=>a+ex.sets.filter(s=>s.done).length,0);
+  if(doneSets===0&&!confirm('沒有完成任何組數，確定要結束？')) return;
+  const noteEl = document.getElementById('gworkoutNote');
+if(noteEl) w.note = noteEl.value.trim();
+gymState.workouts.push(Object.assign({},w));
+  gymState.activeWorkout = null;
+  gymPersist();
+  showToast('🎉 訓練完成！'+gymFmtDuration(w.duration),'success');
+  gymRenderToday();
+}
+
+window.gymAbortWorkout = function() {
+  gymShowConfirm('放棄訓練','確定要放棄本次訓練？記錄不會儲存。',()=>{
+    gymState.activeWorkout=null; gymPersist(); gymRenderToday();
+  });
+};
+
+/* ─────────────────────────────────────────────
+   GYM: REST TIMER
+───────────────────────────────────────────── */
+function gymStartRest(seconds, nextHint) {
+  gymRestRemaining = seconds;
+  gymRestNextHint = nextHint||'';
+  clearInterval(gymRestInterval);
+  const timerEl = document.getElementById('grestTimer');
+  const timeEl = document.getElementById('grestTime');
+  const hintEl = document.getElementById('grestNextHint');
+  if(timerEl) timerEl.classList.add('active');
+  function gymTick() {
+    if(gymRestRemaining<=0) { clearInterval(gymRestInterval); if(timerEl) timerEl.classList.remove('active'); gymRestBeep(); return; }
+    const m=Math.floor(gymRestRemaining/60), s=gymRestRemaining%60;
+    if(timeEl) timeEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(hintEl) hintEl.textContent = gymRestNextHint?`→ ${gymRestNextHint}`:'';
+    gymRestRemaining--;
+  }
+  gymTick();
+  gymRestInterval = setInterval(gymTick, 1000);
+}
+function gymRestBeep() {
+  if(!gymState.settings.sound) return;
+  try{ const ctx=new AudioContext(); const o=ctx.createOscillator(); const g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=880; g.gain.setValueAtTime(0.3,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.8); o.start(); o.stop(ctx.currentTime+0.8); }catch(e){}
+}
+window.gymAddRestTime = function(delta) { gymRestRemaining=Math.max(0,gymRestRemaining+delta); };
+window.gymSkipRest = function() {
+  clearInterval(gymRestInterval);
+  const timerEl = document.getElementById('grestTimer');
+  if(timerEl) timerEl.classList.remove('active');
+};
+
+/* ─────────────────────────────────────────────
+   GYM: PLANS TAB
+───────────────────────────────────────────── */
+function gymRenderPlansTab() {
+  const activeTab = document.querySelector('[data-gplantab].active')?.dataset.gplantab || 'plans';
+  const c = document.getElementById('gplanTabContent');
+  if(!c) return;
+  if(activeTab==='plans') {
+    if(!gymState.plans.length) {
+      c.innerHTML = `<div class="gempty"><span class="emoji">📋</span>還沒有訓練計劃</div>
+        <button class="gbtn gbtn-block" onclick="gymOpenPlanEditor(null)">➕ 新增計劃</button>`;
+      return;
+    }
+    c.innerHTML = `<button class="gbtn gbtn-block gbtn-sec" onclick="gymOpenPlanEditor(null)" style="margin-bottom:10px;">➕ 新增計劃</button>` +
+    gymState.plans.map(plan=>{
+      const info = gymGetPlanWeekInfo(plan);
+      return `<div class="gplan-editor-card">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;">
+          <div>
+            <div style="font-weight:900;font-size:0.95rem;">${gymEsc(plan.name)} ${info?`<span class="gtag">W${info.currentWeek}/${info.total}${info.isDeload?' 🌊':''}</span>`:''}</div>
+            ${plan.tip?`<div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">${gymEsc(plan.tip)}</div>`:''}
+          </div>
+          <button class="gbtn gbtn-sec gbtn-sm" onclick="gymOpenPlanEditor('${plan.id}')">✏️ 編輯</button>
+        </div>
+        ${plan.exercises.map(ex=>`
+          <div class="gex-line">
+            <div class="gex-line-info">
+              <div class="name"><span class="gmbadge muscle-${ex.muscle}">${gymMuscleName(ex.muscle)}</span> ${gymEsc(ex.name)}</div>
+              <div class="meta">${ex.sets}組 × ${gymEsc(ex.reps||'')}</div>
+            </div>
+          </div>`).join('')}
+      </div>`;
+    }).join('');
+  } else {
+    // Templates
+    if(!gymState.templates.length) {
+      c.innerHTML = `<div class="gempty"><span class="emoji">📁</span>還沒有模板<br><small>完成訓練後可另存為模板</small></div>`;
+      return;
+    }
+    c.innerHTML = gymState.templates.map(t=>`
+      <div class="gplan-editor-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
+          <div style="font-weight:900;">${gymEsc(t.name)}</div>
+          <div style="display:flex;gap:5px;">
+            <button class="gbtn gbtn-sm" onclick="gymUseTemplate('${t.id}')">使用</button>
+            <button class="gbtn gbtn-danger gbtn-sm" onclick="gymDeleteTemplate('${t.id}')">刪除</button>
+          </div>
+        </div>
+        ${t.exercises.map(ex=>`<div class="gex-line"><div class="gex-line-info"><div class="name"><span class="gmbadge muscle-${ex.muscle}">${gymMuscleName(ex.muscle)}</span> ${gymEsc(ex.name)}</div></div></div>`).join('')}
+      </div>`).join('');
+  }
+}
+
+window.gymUseTemplate = function(id) {
+  const t = gymState.templates.find(x=>x.id===id);
+  if(!t) return;
+  gymShowPrompt('計劃名稱', t.name, name=>{
+    if(!name) return;
+    gymState.plans.push({ id:gymUid(), name, tip:'', cycleLen:0, deloadWeek:0, startDate:Date.now(),
+      exercises: t.exercises.map(ex=>({...ex, id:gymUid(), supersetWith:null})) });
+    gymPersist(); gymRenderPlansTab();
+    showToast('✅ 已從模板建立計劃');
+  });
+};
+window.gymDeleteTemplate = function(id) {
+  gymShowConfirm('刪除模板','確定刪除此模板？',()=>{
+    gymState.templates = gymState.templates.filter(x=>x.id!==id);
+    gymPersist(); gymRenderPlansTab();
+  });
+};
+
+/* ─────────────────────────────────────────────
+   GYM: PLAN EDITOR
+───────────────────────────────────────────── */
+let gymEditingPlanExercises = [];
+
+window.gymOpenPlanEditor = function(planId) {
+  gymCurrentPlanEditId = planId;
+  const plan = planId ? gymState.plans.find(p=>p.id===planId) : null;
+  document.getElementById('gplanModalTitle').textContent = plan ? '編輯計劃' : '新增計劃';
+  document.getElementById('gplanNameInput').value = plan?.name||'';
+  document.getElementById('gplanTipInput').value = plan?.tip||'';
+  document.getElementById('gplanCycleLen').value = plan?.cycleLen||0;
+  document.getElementById('gplanDeloadWeek').value = plan?.deloadWeek||0;
+  document.getElementById('gdeletePlanBtn').style.display = plan ? 'block' : 'none';
+  gymEditingPlanExercises = plan ? plan.exercises.map(e=>({...e})) : [];
+  gymRenderPlanExercisesList();
+  gymOpenModal('gplanModal');
+};
+
+function gymRenderPlanExercisesList() {
+  const c = document.getElementById('gplanExercisesList');
+  if(!c) return;
+  c.innerHTML = gymEditingPlanExercises.map((ex,i)=>`
+    <div class="gex-line">
+      <div class="gex-line-info">
+        <div class="name"><span class="gmbadge muscle-${ex.muscle}">${gymMuscleName(ex.muscle)}</span> ${gymEsc(ex.name)}</div>
+        <div class="meta">${ex.sets}組 × ${gymEsc(ex.reps||'')}</div>
+      </div>
+      <div class="gex-line-actions">
+        <button class="gbtn gbtn-sec gbtn-sm" onclick="gymEditExercise(${i})">✏️</button>
+        <button class="gbtn gbtn-danger gbtn-sm" onclick="gymRemoveExercise(${i})">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+document.getElementById('gaddExerciseBtn').onclick = ()=>gymOpenExerciseModal(null);
+document.getElementById('gsavePlanBtn').onclick = ()=>{
+  const name = document.getElementById('gplanNameInput').value.trim();
+  if(!name){alert('請輸入計劃名稱');return;}
+  const planData = {
+    name, tip: document.getElementById('gplanTipInput').value.trim(),
+    cycleLen: parseInt(document.getElementById('gplanCycleLen').value)||0,
+    deloadWeek: parseInt(document.getElementById('gplanDeloadWeek').value)||0,
+    exercises: gymEditingPlanExercises
+  };
+  if(gymCurrentPlanEditId) {
+    const idx = gymState.plans.findIndex(p=>p.id===gymCurrentPlanEditId);
+    if(idx>-1) gymState.plans[idx] = Object.assign(gymState.plans[idx], planData);
+  } else {
+    gymState.plans.push({ id:gymUid(), startDate:Date.now(), ...planData });
+  }
+  gymPersist(); gymCloseModal('gplanModal'); gymRenderPlansTab(); gymRenderToday();
+  showToast('✅ 計劃已儲存');
+};
+document.getElementById('gdeletePlanBtn').onclick = ()=>{
+  gymShowConfirm('刪除計劃','確定刪除此計劃？訓練紀錄不會刪除。',()=>{
+    gymState.plans = gymState.plans.filter(p=>p.id!==gymCurrentPlanEditId);
+    gymPersist(); gymCloseModal('gplanModal'); gymRenderPlansTab(); gymRenderToday();
+  });
+};
+
+window.gymEditExercise = function(idx) { gymCurrentExEditIdx = idx; gymOpenExerciseModal(gymEditingPlanExercises[idx]); };
+window.gymRemoveExercise = function(idx) { gymEditingPlanExercises.splice(idx,1); gymRenderPlanExercisesList(); };
+
+function gymOpenExerciseModal(ex) {
+  document.getElementById('gexerciseModalTitle').textContent = ex?'編輯動作':'新增動作';
+  document.getElementById('gexNameInput').value = ex?.name||'';
+  document.getElementById('gexSetsInput').value = ex?.sets||3;
+  document.getElementById('gexRepsInput').value = ex?.reps||'';
+  document.getElementById('gexNotesInput').value = ex?.notes||'';
+  gymRenderMuscleGrid('gmuscleSelectGrid', ex?.muscle||'chest', true);
+  gymRenderExSuggestions('gexSuggestions','gexNameInput');
+  gymOpenModal('gexerciseModal');
+}
+
+document.getElementById('gsaveExerciseBtn').onclick = ()=>{
+  const name = document.getElementById('gexNameInput').value.trim();
+  if(!name){alert('請輸入動作名稱');return;}
+  const muscle = document.querySelector('#gmuscleSelectGrid .gmuscle-sel-btn.selected')?.dataset.id || gymGuessMuscle(name);
+  const exData = {
+    id: gymCurrentExEditIdx!==null ? (gymEditingPlanExercises[gymCurrentExEditIdx]?.id||gymUid()) : gymUid(),
+    name, muscle, sets: parseInt(document.getElementById('gexSetsInput').value)||3,
+    reps: document.getElementById('gexRepsInput').value.trim(),
+    notes: document.getElementById('gexNotesInput').value.trim(), supersetWith:null
+  };
+  if(gymCurrentExEditIdx!==null) { gymEditingPlanExercises[gymCurrentExEditIdx]=exData; gymCurrentExEditIdx=null; }
+  else { gymEditingPlanExercises.push(exData); }
+  gymCloseModal('gexerciseModal');
+  gymRenderPlanExercisesList();
+};
+
+function gymRenderMuscleGrid(containerId, selected, withSuggest) {
+  const c = document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML = GYM_MUSCLES.map(m=>`
+    <button class="gmuscle-sel-btn${m.id===selected?' selected':''}" data-id="${m.id}"
+      style="${m.id===selected?`background:${m.color};border-color:${m.color};`:''}"
+      onclick="gymSelectMuscle('${containerId}','${m.id}','${m.color}',this)">
+      ${m.name}
+    </button>`).join('');
+}
+window.gymSelectMuscle = function(containerId, id, color, btn) {
+  document.querySelectorAll(`#${containerId} .gmuscle-sel-btn`).forEach(b=>{ b.classList.remove('selected'); b.style.background=''; b.style.borderColor=''; });
+  btn.classList.add('selected'); btn.style.background=color; btn.style.borderColor=color;
+};
+
+function gymRenderExSuggestions(containerId, inputId) {
+  const c = document.getElementById(containerId);
+  if(!c) return;
+  c.innerHTML = GYM_EX_SUGGESTIONS.map(s=>`<span class="gsuggestion-chip" onclick="document.getElementById('${inputId}').value='${s}'">${s}</span>`).join('');
+}
+
+/* ─────────────────────────────────────────────
+   GYM: STATS VIEW
+───────────────────────────────────────────── */
+function gymRenderStats() {
+  const c = document.getElementById('gstatsContent');
+  if(!c) return;
+  const now = Date.now();
+  const weekStart = gymStartOfWeek(now);
+  const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0,0,0,0);
+
+  const weekWorkouts = gymState.workouts.filter(w=>w.startTime>=weekStart);
+  const monthWorkouts = gymState.workouts.filter(w=>w.startTime>=monthStart.getTime());
+  const totalWorkouts = gymState.workouts.length;
+
+  const weekVol = weekWorkouts.reduce((a,w)=>a+w.exercises.reduce((b,ex)=>b+ex.sets.filter(s=>s.done).reduce((c,s)=>c+(parseFloat(s.weight)||0)*(parseInt(s.reps)||0),0),0),0);
+
+  let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+    <span style="font-family:'Playfair Display',serif;font-size:0.95rem;">訓練洞察</span>
+    <div style="display:flex;gap:6px;">
+      <button class="gbtn gbtn-sec gbtn-sm" onclick="gymOpenBodyMetrics()">⚖️ 體重</button>
+      <button class="gbtn gbtn-sec gbtn-sm" onclick="gymOpenSettings()">⚙️</button>
+    </div>
+  </div>`;
+
+  html += `<div class="gstat-grid">
+    <div class="gstat-card"><div class="gstat-label">本週訓練</div><div class="gstat-value">${weekWorkouts.length}<span class="gstat-unit">次</span></div></div>
+    <div class="gstat-card"><div class="gstat-label">本月訓練</div><div class="gstat-value">${monthWorkouts.length}<span class="gstat-unit">次</span></div></div>
+    <div class="gstat-card"><div class="gstat-label">本週總量</div><div class="gstat-value">${weekVol>0?Math.round(weekVol/1000)+'k':'—'}<span class="gstat-unit">kg</span></div></div>
+    <div class="gstat-card"><div class="gstat-label">總訓練次數</div><div class="gstat-value">${totalWorkouts}<span class="gstat-unit">次</span></div></div>
+  </div>`;
+
+  // Weekly volume by muscle
+  html += `<div class="gchart-card">
+    <h4>本週肌群訓練量 <span style="font-size:0.7rem;color:var(--text-muted);font-weight:400;">組數</span></h4>`;
+
+  const weekVols = {};
+  GYM_MUSCLES.forEach(m=>weekVols[m.id]=0);
+  weekWorkouts.forEach(w=>w.exercises.forEach(ex=>{
+    const m = ex.muscle||gymGuessMuscle(ex.name);
+    if(weekVols[m]!==undefined) weekVols[m] += ex.sets.filter(s=>s.done).length;
+  }));
+  const maxVol = Math.max(...Object.values(weekVols),1);
+  html += GYM_MUSCLES.map(m=>{
+    const vol = weekVols[m.id]||0;
+    const goal = gymState.settings.volumeGoals[m.id]||0;
+    const pct = Math.min(100,(vol/Math.max(goal,maxVol,1))*100);
+    const overGoal = goal>0&&vol>=goal;
+    return `<div class="gvol-bar-row">
+      <div class="gvol-bar-name"><span class="gmbadge muscle-${m.id}" style="font-size:0.6rem;">${m.name}</span></div>
+      <div class="gvol-bar-track">
+        <div class="gvol-bar-fill" style="width:${pct}%;background:${overGoal?'var(--green)':m.color};"></div>
+        ${goal>0?`<div class="gvol-bar-target" style="left:${Math.min(100,goal/Math.max(maxVol,1)*100)}%;"></div>`:''}
+        <div class="gvol-bar-count">${vol}${goal>0?'/'+goal:''}</div>
+      </div>
+    </div>`;
+  }).join('');
+  html += `</div>`;
+
+  // Plateau detection
+  const plateaus = gymDetectPlateaus();
+  if(plateaus.length) {
+    html += `<div class="gsection-title" style="color:var(--red);">⚠️ 停滯偵測</div>`;
+    html += plateaus.map(p=>`
+      <div class="gplateau-card">
+        <div class="ex-nm">${gymEsc(p.name)}</div>
+        <div class="ex-info">連續 ${p.weeks} 週無進展 · 最高 1RM ${p.maxRM.toFixed(1)}kg</div>
+      </div>`).join('');
+  }
+
+  // Recent workouts chart
+  if(gymState.workouts.length>=2) {
+    html += `<div class="gchart-card">
+      <h4>近期訓練量趨勢</h4>
+      <div class="gchart-wrap"><canvas id="gvolChart"></canvas></div>
+    </div>`;
+  }
+
+  c.innerHTML = html;
+
+  if(gymState.workouts.length>=2) {
+    const recent = [...gymState.workouts].sort((a,b)=>a.startTime-b.startTime).slice(-8);
+    const labels = recent.map(w=>gymFmtDate(w.startTime).slice(5));
+    const data = recent.map(w=>w.exercises.reduce((a,ex)=>a+ex.sets.filter(s=>s.done).reduce((b,s)=>b+(parseFloat(s.weight)||0)*(parseInt(s.reps)||0),0),0));
+    const ctx = document.getElementById('gvolChart')?.getContext('2d');
+    if(ctx) {
+      if(gymCharts.vol) gymCharts.vol.destroy();
+      gymCharts.vol = new Chart(ctx, {
+        type:'line', data:{ labels, datasets:[{
+          label:'總訓練量(kg)', data, borderColor:'#74C69D',
+          backgroundColor:'rgba(116,198,157,0.12)', fill:true, tension:0.35, pointRadius:3
+        }]},
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+          scales:{ x:{ ticks:{color:'#888',font:{size:10}}, grid:{color:'#2C2C2C'} }, y:{ ticks:{color:'#888',font:{size:10}}, grid:{color:'#2C2C2C'} } }
+        }
+      });
+    }
+  }
+}
+
+function gymDetectPlateaus() {
+  const result = [];
+  const names = [...new Set(gymState.workouts.flatMap(w=>w.exercises.map(e=>e.name)))];
+  names.forEach(name=>{
+    const history = gymState.workouts.flatMap(w=>w.exercises.filter(e=>e.name===name).map(e=>({ week:gymStartOfWeek(w.startTime), rm:Math.max(...e.sets.filter(s=>s.done).map(s=>gymEpley1RM(s.weight,s.reps)),0) }))).filter(x=>x.rm>0);
+    if(history.length<3) return;
+    const byWeek = {};
+    history.forEach(h=>{ if(!byWeek[h.week]||byWeek[h.week]<h.rm) byWeek[h.week]=h.rm; });
+    const weeks = Object.values(byWeek);
+    if(weeks.length<3) return;
+    const last3 = weeks.slice(-3);
+    const maxRM = Math.max(...last3);
+    if(last3.every(v=>Math.abs(v-maxRM)/maxRM<0.03)) result.push({ name, weeks:3, maxRM });
+  });
+  return result.slice(0,3);
+}
+
+/* ─────────────────────────────────────────────
+   GYM: HISTORY VIEW
+───────────────────────────────────────────── */
+function gymRenderHistory() {
+  const c = document.getElementById('ghistoryContent');
+  if(!c) return;
+  const sorted = [...gymState.workouts].sort((a,b)=>b.startTime-a.startTime);
+  if(!sorted.length) {
+    c.innerHTML = `<div class="gempty"><span class="emoji">📅</span>還沒有訓練紀錄</div>`; return;
+  }
+  c.innerHTML = sorted.map(w=>{
+    const doneSets = w.exercises.reduce((a,ex)=>a+ex.sets.filter(s=>s.done).length,0);
+    const vol = w.exercises.reduce((a,ex)=>a+ex.sets.filter(s=>s.done).reduce((b,s)=>b+(parseFloat(s.weight)||0)*(parseInt(s.reps)||0),0),0);
+    return `<div class="ghist-item" onclick="gymShowHistoryDetail('${w.id}')">
+      <div class="ghist-date">${gymFmtDate(w.startTime)}</div>
+      <div class="ghist-name">${gymEsc(w.planName)}</div>
+      <div class="ghist-stats">
+        <span>⏱ ${gymFmtDuration(w.duration||0)}</span>
+        <span>💪 ${doneSets} 組</span>
+        ${vol>0?`<span>📦 ${Math.round(vol)}kg</span>`:''}
+        ${w.checkin?.sleep?`<span>😴 ${w.checkin.sleep}/5</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.gymShowHistoryDetail = function(id) {
+  const w = gymState.workouts.find(x=>x.id===id);
+  if(!w) return;
+  document.getElementById('ghistoryDetailTitle').textContent = gymFmtDate(w.startTime)+' · '+w.planName;
+  let html = `<div style="margin-bottom:8px;font-size:0.8rem;color:var(--text-muted);">時長: ${gymFmtDuration(w.duration||0)}</div>
+${w.note?`<div style="font-size:0.78rem;color:var(--yellow);background:var(--yellow-light);border-radius:6px;padding:5px 8px;margin-bottom:6px;">✍️ ${gymEsc(w.note)}</div>`:''}`;
+  if(w.checkin) {
+    const parts=[];
+    if(w.checkin.sleep) parts.push(`😴 睡眠 ${w.checkin.sleep}/5`);
+    if(w.checkin.stress) parts.push(`😰 壓力 ${w.checkin.stress}/5`);
+    if(w.checkin.weight) parts.push(`⚖️ ${w.checkin.weight}kg`);
+    if(parts.length) html+=`<div class="gbio-summary">${parts.map(p=>`<span class="gbio-chip">${p}</span>`).join('')}</div>`;
+  }
+  w.exercises.forEach(ex=>{
+    const doneSets = ex.sets.filter(s=>s.done);
+    if(!doneSets.length) return;
+    const oneRM = Math.max(...doneSets.map(s=>gymEpley1RM(s.weight,s.reps)));
+    html += `<div style="margin-bottom:9px"><div style="font-weight:900;font-size:0.88rem;margin-bottom:3px;"><span class="gmbadge muscle-${ex.muscle||gymGuessMuscle(ex.name)}">${gymMuscleName(ex.muscle||gymGuessMuscle(ex.name))}</span> ${gymEsc(ex.name)} ${oneRM>0?`<span class="gtag">1RM ${oneRM.toFixed(1)}kg</span>`:''}</div>`;
+    doneSets.forEach((s,i)=>{
+      html += `<div style="font-size:0.82rem;color:var(--text-muted);margin-left:8px">第${i+1}組${s.isDropset?' (Drop)':''}: ${s.weight||0}kg × ${s.reps||0}${s.rpe?` @RPE ${s.rpe}`:''}</div>`;
+    });
+    html += `</div>`;
+  });
+  document.getElementById('ghistoryDetailBody').innerHTML = html;
+  document.getElementById('gdeleteHistoryBtn').onclick = ()=>{
+    gymShowConfirm('刪除紀錄','確定刪除？',()=>{
+      gymState.workouts=gymState.workouts.filter(x=>x.id!==id);
+      gymPersist(); gymCloseModal('ghistoryDetailModal'); gymRenderHistory();
+    });
+  };
+  document.getElementById('gsaveAsTemplateBtn').onclick = ()=>{
+    gymShowPrompt('另存為模板', w.planName+' (模板)', name=>{
+      if(!name) return;
+      gymState.templates.push({ id:gymUid(), name,
+        exercises: w.exercises.map(ex=>({ id:gymUid(), name:ex.name, muscle:ex.muscle||gymGuessMuscle(ex.name), sets:ex.sets.length, reps:ex.targetReps||'', notes:'' }))
+      });
+      gymPersist(); gymCloseModal('ghistoryDetailModal');
+      showToast('✅ 已儲存為模板');
+    });
+  };
+  gymOpenModal('ghistoryDetailModal');
+};
+
+/* ─────────────────────────────────────────────
+   GYM: EXERCISE DETAIL
+───────────────────────────────────────────── */
+window.gymOpenExDetail = function(name) {
+  document.getElementById('gexDetailTitle').textContent = name+' 分析';
+  const history = gymState.workouts.flatMap(w=>w.exercises.filter(e=>e.name===name).map(e=>({ date:w.date||gymFmtDate(w.startTime), sets:e.sets.filter(s=>s.done) }))).filter(x=>x.sets.length);
+  if(!history.length) { document.getElementById('gexDetailBody').innerHTML = '<div class="gempty">還沒有此動作的紀錄</div>'; gymOpenModal('gexDetailModal'); return; }
+  const recent = history.slice(-5).reverse();
+  let html = recent.map(h=>{
+    const best = h.sets.reduce((a,s)=>{ const rm=gymEpley1RM(s.weight,s.reps); return rm>a.rm?{rm,s}:a; },{rm:0,s:null});
+    return `<div class="gcard" style="margin-bottom:7px;"><div style="font-size:0.78rem;color:var(--text-muted);">${h.date}</div>${h.sets.map((s,i)=>`<div style="font-size:0.85rem;margin-top:2px;">${i+1}. ${s.weight||0}kg × ${s.reps||0}${s.rpe?` @RPE${s.rpe}`:''}</div>`).join('')}${best.s?`<div style="font-size:0.72rem;color:var(--blue);margin-top:4px;">最高 1RM: ${gymEpley1RM(best.s.weight,best.s.reps).toFixed(1)}kg</div>`:''}</div>`;
+  }).join('');
+  document.getElementById('gexDetailBody').innerHTML = html;
+  gymOpenModal('gexDetailModal');
+};
+
+/* ─────────────────────────────────────────────
+   GYM: BODY METRICS
+───────────────────────────────────────────── */
+function gymOpenBodyMetrics() {
+  document.getElementById('gnewWeightInput').value='';
+  gymRenderWeightHistory();
+  gymOpenModal('gbodyMetricsModal');
+}
+document.getElementById('gsaveWeightBtn').onclick = ()=>{
+  const v = parseFloat(document.getElementById('gnewWeightInput').value);
+  if(!v||v<=0){alert('請輸入有效體重');return;}
+  gymState.bodyMetrics.push({date:Date.now(),weight:v});
+  gymPersist(); document.getElementById('gnewWeightInput').value=''; gymRenderWeightHistory();
+};
+function gymRenderWeightHistory() {
+  const c = document.getElementById('gweightHistory');
+  const sorted = [...gymState.bodyMetrics].sort((a,b)=>b.date-a.date).slice(0,10);
+  if(!sorted.length){c.innerHTML='<div style="color:var(--text-muted);text-align:center;padding:10px;font-size:0.82rem;">還沒有紀錄</div>';return;}
+  c.innerHTML = sorted.map(m=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid var(--border);"><div style="font-size:0.8rem;color:var(--text-muted);">${gymFmtDateTime(m.date)}</div><div style="font-weight:900;color:var(--green);">${m.weight} kg</div></div>`).join('');
+}
+
+/* ─────────────────────────────────────────────
+   GYM: SETTINGS
+───────────────────────────────────────────── */
+function gymOpenSettings() {
+  document.getElementById('grestTimeInput').value = gymState.settings.restTime;
+  document.getElementById('gsoundToggle').checked = gymState.settings.sound;
+  document.getElementById('gautoTimerToggle').checked = gymState.settings.autoTimer;
+  document.getElementById('gcheckinToggle').checked = gymState.settings.showCheckin;
+  const vg = document.getElementById('gvolumeGoalGrid');
+  vg.innerHTML = GYM_MUSCLES.map(m=>`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <div style="width:55px;"><span class="gmbadge muscle-${m.id}">${m.name}</span></div>
+      <input type="number" class="gform-input" id="gvg_${m.id}" value="${gymState.settings.volumeGoals[m.id]||0}" min="0" style="padding:5px;font-size:0.82rem;">
+      <span style="color:var(--text-muted);font-size:0.72rem;">組/週</span>
+    </div>`).join('');
+  gymOpenModal('gsettingsModal');
+}
+window.gymSaveSettings = function() {
+  gymState.settings.restTime = parseInt(document.getElementById('grestTimeInput').value)||90;
+  gymState.settings.sound = document.getElementById('gsoundToggle').checked;
+  gymState.settings.autoTimer = document.getElementById('gautoTimerToggle').checked;
+  gymState.settings.showCheckin = document.getElementById('gcheckinToggle').checked;
+  GYM_MUSCLES.forEach(m=>{ const el=document.getElementById('gvg_'+m.id); if(el) gymState.settings.volumeGoals[m.id]=parseInt(el.value)||0; });
+  gymPersist();
+};
+
+/* ─────────────────────────────────────────────
+   GYM: INIT — called after Home App Firebase ready
+───────────────────────────────────────────── */
+window.gymInit = async function(memberId, memberName, firestoreDb) {
+  gymCurrentMemberId = memberId || 'default';
+  gymCurrentMemberName = memberName || '我';
+  gymFirestoreDb = firestoreDb;
+  window._gymDb = firestoreDb;
+
+  // Update member banner
+  const banner = document.getElementById('gym-member-display');
+  if(banner) banner.textContent = memberName||'我';
+
+  await gymLoadFromFirebase();
+  gymRenderToday();
+};
+
+// Also watch for member switches from Home App
+window.gymOnMemberChange = async function(memberId, memberName) {
+  gymCurrentMemberId = memberId;
+  gymCurrentMemberName = memberName;
+  const banner = document.getElementById('gym-member-display');
+  if(banner) banner.textContent = memberName||'我';
+  gymState = { plans:[], workouts:[], templates:[], bodyMetrics:[], activeWorkout:null, pendingPlanId:null, settings:{restTime:90,sound:true,autoTimer:true,showCheckin:true,volumeGoals:{chest:12,back:14,shoulders:10,legs:14,arms:8,core:6,cardio:0}} };
+  await gymLoadFromFirebase();
+  // Re-render if gym tab is active
+  if(document.getElementById('tab-gym')?.classList.contains('active')) {
+    gymRenderToday();
+  }
+};
+</script>
+
 <script>
     window.addEventListener('load', function() {
       const loader = document.getElementById('initial-loader');
@@ -4291,6 +5997,9 @@
         }, 500);
       }
     });
+
+
+
   </script>
   </body>
 </html>
