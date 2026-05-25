@@ -1255,6 +1255,12 @@
       <div class="gsection-title" style="margin-top:0">動作清單</div>
       <div id="gplanExercisesList"></div>
       <button class="gbtn gbtn-sec gbtn-block gbtn-sm" id="gaddExerciseBtn" style="margin-top:7px">➕ 新增動作</button>
+      <div class="gsection-title" style="margin-top:14px;color:var(--yellow);">🔥 熱身組設定（可選）</div>
+      <div id="gplanWarmupList"></div>
+      <button class="gbtn gbtn-sec gbtn-block gbtn-sm" id="gaddPlanWarmupBtn" style="margin-top:4px">＋ 新增熱身條目</button>
+      <div class="gsection-title" style="margin-top:14px;color:var(--blue);">❄️ 冷卻組設定（可選）</div>
+      <div id="gplanCooldownList"></div>
+      <button class="gbtn gbtn-sec gbtn-block gbtn-sm" id="gaddPlanCooldownBtn" style="margin-top:4px">＋ 新增冷卻條目</button>
       <hr>
       <div class="gform-row">
         <button class="gbtn gbtn-sec" onclick="gymCloseModal('gplanModal')">取消</button>
@@ -5087,9 +5093,9 @@ window.gymSwitchView = function(viewId, btn) {
   const el = document.getElementById(viewId);
   if(el) el.classList.add('active');
   if(viewId==='gtoday') gymRenderToday();
-  if(viewId==='gplans') gymRenderPlansTab();
+  if(viewId==='gplans') gymLoadFromFirebase().then(()=>gymRenderPlansTab());
   if(viewId==='gstats') gymRenderStats();
-  if(viewId==='ghistory') gymRenderHistory();
+  if(viewId==='ghistory') gymLoadFromFirebase().then(()=>gymRenderHistory());
 };
 
 document.addEventListener('click', function(e){
@@ -5265,6 +5271,8 @@ function gymBeginWorkout(planId, checkin) {
     manualStartTime: null,
     manualEndTime: null,
     checkin,
+    warmupSets: (plan.warmup||[]).map(e=>({text:e.text||''})),
+    cooldownSets: (plan.cooldown||[]).map(e=>({text:e.text||''})),
     exercises: plan.exercises.map(ex=>({
       id: ex.id, name: ex.name, muscle: ex.muscle||gymGuessMuscle(ex.name),
       targetSets: ex.sets, targetReps: ex.reps, notes: ex.notes||'',
@@ -5334,12 +5342,14 @@ function gymRenderActiveWorkout(c) {
     <div class="gsection-title" style="color:var(--yellow);">🔥 熱身組</div>
     ${w.warmupSets.length===0?`<div style="font-size:0.78rem;color:var(--text-dim);padding:4px 0 6px;">尚無熱身組，點下方新增</div>`:''}
     ${w.warmupSets.map((s,i)=>`
-      <div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr 28px;gap:5px;align-items:center;padding:5px 0;border-top:1px solid var(--border);">
-        <div class="gset-num" style="background:var(--yellow-light);color:var(--yellow);font-size:0.68rem;">W${i+1}</div>
-        <input class="gset-input" type="text" placeholder="動作名" value="${gymEsc(s.name||'')}" onchange="gymWarmupVal(${i},'name',this.value)" onblur="gymWarmupVal(${i},'name',this.value)">
-        <input class="gset-input" type="number" step="0.5" placeholder="kg" value="${gymEsc(s.weight||'')}" onchange="gymWarmupVal(${i},'weight',this.value)">
-        <input class="gset-input" type="number" placeholder="次" value="${gymEsc(s.reps||'')}" onchange="gymWarmupVal(${i},'reps',this.value)">
-        <button style="background:var(--red-light);color:var(--red);border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;" onclick="gymRemoveWarmup(${i})">✕</button>
+      <div style="display:flex;gap:6px;align-items:flex-start;padding:5px 0;border-top:1px solid var(--border);">
+        <div class="gset-num" style="background:var(--yellow-light);color:var(--yellow);font-size:0.68rem;flex-shrink:0;margin-top:3px;">W${i+1}</div>
+        <textarea class="gset-input" rows="1" style="resize:none;flex:1;min-height:32px;padding:5px 8px;"
+          placeholder="例如：股四頭拉伸 30秒 × 2"
+          onchange="gymWarmupVal(${i},'text',this.value)"
+          onblur="gymWarmupVal(${i},'text',this.value)"
+        >${gymEsc(s.text||'')}</textarea>
+        <button style="background:var(--red-light);color:var(--red);border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;flex-shrink:0;margin-top:3px;" onclick="gymRemoveWarmup(${i})">✕</button>
       </div>`).join('')}
     <button class="gbtn gbtn-sec gbtn-sm" style="margin-top:5px;" onclick="gymAddWarmup()">＋ 新增熱身組</button>
   </div>`;
@@ -5405,12 +5415,14 @@ prevInfo = `上次: ${setLines}${best1RM>0?' | 1RM≈'+best1RM.toFixed(1)+'kg':'
     <div class="gsection-title" style="color:var(--blue);">❄️ 冷卻組</div>
     ${w.cooldownSets.length===0?`<div style="font-size:0.78rem;color:var(--text-dim);padding:4px 0 6px;">尚無冷卻組，點下方新增</div>`:''}
     ${w.cooldownSets.map((s,i)=>`
-      <div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr 28px;gap:5px;align-items:center;padding:5px 0;border-top:1px solid var(--border);">
-        <div class="gset-num" style="background:var(--blue-light);color:var(--blue);font-size:0.68rem;">C${i+1}</div>
-        <input class="gset-input" type="text" placeholder="動作名" value="${gymEsc(s.name||'')}" onchange="gymCooldownVal(${i},'name',this.value)" onblur="gymCooldownVal(${i},'name',this.value)">
-        <input class="gset-input" type="number" step="0.5" placeholder="kg" value="${gymEsc(s.weight||'')}" onchange="gymCooldownVal(${i},'weight',this.value)">
-        <input class="gset-input" type="number" placeholder="次" value="${gymEsc(s.reps||'')}" onchange="gymCooldownVal(${i},'reps',this.value)">
-        <button style="background:var(--red-light);color:var(--red);border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;" onclick="gymRemoveCooldown(${i})">✕</button>
+      <div style="display:flex;gap:6px;align-items:flex-start;padding:5px 0;border-top:1px solid var(--border);">
+        <div class="gset-num" style="background:var(--blue-light);color:var(--blue);font-size:0.68rem;flex-shrink:0;margin-top:3px;">C${i+1}</div>
+        <textarea class="gset-input" rows="1" style="resize:none;flex:1;min-height:32px;padding:5px 8px;"
+          placeholder="例如：闊背肌伸展 45秒"
+          onchange="gymCooldownVal(${i},'text',this.value)"
+          onblur="gymCooldownVal(${i},'text',this.value)"
+        >${gymEsc(s.text||'')}</textarea>
+        <button style="background:var(--red-light);color:var(--red);border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;flex-shrink:0;margin-top:3px;" onclick="gymRemoveCooldown(${i})">✕</button>
       </div>`).join('')}
     <button class="gbtn gbtn-sec gbtn-sm" style="margin-top:5px;" onclick="gymAddCooldown()">＋ 新增冷卻組</button>
   </div>`;
@@ -5480,7 +5492,7 @@ window.gymRemoveLastSet = function(exIdx) {
 window.gymAddWarmup = function() {
   if(!gymState.activeWorkout) return;
   if(!gymState.activeWorkout.warmupSets) gymState.activeWorkout.warmupSets=[];
-  gymState.activeWorkout.warmupSets.push({name:'',weight:'',reps:''});
+  gymState.activeWorkout.warmupSets.push({text:''});
   gymPersist(); gymRenderToday();
 };
 window.gymRemoveWarmup = function(i) {
@@ -5497,7 +5509,7 @@ window.gymWarmupVal = function(i,key,val) {
 window.gymAddCooldown = function() {
   if(!gymState.activeWorkout) return;
   if(!gymState.activeWorkout.cooldownSets) gymState.activeWorkout.cooldownSets=[];
-  gymState.activeWorkout.cooldownSets.push({name:'',weight:'',reps:''});
+  gymState.activeWorkout.cooldownSets.push({text:''});
   gymPersist(); gymRenderToday();
 };
 window.gymRemoveCooldown = function(i) {
@@ -5695,6 +5707,8 @@ window.gymDeleteTemplate = function(id) {
    GYM: PLAN EDITOR
 ───────────────────────────────────────────── */
 let gymEditingPlanExercises = [];
+let gymEditingPlanWarmup = [];
+let gymEditingPlanCooldown = [];
 
 window.gymOpenPlanEditor = function(planId) {
   gymCurrentPlanEditId = planId;
@@ -5706,7 +5720,11 @@ window.gymOpenPlanEditor = function(planId) {
   document.getElementById('gplanDeloadWeek').value = plan?.deloadWeek||0;
   document.getElementById('gdeletePlanBtn').style.display = plan ? 'block' : 'none';
   gymEditingPlanExercises = plan ? plan.exercises.map(e=>({...e})) : [];
+  gymEditingPlanWarmup = plan ? (plan.warmup||[]).map(e=>({...e})) : [];
+  gymEditingPlanCooldown = plan ? (plan.cooldown||[]).map(e=>({...e})) : [];
   gymRenderPlanExercisesList();
+  gymRenderPlanWarmupList();
+  gymRenderPlanCooldownList();
   gymOpenModal('gplanModal');
 };
 
@@ -5727,6 +5745,53 @@ function gymRenderPlanExercisesList() {
 }
 
 document.getElementById('gaddExerciseBtn').onclick = ()=>gymOpenExerciseModal(null);
+document.getElementById('gaddPlanWarmupBtn').onclick = ()=>{
+  gymEditingPlanWarmup.push({text:''});
+  gymRenderPlanWarmupList();
+};
+document.getElementById('gaddPlanCooldownBtn').onclick = ()=>{
+  gymEditingPlanCooldown.push({text:''});
+  gymRenderPlanCooldownList();
+};
+
+function gymRenderPlanWarmupList() {
+  const c = document.getElementById('gplanWarmupList');
+  if(!c) return;
+  if(!gymEditingPlanWarmup.length){
+    c.innerHTML='<div style="font-size:0.75rem;color:var(--text-dim);padding:4px 0;">尚無熱身條目</div>';
+    return;
+  }
+  c.innerHTML = gymEditingPlanWarmup.map((e,i)=>`
+    <div style="display:flex;gap:5px;margin-bottom:5px;align-items:flex-start;">
+      <textarea class="gform-input" rows="1" style="resize:none;flex:1;padding:7px 10px;min-height:36px;"
+        placeholder="例如：股四頭拉伸 30秒 × 2"
+        onchange="gymEditingPlanWarmup[${i}].text=this.value"
+        onblur="gymEditingPlanWarmup[${i}].text=this.value"
+      >${gymEsc(e.text||'')}</textarea>
+      <button style="background:var(--red-light);color:var(--red);border:none;border-radius:6px;width:30px;height:30px;cursor:pointer;flex-shrink:0;margin-top:3px;"
+        onclick="gymEditingPlanWarmup.splice(${i},1);gymRenderPlanWarmupList()">✕</button>
+    </div>`).join('');
+}
+
+function gymRenderPlanCooldownList() {
+  const c = document.getElementById('gplanCooldownList');
+  if(!c) return;
+  if(!gymEditingPlanCooldown.length){
+    c.innerHTML='<div style="font-size:0.75rem;color:var(--text-dim);padding:4px 0;">尚無冷卻條目</div>';
+    return;
+  }
+  c.innerHTML = gymEditingPlanCooldown.map((e,i)=>`
+    <div style="display:flex;gap:5px;margin-bottom:5px;align-items:flex-start;">
+      <textarea class="gform-input" rows="1" style="resize:none;flex:1;padding:7px 10px;min-height:36px;"
+        placeholder="例如：闊背肌伸展 45秒"
+        onchange="gymEditingPlanCooldown[${i}].text=this.value"
+        onblur="gymEditingPlanCooldown[${i}].text=this.value"
+      >${gymEsc(e.text||'')}</textarea>
+      <button style="background:var(--red-light);color:var(--red);border:none;border-radius:6px;width:30px;height:30px;cursor:pointer;flex-shrink:0;margin-top:3px;"
+        onclick="gymEditingPlanCooldown.splice(${i},1);gymRenderPlanCooldownList()">✕</button>
+    </div>`).join('');
+}
+
 document.getElementById('gsavePlanBtn').onclick = ()=>{
   const name = document.getElementById('gplanNameInput').value.trim();
   if(!name){alert('請輸入計劃名稱');return;}
@@ -5734,7 +5799,9 @@ document.getElementById('gsavePlanBtn').onclick = ()=>{
     name, tip: document.getElementById('gplanTipInput').value.trim(),
     cycleLen: parseInt(document.getElementById('gplanCycleLen').value)||0,
     deloadWeek: parseInt(document.getElementById('gplanDeloadWeek').value)||0,
-    exercises: gymEditingPlanExercises
+    exercises: gymEditingPlanExercises,
+    warmup: gymEditingPlanWarmup,
+    cooldown: gymEditingPlanCooldown
   };
   if(gymCurrentPlanEditId) {
     const idx = gymState.plans.findIndex(p=>p.id===gymCurrentPlanEditId);
@@ -6068,6 +6135,14 @@ window.gymOpenHistoryEdit = function(id) {
   document.getElementById('gheditPlanName').value = w.planName||'';
   document.getElementById('gheditDate').value = d.toISOString().split('T')[0];
   document.getElementById('gheditNote').value = w.note||'';
+  gymRenderHistoryEditExercises();
+  gymCloseModal('ghistoryDetailModal');
+  gymOpenModal('ghistoryEditModal');
+};
+
+function gymRenderHistoryEditExercises() {
+  const w = gymState.workouts.find(x=>x.id===gymEditingHistoryId);
+  if(!w) return;
   const c = document.getElementById('gheditExercisesList');
   c.innerHTML = w.exercises.map((ex,ei)=>`
     <div class="gchart-card" style="margin-bottom:8px;padding:10px;">
@@ -6085,12 +6160,50 @@ window.gymOpenHistoryEdit = function(id) {
           <input class="gset-input" type="number" placeholder="次" value="${gymEsc(s.reps||'')}" id="ghedit_r_${ei}_${si}">
           <input class="gset-input grpe-input" type="number" step="0.5" placeholder="—" min="1" max="10" value="${gymEsc(s.rpe||'')}" id="ghedit_rpe_${ei}_${si}">
         </div>`).join('')}
+      <div style="display:flex;gap:5px;margin-top:7px;">
+        <button class="gbtn gbtn-sec gbtn-sm" style="flex:1;" onclick="gymHistoryAddSet(${ei})">＋ 新增組</button>
+        <button class="gbtn gbtn-danger gbtn-sm" style="flex:1;" onclick="gymHistoryRemoveSet(${ei})" ${ex.sets.length<=1?'disabled':''}>− 刪除最後組</button>
+      </div>
     </div>`).join('');
-  gymCloseModal('ghistoryDetailModal');
-  gymOpenModal('ghistoryEditModal');
+}
+
+function gymSyncHistoryInputs() {
+  const w = gymState.workouts.find(x=>x.id===gymEditingHistoryId);
+  if(!w) return;
+  w.exercises.forEach((ex,ei)=>{
+    const nameEl = document.getElementById(`ghedit_ex_name_${ei}`);
+    if(nameEl) ex.name = nameEl.value.trim()||ex.name;
+    ex.sets.forEach((s,si)=>{
+      const wEl  = document.getElementById(`ghedit_w_${ei}_${si}`);
+      const rEl  = document.getElementById(`ghedit_r_${ei}_${si}`);
+      const rpeEl= document.getElementById(`ghedit_rpe_${ei}_${si}`);
+      if(wEl)  s.weight = wEl.value;
+      if(rEl)  s.reps   = rEl.value;
+      if(rpeEl) s.rpe   = rpeEl.value;
+    });
+  });
+}
+
+window.gymHistoryAddSet = function(ei) {
+  gymSyncHistoryInputs();
+  const w = gymState.workouts.find(x=>x.id===gymEditingHistoryId);
+  if(!w) return;
+  const ex = w.exercises[ei];
+  const last = ex.sets[ex.sets.length-1];
+  ex.sets.push({weight:last?.weight||'', reps:last?.reps||'', rpe:'', done:true});
+  gymRenderHistoryEditExercises();
+};
+
+window.gymHistoryRemoveSet = function(ei) {
+  gymSyncHistoryInputs();
+  const w = gymState.workouts.find(x=>x.id===gymEditingHistoryId);
+  if(!w) return;
+  const ex = w.exercises[ei];
+  if(ex.sets.length > 1) { ex.sets.pop(); gymRenderHistoryEditExercises(); }
 };
 
 window.gymSaveHistoryEdit = function() {
+  gymSyncHistoryInputs();
   const w = gymState.workouts.find(x=>x.id===gymEditingHistoryId);
   if(!w) return;
   const newPlanName = document.getElementById('gheditPlanName').value.trim();
@@ -6105,18 +6218,6 @@ window.gymSaveHistoryEdit = function() {
     w.date = gymFmtDate(w.startTime);
   }
   w.note = newNote;
-  w.exercises.forEach((ex,ei)=>{
-    const nameEl = document.getElementById(`ghedit_ex_name_${ei}`);
-    if(nameEl) ex.name = nameEl.value.trim()||ex.name;
-    ex.sets.forEach((s,si)=>{
-      const wEl  = document.getElementById(`ghedit_w_${ei}_${si}`);
-      const rEl  = document.getElementById(`ghedit_r_${ei}_${si}`);
-      const rpeEl = document.getElementById(`ghedit_rpe_${ei}_${si}`);
-      if(wEl)  s.weight = wEl.value;
-      if(rEl)  s.reps   = rEl.value;
-      if(rpeEl) s.rpe   = rpeEl.value;
-    });
-  });
   gymPersist();
   gymCloseModal('ghistoryEditModal');
   gymRenderHistory();
