@@ -1262,6 +1262,7 @@
       <div id="gplanCooldownList"></div>
       <button class="gbtn gbtn-sec gbtn-block gbtn-sm" id="gaddPlanCooldownBtn" style="margin-top:4px">＋ 新增冷卻條目</button>
       <hr>
+      <button type="button" class="gbtn gbtn-sec gbtn-block" style="margin-top:8px;" onclick="gymSavePlanAsSharedTemplate()">🌐 共用為家庭模板</button>
       <div class="gform-row">
         <button class="gbtn gbtn-sec" onclick="gymCloseModal('gplanModal')">取消</button>
         <button class="gbtn" id="gsavePlanBtn">儲存</button>
@@ -4958,20 +4959,25 @@ const GYM_MUSCLES = [
   {id:'arms',name:'手臂',color:'#ff922b'},{id:'core',name:'核心',color:'#cc5de8'},
   {id:'cardio',name:'心肺',color:'#22b8cf'}
 ];
-const GYM_EX_SUGGESTIONS = [
-  '槓鈴深蹲','槓鈴硬舉','槓鈴臥推','槓鈴划船','槓鈴肩推',
-  '引體向上','雙槓臂屈伸','保加利亞分腿蹲','羅馬尼亞硬舉','腿推',
-  '滑輪下拉','坐姿划船','啞鈴飛鳥','側平舉','二頭彎舉','三頭下壓',
-  '腿屈伸','腿彎舉','髖推','臀推','滑輪面拉','平板支撐'
-];
+const GYM_EX_BY_MUSCLE = {
+  chest:  ['槓鈴臥推','啞鈴臥推','上斜臥推','下斜臥推','啞鈴飛鳥','蝴蝶機夾胸','坐姿器械胸推','伏地挺身','纜繩夾胸','史密斯機臥推'],
+  back:   ['槓鈴硬舉','槓鈴划船','啞鈴划船','滑輪下拉','坐姿划船','引體向上','反握引體向上','T字划船','滑輪面拉','背部伸展','早安式硬舉'],
+  shoulders: ['槓鈴肩推','啞鈴肩推','史密斯機肩推','側平舉','前平舉','俯身飛鳥','纜繩側平舉','阿諾肩推','直立划船','聳肩'],
+  legs:   ['槓鈴深蹲','前蹲','哈克深蹲機','腿推','保加利亞分腿蹲','羅馬尼亞硬舉','腿屈伸','腿彎舉','髖推','臀推','弓步蹲','酒杯深蹲','器械腿屈伸','北歐腿彎舉','小腿提踵'],
+  arms:   ['槓鈴二頭彎舉','啞鈴二頭彎舉','錘式彎舉','纜繩二頭彎舉','傳教士彎舉','三頭下壓','過頭三頭伸展','雙槓臂屈伸','窄距臥推','法式推舉','纜繩三頭下壓'],
+  core:   ['平板支撐','側棒式','捲腹','仰臥起坐','俄羅斯轉體','死蟲式','懸吊抬腿','滾輪','纜繩捲腹','鳥狗式'],
+  cardio: ['跑步機','橢圓機','划船機','腳踏車','跳繩','HIIT','快走','爬樓梯','戰繩','跳箱']
+};
+// Flat list for backward compatibility
+const GYM_EX_SUGGESTIONS = Object.values(GYM_EX_BY_MUSCLE).flat();
 const GYM_EX_MUSCLE_MAP = {
-  '深蹲':'legs','硬舉':'legs','腿推':'legs','分腿蹲':'legs','腿屈伸':'legs','腿彎舉':'legs','髖推':'legs','臀推':'legs','酒杯深蹲':'legs',
+  '深蹲':'legs','硬舉':'legs','腿推':'legs','分腿蹲':'legs','腿屈伸':'legs','腿彎舉':'legs','髖推':'legs','臀推':'legs','酒杯深蹲':'legs','弓步':'legs','提踵':'legs',
   '臥推':'chest','飛鳥':'chest','胸推':'chest','夾胸':'chest','伏地挺身':'chest',
-  '划船':'back','下拉':'back','引體':'back','背闊':'back','面拉':'back',
-  '肩推':'shoulders','側平舉':'shoulders','前平舉':'shoulders',
-  '彎舉':'arms','二頭':'arms','三頭':'arms','下壓':'arms','臂屈伸':'arms','錘式':'arms',
-  '捲腹':'core','棒式':'core','支撐':'core','腹':'core',
-  '快走':'cardio','跑步':'cardio','腳踏車':'cardio','划船機':'cardio','HIIT':'cardio'
+  '划船':'back','下拉':'back','引體':'back','背闊':'back','面拉':'back','早安':'back','背部伸展':'back',
+  '肩推':'shoulders','側平舉':'shoulders','前平舉':'shoulders','聳肩':'shoulders','俯身飛鳥':'shoulders','阿諾':'shoulders',
+  '彎舉':'arms','二頭':'arms','三頭':'arms','下壓':'arms','臂屈伸':'arms','錘式':'arms','法式':'arms','窄距':'arms',
+  '捲腹':'core','棒式':'core','支撐':'core','腹':'core','死蟲':'core','鳥狗':'core','抬腿':'core','俄羅斯':'core',
+  '跑步':'cardio','腳踏車':'cardio','划船機':'cardio','HIIT':'cardio','跳繩':'cardio','橢圓':'cardio','爬樓':'cardio','戰繩':'cardio','跳箱':'cardio','快走':'cardio'
 };
 
 /* ─────────────────────────────────────────────
@@ -5665,28 +5671,57 @@ function gymRenderPlansTab() {
           </div>`).join('')}
       </div>`;
     }).join('');
-  } else {
-    // Templates
-    if(!gymState.templates.length) {
-      c.innerHTML = `<div class="gempty"><span class="emoji">📁</span>還沒有模板<br><small>完成訓練後可另存為模板</small></div>`;
-      return;
-    }
-    c.innerHTML = gymState.templates.map(t=>`
+} else {
+    // Templates — personal + shared
+    const renderTemplatelist = (templates, isShared) => templates.map(t=>`
       <div class="gplan-editor-card">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
-          <div style="font-weight:900;">${gymEsc(t.name)}</div>
+          <div>
+            <div style="font-weight:900;">${gymEsc(t.name)}</div>
+            ${isShared?`<div style="font-size:0.68rem;color:var(--blue);margin-top:2px;">🌐 ${gymEsc(t.createdBy||'共用')} 建立</div>`:''}
+          </div>
           <div style="display:flex;gap:5px;">
-            <button class="gbtn gbtn-sm" onclick="gymUseTemplate('${t.id}')">使用</button>
-            <button class="gbtn gbtn-danger gbtn-sm" onclick="gymDeleteTemplate('${t.id}')">刪除</button>
+            <button class="gbtn gbtn-sm" onclick="gymUseTemplate('${t.id}',${isShared})">使用</button>
+            ${!isShared?`<button class="gbtn gbtn-danger gbtn-sm" onclick="gymDeleteTemplate('${t.id}')">刪除</button>`:''}
           </div>
         </div>
-        ${t.exercises.map(ex=>`<div class="gex-line"><div class="gex-line-info"><div class="name"><span class="gmbadge muscle-${ex.muscle}">${gymMuscleName(ex.muscle)}</span> ${gymEsc(ex.name)}</div></div></div>`).join('')}
+        ${t.exercises.map(ex=>`<div class="gex-line"><div class="gex-line-info"><div class="name"><span class="gmbadge muscle-${ex.muscle||'chest'}">${gymMuscleName(ex.muscle||'chest')}</span> ${gymEsc(ex.name)}</div></div></div>`).join('')}
       </div>`).join('');
+
+    let html = '';
+    if(gymState.templates.length) {
+      html += `<div class="gsection-title">我的模板</div>` + renderTemplatelist(gymState.templates, false);
+    }
+    // Load shared templates async
+    html += `<div class="gsection-title" style="margin-top:12px;">家庭共用模板 <button class="gbtn gbtn-sec gbtn-sm" onclick="gymRefreshSharedTemplates()" style="font-size:0.68rem;padding:3px 8px;">🔄 更新</button></div>`;
+    html += `<div id="gsharedTemplatesList"><div style="color:var(--text-muted);font-size:0.8rem;padding:8px 0;">載入中…</div></div>`;
+    if(!gymState.templates.length && !html.includes('gplan-editor-card')) {
+      html = `<div class="gempty"><span class="emoji">📁</span>還沒有個人模板<br><small>完成訓練後可另存，或使用家庭共用模板</small></div>` + html;
+    }
+    c.innerHTML = html;
+
+    // Async load shared templates
+    gymLoadSharedTemplates().then(shared=>{
+      const el = document.getElementById('gsharedTemplatesList');
+      if(!el) return;
+      if(!shared.length) { el.innerHTML = `<div style="color:var(--text-dim);font-size:0.8rem;padding:6px 0;">還沒有共用模板</div>`; return; }
+      el.innerHTML = renderTemplatelist(shared, true);
+    });
   }
 }
 
-window.gymUseTemplate = function(id) {
-  const t = gymState.templates.find(x=>x.id===id);
+window.gymRefreshSharedTemplates = function() {
+  gymRenderPlansTab();
+};
+
+window.gymUseTemplate = async function(id, isShared) {
+  let t;
+  if(isShared) {
+    const shared = await gymLoadSharedTemplates();
+    t = shared.find(x=>x.id===id);
+  } else {
+    t = gymState.templates.find(x=>x.id===id);
+  }
   if(!t) return;
   gymShowPrompt('計劃名稱', t.name, name=>{
     if(!name) return;
@@ -5791,6 +5826,40 @@ function gymRenderPlanCooldownList() {
         onclick="gymEditingPlanCooldown.splice(${i},1);gymRenderPlanCooldownList()">✕</button>
     </div>`).join('');
 }
+
+window.gymSavePlanAsSharedTemplate = async function() {
+  const name = document.getElementById('gplanNameInput').value.trim();
+  if(!name){alert('請輸入計劃名稱');return;}
+  const db = gymGetDb();
+  if(!db){ showToast('⚠️ 需要連線 Firebase 才能共用模板','error'); return; }
+  const tplData = {
+    id: gymUid(),
+    name,
+    tip: document.getElementById('gplanTipInput').value.trim(),
+    exercises: gymEditingPlanExercises.map(ex=>({...ex})),
+    createdBy: gymCurrentMemberName || '未知',
+    createdAt: Date.now(),
+    isShared: true
+  };
+  try {
+    const { doc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await setDoc(doc(db, 'gym_shared_templates', tplData.id), tplData);
+    showToast('✅ 已共用為家庭模板，所有成員可使用');
+    gymCloseModal('gplanModal');
+  } catch(e) {
+    showToast('❌ 共用失敗：'+e.message,'error');
+  }
+};
+
+window.gymLoadSharedTemplates = async function() {
+  const db = gymGetDb();
+  if(!db) return [];
+  try {
+    const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const snap = await getDocs(collection(db, 'gym_shared_templates'));
+    return snap.docs.map(d=>d.data());
+  } catch(e) { return []; }
+};
 
 document.getElementById('gsavePlanBtn').onclick = ()=>{
   const name = document.getElementById('gplanNameInput').value.trim();
@@ -5897,7 +5966,30 @@ window.gymSelectMuscle = function(containerId, id, color, btn) {
 function gymRenderExSuggestions(containerId, inputId) {
   const c = document.getElementById(containerId);
   if(!c) return;
-  c.innerHTML = GYM_EX_SUGGESTIONS.map(s=>`<span class="gsuggestion-chip" onclick="document.getElementById('${inputId}').value='${s}'">${s}</span>`).join('');
+  const selectedMuscle = document.querySelector('#gmuscleSelectGrid .gmuscle-sel-btn.selected')?.dataset.id
+    || document.querySelector('#gswapMuscleGrid .gmuscle-sel-btn.selected')?.dataset.id
+    || null;
+
+  let html = '';
+  if(selectedMuscle && GYM_EX_BY_MUSCLE[selectedMuscle]) {
+    // Show current muscle group first, then others collapsed
+    html += `<div style="font-size:0.62rem;color:var(--text-muted);font-weight:900;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;">${gymMuscleName(selectedMuscle)}</div>`;
+    html += GYM_EX_BY_MUSCLE[selectedMuscle].map(s=>`<span class="gsuggestion-chip" onclick="document.getElementById('${inputId}').value='${s}'">${s}</span>`).join('');
+    // Other muscle groups
+    Object.entries(GYM_EX_BY_MUSCLE).filter(([k])=>k!==selectedMuscle).forEach(([muscleId, exList])=>{
+      const m = GYM_MUSCLES.find(x=>x.id===muscleId);
+      html += `<div style="font-size:0.62rem;color:var(--text-dim);font-weight:900;letter-spacing:0.05em;text-transform:uppercase;margin:6px 0 3px;">${m?m.name:muscleId}</div>`;
+      html += exList.map(s=>`<span class="gsuggestion-chip" style="opacity:0.6;" onclick="document.getElementById('${inputId}').value='${s}';gymSelectMuscle('gmuscleSelectGrid','${muscleId}','${gymMuscleColor(muscleId)}',document.querySelector('#gmuscleSelectGrid [data-id=${muscleId}]'))">${s}</span>`).join('');
+    });
+  } else {
+    // No muscle selected — show all grouped
+    Object.entries(GYM_EX_BY_MUSCLE).forEach(([muscleId, exList])=>{
+      const m = GYM_MUSCLES.find(x=>x.id===muscleId);
+      html += `<div style="font-size:0.62rem;color:var(--text-muted);font-weight:900;letter-spacing:0.05em;text-transform:uppercase;margin:6px 0 3px;">${m?m.name:muscleId}</div>`;
+      html += exList.map(s=>`<span class="gsuggestion-chip" onclick="document.getElementById('${inputId}').value='${s}'">${s}</span>`).join('');
+    });
+  }
+  c.innerHTML = html;
 }
 
 /* ─────────────────────────────────────────────
@@ -6164,8 +6256,36 @@ function gymRenderHistoryEditExercises() {
         <button class="gbtn gbtn-sec gbtn-sm" style="flex:1;" onclick="gymHistoryAddSet(${ei})">＋ 新增組</button>
         <button class="gbtn gbtn-danger gbtn-sm" style="flex:1;" onclick="gymHistoryRemoveSet(${ei})" ${ex.sets.length<=1?'disabled':''}>− 刪除最後組</button>
       </div>
-    </div>`).join('');
+    </div>`).join('') + `
+    <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+      <div style="font-size:0.7rem;font-weight:900;color:var(--text-muted);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:6px;">新增動作至此紀錄</div>
+      <div style="display:flex;gap:6px;margin-bottom:6px;">
+        <input type="text" class="gform-input" id="gheditAddExName" placeholder="動作名稱" style="flex:1;font-size:0.85rem;">
+        <select class="gform-input" id="gheditAddExMuscle" style="flex:0 0 80px;font-size:0.82rem;padding:8px 6px;">
+          ${GYM_MUSCLES.map(m=>`<option value="${m.id}">${m.name}</option>`).join('')}
+        </select>
+      </div>
+      <button class="gbtn gbtn-sec gbtn-block" onclick="gymHistoryAddExercise()">➕ 新增動作至紀錄</button>
+    </div>`;
 }
+
+window.gymHistoryAddExercise = function() {
+  gymSyncHistoryInputs();
+  const w = gymState.workouts.find(x=>x.id===gymEditingHistoryId);
+  if(!w) return;
+  const nameEl = document.getElementById('gheditAddExName');
+  const muscleEl = document.getElementById('gheditAddExMuscle');
+  const name = nameEl ? nameEl.value.trim() : '';
+  if(!name){ showToast('⚠️ 請輸入動作名稱','error'); return; }
+  const muscle = muscleEl ? muscleEl.value : gymGuessMuscle(name);
+  w.exercises.push({
+    id: gymUid(), name, muscle,
+    sets: [{weight:'', reps:'', rpe:'', done:true}]
+  });
+  gymPersist();
+  gymRenderHistoryEditExercises();
+  showToast('✅ 已新增動作：'+name);
+};
 
 function gymSyncHistoryInputs() {
   const w = gymState.workouts.find(x=>x.id===gymEditingHistoryId);
